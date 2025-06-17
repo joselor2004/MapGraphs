@@ -23,8 +23,58 @@
 
 \begin{flushleft}
 
-Stabilité par sous graphe induit.\\
-$K_{3,3}$ pas un map graph (preuve topologique par Jordan)
+\section*{Introduction}
+
+\section{Résultats}
+
+\begin{theorem}[Caractérisation des graphes de carte]\label{carCarte}
+    Un graphe $G = (V, E)$ est de carte si et seulement si il existe $H$ un graphe biparti planaire dont un des
+    côtés de la bipartition est $V$, tel que $H^2[V] = G$.
+\end{theorem}
+
+\begin{prop}
+    Si $G$ est un graphe de carte, et $H = G[A]$ où $A \subset V$, alors $H$ est un graphe de carte
+\end{prop}
+
+\begin{proof}
+    On reprend la carte de $G$ où l'on ne garde que les régions identifées aux sommets présents dans $A$
+\end{proof}
+
+\begin{def*}[Join]
+    Le join de $2$ graphes $G = (V, E)$ et $G' = (V', E')$ est le graphe ayant pour sommet $V'' = V \cup V'$ et pour arrêtes
+    \[ E'' = E \cup E' \cup \{ xx' \mid x \in V, x \in V' \} \]
+    On notera pour tout $n \geq 1$ $K(n, G)$ le join d'un indépendant à $n$ sommets avec le graphe $G$
+\end{def*}
+
+\begin{prop}
+    Soit $G$ un graphe à $3$ sommets. $K(3, G)$ n'est pas un graphe de carte
+\end{prop}
+
+\begin{proof}
+    Supposons par l'absurde que $K(3, G)$ est un graphe de carte. On se donne alors $H$ vérifiant toutes les propriétés
+    du théorème \ref{carCarte}. On note pour tout $v_i$, sommet indépendant de $K(3, G)$, $N_i$ son voisinage dans $H$
+    incluant $v_i$. On note $H'$ le graphe $(((H / N_1) / N_2) / N_3)$, qui est donc un mineur de $H$ et donc planaire.
+    Or $H' = K_{3,3}$ : en effet $N_i$ est adjacent à tout les sommets de $G$, comme le voisinage de $v_i$ dans $H$ l'est,
+    car $v_i$ l'est dans $K(3, G)$. De plus il n'y a pas d'arrêtes entre les sommets de $G$ comme $H$ est biparti, et pas
+    d'arrêtes entre les différents $N_i$ comme les $v_i$ sont indépendants dans $G$.\\
+    Absurde, $K(3, G)$ n'est pas un graphe de carte
+\end{proof}
+
+Un argument très similaire montre que les expansions de $K(3, G)$ ne sont également pas des graphes de carte.\\
+Notons que $K(2, G)$ pour $G$ quelconque et $K(n, G)$ pour $G$ à $2$ sommets sont de carte (ptit dessin)
+
+\begin{conj}
+    Les graphes de carte sont stables par contraction d'arrête
+\end{conj}
+
+\begin{conj}
+    Si $G$ n'a pas de sous graphe induit se contractant en un $K(3, H)$, $G$ est de carte
+\end{conj}
+
+Si la conjecture est vraie, on a alors un algorithme polynômial pour reconnaître les cographes de carte : pour l'union disjointe,
+il n'y a rien à vérifier. Pour le join, il suffit de vérifier récursivement que chaque composante a join est de carte, et
+qu'aucune ne contient un indépendant de taille $3$. Au final on devrait avoir du $O(n^4)$ pire des cas avec que des algos
+naïfs, mais y a sûrement moyen d'améliorer
 
 \end{flushleft}
 \end{document}
