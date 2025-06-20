@@ -27,9 +27,22 @@
 
 \section{Résultats}
 
+\subsection{Trucs généraux}
+
+\begin{def*}[Carte]
+    Une carte est une fonction $f : V \rightarrow \mathcal{P}(\mathbb{S}^2)$ telle que pour tout $v \in V$, $f(v)$
+    est homéomorphe à $\mathbb{D}^2$ et telle que pour $v \neq u$, $f(u)$ et $f(v)$ sont d'intérieur disjoints. Si
+    $f$ forme un recouvrement de $\mathbb{S}^2$, on la dira sans trou, ou complète. On appelera les $f(v)$ régions
+\end{def*}
+
+\begin{def*}[Graphe de carte]
+    Un graphe $G = (V, E)$ est de carte s'il existe une carte $f$ sur $V$ telle que $xy \in E$ si et seulement si
+    $f(x) \cap f(y) \neq \varnothing$
+\end{def*}
+
 \begin{theorem}[Caractérisation des graphes de carte]\label{carCarte}
     Un graphe $G = (V, E)$ est de carte si et seulement si il existe $H$ un graphe biparti planaire dont un des
-    côtés de la bipartition est $V$, tel que $H^2[V] = G$.
+    côtés de la bipartition est $V$, tel que $H^2[V] = G$. Un tel graphe $H$ est appelé graphe témoin de $G$
 \end{theorem}
 
 \begin{prop}
@@ -60,13 +73,11 @@
     Absurde, $K(3, G)$ n'est pas un graphe de carte
 \end{proof}
 
-Un argument très similaire montre que les expansions de $K(3, G)$ ne sont également pas des graphes de carte.\\
-Notons que $K(2, G)$ pour $G$ quelconque et $K(n, G)$ pour $G$ à $2$ sommets sont de carte (ptit dessin)
-
-\begin{conj}
-    Les graphes de carte sont stables par contraction d'arrête
-\end{conj}
-
+Un argument très similaire montre que les graphes se contractant en $K(3, G)$ ne sont également pas des graphes de carte.\\
+Notons que $K(2, G)$ pour $G$ quelconque et $K(n, G)$ pour $G$ à $2$ sommets sont de carte, ainsi que le join de $G$ et $H$ où
+$G$ et $H$ ont $3$ sommets et possèdent tout deux des arrêtes (ptit dessin)
+\\~\\
+Pour la suite dès que l'on utilisera la notation $K(3, H)$, on supposera $H$ à $3$ sommets
 \begin{conj}
     Si $G$ n'a pas de sous graphe induit se contractant en un $K(3, H)$, $G$ est de carte
 \end{conj}
@@ -76,5 +87,144 @@ il n'y a rien à vérifier. Pour le join, il suffit de vérifier récursivement 
 qu'aucune ne contient un indépendant de taille $3$. Au final on devrait avoir du $O(n^4)$ pire des cas avec que des algos
 naïfs, mais y a sûrement moyen d'améliorer
 
+\subsection{Preuve de la conjecture}
+
+On va regarder des graphes dont les cartes sont complètes et $2$-connexes. (d'ailleurs y a moyen que carte complète
+$\Rightarrow$ $2$-connexe)
+On aimerait pouvoir trouver des classes spéciales de graphes de carte, dans l'idéal définies de manière combinatoire et
+relativement stables, qui admettent des cartes complètes
+
+\begin{conj}
+    Il existe une classe de graphe $\mathcal{C}$ telle que si $G \in \mathcal{C}$ et est de carte, $G$ admet une carte complète.
+    De plus cette classe $\mathcal{C}$ est stable par contraction d'une certaine arrête
+\end{conj}
+
+\begin{conj}
+    Il s'agit de l'ensemble des graphes $3$-connexes
+\end{conj}
+
+\subsubsection{Bases combinatoire}
+
+\begin{lem}
+    Un graphe $G$ se contracte en un $K(3, H)$ si et seulement si il existe $3$ sommets
+    indépendants dans $G$ pouvant tous accéder aux $3$ même sommets par des chemins n'exploitant pas ces derniers (sauf en
+    leur éxtrémités), ces derniers ne s'intersectant éventuellement qu'en leur fin (on situe leur début en les sommets indépendants)
+\end{lem}
+
+\begin{proof}
+    Si $G$ vérifie cette propriété, alors en contractant les arrêtes en partant de la fin des chemins, on obtient un $K(3, H)$ : en
+    effet les chemins étant distincts, à cause de leur première arrête car les sommets indépendants sont bien distincts,
+    cette contraction transforme les $3$ chemins de chaque sommet indépendant en $3$ arrêtes (car les chemins n'exploitent pas les sommets
+    d'arrivée), on a bien ce que l'on veut
+    \\~\\
+    Si $G$ se contracte en un $K(3, H)$, notons $V_1$, $V_2$, $V_3$ l'ensemble des sommets de $G$ formant l'indépendant
+    de taille $3$ de $K(3, H)$, et $A_1, A_2, A_3$ ceux formant le graphe $H$. Soient $v_1, v_2, v_3$ dans chacun des ensembles respectifs.
+    Ces $3$ sommets sont indépendants. Soient $a_1, a_2, a_3$ dans leurs ensembles respectifs. Comme il y a une arrête de $V_i$ à $A_j$
+    pour tout $1 \leq i,j \leq 3$, il existe une arrête d'un élement de $V_i$ à un de $A_j$. $V_i$ étant obtenu par contraction d'arrêtes,
+    $G[V_i]$ est connexe, tout comme $G[A_j]$. Ainsi, on trouve bien un chemin de $v_i$ à $a_j$. Un chemin de $v_k$ à $a_j$, $k \neq i$ construit
+    de la même manière n'intersecte l'autre chemin qu'éventuellement dans la partie dans $A_j$, soit la fin du chemin.
+\end{proof}
+
+\subsubsection{Etude des cartes}
+
+\begin{lem}\label{cycleCompl}
+    Soit $G$ un graphe de carte à carte complète et $v \in V$ de degré au moins $2$. Pour un certain graphe témoin $H$, il existe un cycle séparant $v$
+    du reste du graphe $H$ (le seul sommet dans l'intérieur du cycle est $v$), et tel que $v$ soit adjacent (dans $G$) à tout les sommets
+    de $G$ formant ce cycle
+\end{lem}
+
+\begin{proof}
+    On se donne une carte complète de $G$ et on confondra alors sommets et régions. Les voisins de $v$ sont exactement les régions
+    rencontrant la frontière de $v$. Comme $v$ est homéomorphe à un disque, on se donne $\gamma : [0, 1] \rightarrow \mathbb{S}^2$
+    une courbe de Jordan paramétrant sa frontière. Notons $u_0$ une région distincte de $v$ contenant $\gamma([t_0, \varepsilon[)$ pour $\varepsilon$
+    assez petit, où $t_0 = 0$, cette dernière existe comme la carte est complète. On note $I_0 = \{ t \in [0, 1] \mid \gamma(t) \in u_0 \}$
+    et $t_1 = \max(I_0)$. Si $t_1 = 1$, comme $v$ est de degré au moins $2$, il existe une autre région adjacente à $v$, en un point uniquement
+    comme $t_1 = 1$. On peut alors montrer que $\gamma$ n'est pas un lacet contractile dans $u_0$ et donc que $u_0$ n'est pas simplement connexe, absurde.
+    Donc $t_1 < 1$. Par maximalité, $\gamma(t_1)$ est sur le bord de $u_0$ et donc il existe un $u_1$ vérifiant les mêmes propriétés que $u_0$
+    relativement à $t_1$. On a alors $u_0u_1 \in E$. On répète alors le processus afin de trouver $u_0, ..., u_k$, $k \geq 1$ formant un cycle
+    \\~\\
+    On construit alors le graphe témoin $H$ comme suit : on commence par se donner un graphe témoin quelconque de $G - v$ construit à partir de la carte
+    complète donnée, que l'on considèrera alors plongé dans le plan. On ajoute ensuite $v$ : on ajoute au graphe témoin les sommets
+    $\gamma(t_i)$, $1 \leq i \leq k$, à l'exception peut être de $\gamma(t_k)$ si $u_k = u_0$. On relie alors les regions $u_i$ aux $\gamma(t_j)$
+    adjacents à ces dernières par des chemins, et on ajoute enfin un dernier point dans $v$, que l'on relie à chaque $\gamma(t_i)$.
+    Par construction de $\gamma$, s'il existe une région adjacente à $v$ distincte des $u_i$, leur intersection est incluse
+    dans les $\gamma(t_i)$, et il suffit alors de relier $\gamma(t_i)$ au point représentant la région correspondante pour ainsi avoir
+    un témoin de $G$. Notons que $u_0, \gamma(t_1), u_1, \gamma(t_2), ..., u_0$ est un cycle séparant $v$ du reste de $H$ par construction de ce dernier,
+    et la construction des $u_i$ implique que $v$ leur est adjacent dans $G$
+\end{proof}
+
+\begin{lem}\label{3connCompl}
+    Soit $G$ un graphe de carte $3$-connexe. Il existe un surgraphe de $G$ à un sommet de plus admettant une carte complète.
+\end{lem}
+
+\begin{proof}
+    On se donne un témoin $H$ de $G$ et on note $U$ l'ensemble des sommets autres que $V$ de $H$. On peut supposer que $H$
+    est construit de telle sorte à ce que $d(u) \geq 2$ pour $u \in U$. Soit $u \in U$, $x, y \in V$ parmi ses voisins.
+    Si $x$ et $y$ sont adjacents à la même face de $H$, alors on ajoute une arrête entre $x$ et $y$ à l'intérieur de cette face,
+    que l'on subdivise ensuite à l'aide d'un sommet afin de garder le graphe biparti. On répète alors
+    ce processus jusqu'à ce que tout les sommets adjancents dans $G$ soient reliés par deux chemins de longueur $2$.
+    \\~\\
+    Le nouveau graphe $H'$ est planaire biparti et $2$-connexe : si l'on retire un sommet de $V$ le graphe reste clairement
+    connexe comme $G$ est $3$-connexe. Si l'on retire un sommet de $U'$ (l'ensemble $U$ avec les nouveaux sommets ajoutés),
+    $H$ reste aussi connexe :
+    si le sommet retiré est parmi ceux de $U' \backslash U$, la construction de $U'$ donne que le graphe reste connexe. Sinon,
+    on se donne $v_1, ..., v_k$ les voisins de $u$ le sommet retiré, tels que $v_i$ et $v_{i+1}$ soient adjacents à la
+    même face. On a alors qu'après le retrait de $u$, par construction encore de $U'$, les $v_i$ sont tous accessibles
+    entre eux. On peut alors voir que cela implique que le graphe reste connexe et est un témoin de $G$
+    \\~\\
+    On construit alors un surgraphe de $H'$ que l'on va plonger dans le plan. On construit le
+    surgraphe $H''$ en itérant sur tout sommet $v \in V$, et en ajoutant une arrête entre chaque paire $u_1, u_2$
+    voisine de $v$ adjacente à une même face, arrête prenant la forme d'un chemin dans cette face. Si $v$ est
+    un sommet extérieur dans $H'$, et que l'on considère $2$ de ses voisins dans $H'$ eux aussi extérieurs,
+    alors on choisira le chemin de telle sorte à ce que $v$ devienne intérieur dans $H''$.
+    Ainsi tout les élements de $U'$ deviennent de degré au moins $3$. $G$ étant $3$-connexe, on peut alors voir que $H''$
+    le devient également (on ne peut plus isoler de sommet de $U'$). $H''$ est également planaire et par construction,
+    tout les sommets $v \in V$ sont intérieurs.
+    \\~\\
+    (merde faut montrer que les adjacences restent cohérentes aussi).
+    On construit à présent la carte : pour $v \in V$, la région associée à $v$ est l'adhérence de la face dans laquelle se trouve
+    le point $v$ dans $H'' - v$. Cette face est bien homéomorphe à un disque, comme $H'' - v$ est $2$-connexe et qu'alors
+    cette dernière est bordée par un cycle (voir ...), le théorème de Jordan-Schönflies nous donne ce que l'on veut.
+    Cet ensemble de région correspond alors à l'intérieur du cycle de $H''$
+    séparant la face non bornée des autres (comme $H''$ est $2$-connexe). Ainsi, pour les mêmes raisons, la face non bornée, vue dans $\mathbb{S}^2$,
+    est homéomorphe à un disque. On ajoute alors un sommet à $G$ correspondant à cette face et à ses adjacences dans cette carte.
+    La carte est bien complète par construction
+
+\end{proof}
+
+\begin{lem}
+    Soit $G$ un graphe $3$-connexe ne contenant pas un sous graphe induit sur contractant en $K(3, H)$. Alors $G$ est de carte
+\end{lem}
+
+\begin{proof}
+    On procède par récurrence sur le nombre de sommets de $G$ que l'on note $n$.
+    Tout les graphes a moins de $n = 4$ sommets sont de carte, on a notre initialisation.\\
+    Soit $G$ un graphe a $n \geq 5$ sommets vérifiant l'hypothèse. On se donne par ..., une arrête $xy \in E$ telle que $G / xy$ soit $3$-connexe.
+    $G / xy$ ne possède pas de sous graphe se contractant en $K(3, H)$, sinon $G$ en possède un, $G / xy$ est alors de carte par récurrence. On ajoute
+    un sommet $\infty$ à $G / xy$ que l'on rend adjacent à certains sommets de telle sorte que $G'$, le nouveau graphe, admette une carte complète par
+    le lemme \ref{3connCompl}. Notons $z$ le sommet obtenu par contraction de $xy$. $G / xy$ étant $3$-connexe, $z$ est de degré au moins $3$ dans $G'$.
+    \\~\\
+    On traite d'abord le cas où $z$ n'est pas adjacent à $\infty$. On se donne $H$ un témoin de $G'$ vérifiant les hypothèse du lemme \ref{3connCompl}
+    relativement à $z$. On note $x_1, ..., x_k$ les voisins de $x$ dans $G'$ présents dans le cycle, l'ordre donné étant l'ordre de leur apparition
+    dans le cycle. On note pour tout $i$ $P_i$ le chemin de $x_i$ à $x_{i+1}$ dans $H$ donné par le sens usuel du cycle (on considèrera tout les indices
+    modulo $k$). On va à présent construire un témoin pour $G$. On distingue ensuite plusieurs cas selon la position des voisins de $y$ dans $H$ :
+    \begin{itemize}
+        \item Si tout les voisins de $y$ sont compris dans un $P_i$, on place $y$ dans l'intérieur du cycle donné par $x$ et $P_i$, et on
+        relie alors $y$ à ses voisins par des chemins dans l'intérieur du cycle. On ajoute également un chemin de $y$ vers $x$ que l'on
+        subdivise pour garder le graphe biparti
+
+        \item 
+    \end{itemize}
+\end{proof}
+
+Schéma de preuve : se donner un graphe qui marche pour avoir des cartes complètes, de telle sorte que la contraction d'arrête
+garde cette propriété. On contracte la bonne arrête. On retire le sommet identifé et on identifie un cycle minimal qui
+l'entoure dans le $H$ (on est de taille 1 de moins donc de carte). Puis, on distingue globalement $3$ cas dont un
+problématique, qui sont explicités dans le livre. Le cas $K_5$ ne pose pas de problème car on a droit à pleins
+d'intersections entre régions, le cas $K_{3,3}$ qui devient $K(3, G)$ est évacué par l'hypothèse initiale
+\\~\\
+Pour conclure, il faut également dire que l'on peut ajouter des nouveaux sommets à un graphe sans $K(3, G)$
+pour obtenir un graphe vérifiant les hypothèses et toujours sans $K(3, G)$. La stabilité par sous graphe induit finit
+la preuve
 \end{flushleft}
 \end{document}
