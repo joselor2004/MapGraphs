@@ -6,6 +6,7 @@
 \usepackage{amsmath}
 \usepackage{algorithm2e}
 \usepackage{hyperref}
+\usepackage{comment}
 \usepackage[french]{babel}
 \usepackage{color}
 \usepackage{tikz}
@@ -73,6 +74,8 @@
     Absurde, $K(3, G)$ n'est pas un graphe de carte
 \end{proof}
 
+\begin{comment}
+
 \subsection{Contractibilité des arrêtes}
 
 On aimerait donner une condition nécessaire et suffisante permettant de contracter les arrêtes d'un graphe de carte.
@@ -93,6 +96,15 @@ en ajoutant des arrêtes entre les sommets distincts de $a, b, c$
                 \node (y) [below right = 12mm and 5mm of a] {$y$};
                 \node (u) [below = of b] {$u$};
                 \node (v) [below = of c] {$v$};
+
+                \node (a1) [right = 20mm of v] {$a$};
+                \node (b1) [right = of a1] {$b$};
+                \node (c1) [right = of b1] {$c$};
+                \node (d1) [right = of c1] {$d$};
+                \node (x1) [above = of a1] {$x$};
+                \node (y1) [above = of b1] {$y$};
+                \node (u1) [above = of c1] {$u$};
+                \node (v1) [above = of d1] {$v$};
             \end{scope}
 
             \path
@@ -100,7 +112,12 @@ en ajoutant des arrêtes entre les sommets distincts de $a, b, c$
             (b) edge (x) edge (u) edge (v)
             (c) edge (y) edge (u) edge (v)
             (x) edge (y) edge[bend right] (u)
-            (y) edge (u);
+            (y) edge (u)
+            (x1) edge (y1) edge (a1) edge (b1) edge (c1)
+            (y1) edge (a1) edge (b1) edge (d1)
+            (u1) edge (a1) edge (c1) edge (d1)
+            (v1) edge (b1) edge (c1) edge (d1)
+            (a1) edge (b1);
         \end{tikzpicture}
 
     \end{center}
@@ -145,10 +162,11 @@ ces deux derniers sont adjacents pour obtenir un témoin de $G$ présentant le p
 
 \begin{def*}[Arrête pincée]
     On appellera arrête pincée de $G$ toute arrête $xy$ telle qu'il existe un sous graphe induit de $G$ contenant $xy$ se contractant en
-    $G_p \in \mathcal{G}_{pch}$, et telle que la contraction n'exploite pas les arrêtes du sous graphe induit par $x,y,a,u$
+    $G_p \in \mathcal{G}_{pch}$, et telle que la contraction n'exploite pas les arrêtes du sous graphe induit par $x,y,a,u$.
 \end{def*}
 
-Les conditions sur les arrêtes à contracter ne sont pas strictement nécessaires mais rendent plus agréables les preuves
+
+(Ouais jpense pas continuer à parler des arrêtes pincées c trop dur)
 
 \begin{prop}
     Soit $G$ un graphe de carte et $xy \in E$. Si $xy$ n'est pas pincée, $G / xy$ est de carte
@@ -172,15 +190,29 @@ Les conditions sur les arrêtes à contracter ne sont pas strictement nécessair
     On note $C_x$ le cycle bordant $x$ et $C_y$ celui bordant $y$. On note $C_{x, y}$ la partie commune de ces deux cycles.
     On choisit $C_x$ et $C_y$ de manière à minimiser le nombre de sommets de $C_{x,y}$ d'abord, puis ceux de $C_x$ et $C_y$.
     Cela implique, en particulier, qu'il n'existe pas de chemin disjoint de $C_x$ d'un sommet de $C_{x,y}$ à $C_x$, car
-    cela contredirait la minimalité (cela vaut pour $y$ également). On en déduit que dans les chemins de $x$ à $C_x$ dont
-    l'existence a été montrée, au moins un a pour destination un sommet hors de $C_{x,y}$, et de même pour $y$.
+    cela contredirait la minimalité (cela vaut pour $y$ également). On en déduit que dans les chemins de $x$ à $C_x$ ne passant pas
+    par $s$, dont l'existence a été montrée plus tôt, au moins un a pour destination un sommet hors de $C_{x,y}$, et de même pour $y$.
     Le cas contraire, on pourrait construire un témoin comme illustré figure ??.
     \\~\\
-    On suppose dans un premier temps que $C_{x,y}$ contient strictement $\{u, a\}$. On suppose même sans perte de généralité
-    que $a$ a un voisin distinct de $u$ dans $C_{x, y}$. On se donne $z$ le sommet d'arrivée du chemin de $x$ à
-    $C_x - C_{x,y}$ et $t$ celui de $y$.
+    On suppose dans un premier temps que $C_{x,y}$ est strictement plus grand que $\{u, s, a\}$. On suppose même, sans perte de généralité,
+    que $a$ possède un voisin $q$ dans $C_{x,y}$ distinct de $s$. Cela implique qu'il existe un sommet $p \in V \cap C_{x,y}$, distinct de $u$
+    et $a$, tel que $ap$ soit une arrête de $G$ : en effet si ce n'était pas le cas, les voisins de $q$ distincts de $a$
+    dans $C_x$ ou $C_y$ ne seraient pas dans $C_{x, y}$. Soit $r$ un de ces voisins, supposons dans $C_x$.
+    $r$ et $a$ sont adjacents à la même face : si ce n'est pas le cas, il existe alors un chemin de $q$ à un sommet du cycle contenant $r$
+    séparant $r$ et $a$. On se donne alors $r'$ le voisin de $q$ sur ce chemin, et on réitère le processus jusqu'à obtenir un point $r^*$
+    adjacent à la même face que $a$. Quitte à faire un bon choix de témoin initialement, on peut supposer que les sommets de $V$ formant
+    une arrête et adjacents à une même face de $H$ sont reliés par une arrête subdivisée. Notons $q'$ le sommet entre $a$ et $r^*$.
+    On peut alors construire un nouveau cycle contenant $x$ en exploitant les arrête $aq', q'r^*$ puis le chemin contenant $r^*$ et $C_x$.
+    Ce cycle a une partie commune avec $C_y$ strictement plus petite que $C_{x,y}$, cela contredit la minimalité.
     \\~\\
-    Une disjonction de cas interminable termine la preuve (à bien faire sur papier)
+    On distingue alors $2$ grands cas
+    \begin{itemize}
+        \item Si $zt$ n'est pas une arrête de $G$ : alors en considérant les sommets $a, z, t$ et $x, y, u, p$, on obtient par de bon
+        choix de chemins des $a, z, t$ vers les $x, y, u, p$ un graphe se contractant de la manière voulue en un $G_p \in \mathcal{G}_{pch}$
+
+        \item Si $zt$ est une arrête de $G$ : si il n'existe aucun autre chemin hors cycle de $C_x$ à $C_y$, le graphe $G / xy$
+        est de carte, il en existe donc au moins un. 
+    \end{itemize}
 \end{proof}
 
 On dira qu'une suite de contractions est sans pincement si elle n'exploite aucune arrête pincée
@@ -189,39 +221,19 @@ On dira qu'une suite de contractions est sans pincement si elle n'exploite aucun
     Si $G$ a un sous graphe induit se contractant sans pincement en un $K(3, H)$, $G$ n'est pas de carte
 \end{cor}
 
-\section{Caractérisation combinatoire des graphes de carte}
+\end{comment}
 
-Ce qu'on essaie de montrer
+\section{Etude des cartes complètes $3$-connexes}
 
-\begin{conj}
-    Tout graphe $G$ n'ayant pas de sous graphe induit se contractant sans pincement en un $K(3, H)$ est de carte
-\end{conj}
+On va faire qqes lemmes sur les cartes complètes qui permettront de déblayer un algo
 
-\begin{lem}
-    Un graphe $G$ se contracte en un $K(3, H)$ si et seulement si il existe $3$ sommets
-    indépendants dans $G$ pouvant tous accéder aux $3$ même sommets par des chemins n'exploitant pas ces derniers (sauf en
-    leur éxtrémités), ces derniers ne s'intersectant éventuellement qu'en leur fin (on situe leur début en les sommets indépendants)
+\begin{lem}[Cycle recouvrant]\label{cycleCompl}
+    Soit $G$ un graphe de carte $3$-connexe à carte complète. Il existe un cycle, ou chemin de taille $2$, $C$ inclus dans le voisinage de $v$,
+    tel que $N(v) \subset N(C)$
 \end{lem}
 
-\begin{proof}
-    Si $G$ vérifie cette propriété, alors en contractant les arrêtes en partant de la fin des chemins, on obtient un $K(3, H)$ : en
-    effet les chemins étant distincts, à cause de leur première arrête car les sommets indépendants sont bien distincts,
-    cette contraction transforme les $3$ chemins de chaque sommet indépendant en $3$ arrêtes (car les chemins n'exploitent pas les sommets
-    d'arrivée), on a bien ce que l'on veut
-    \\~\\
-    Si $G$ se contracte en un $K(3, H)$, notons $V_1$, $V_2$, $V_3$ l'ensemble des sommets de $G$ formant l'indépendant
-    de taille $3$ de $K(3, H)$, et $A_1, A_2, A_3$ ceux formant le graphe $H$. Soient $v_1, v_2, v_3$ dans chacun des ensembles respectifs.
-    Ces $3$ sommets sont indépendants. Soient $a_1, a_2, a_3$ dans leurs ensembles respectifs. Comme il y a une arrête de $V_i$ à $A_j$
-    pour tout $1 \leq i,j \leq 3$, il existe une arrête d'un élement de $V_i$ à un de $A_j$. $V_i$ étant obtenu par contraction d'arrêtes,
-    $G[V_i]$ est connexe, tout comme $G[A_j]$. Ainsi, on trouve bien un chemin de $v_i$ à $a_j$. Un chemin de $v_k$ à $a_j$, $k \neq i$ construit
-    de la même manière n'intersecte l'autre chemin qu'éventuellement dans la partie dans $A_j$, soit la fin du chemin.
-\end{proof}
-
-\begin{lem}\label{cycleCompl}
-    Soit $G$ un graphe de carte à carte complète et $v \in V$ de degré au moins $2$. Pour un certain graphe témoin $H$, il existe un cycle séparant $v$
-    du reste du graphe $H$ (le seul sommet dans l'intérieur du cycle est $v$), et tel que $v$ soit adjacent (dans $G$) à tout les sommets
-    de $G$ formant ce cycle
-\end{lem}
+Faut prendre en compte le cas où la fusion de $v$ et d'une région n'est pas simplement connexe et intersecte en au moins $2$ segments
+disjoints
 
 \begin{proof}
     On se donne une carte complète de $G$ et on confondra alors sommets et régions. Les voisins de $v$ sont exactement les régions
@@ -282,37 +294,78 @@ Ce qu'on essaie de montrer
 
 \end{proof}
 
-\begin{lem}
-    Soit $G$ un graphe de carte et $v \in V$. Il existe un surgraphe de carte $G'$ de $G$ se contractant sans pincement en $G$
-    tel que pour un certain témoin $H$ de $G'$, les voisins de $v$ dans $H$ soient tous de degré $2$
+\begin{def*}[Arrête sans trou]
+    On dit qu'une arrête $xy$ d'un graphe $G$ $3$-connexe est sans trou si et seulement si pour toute paire de cliques $K^1, K^2$, voisines toutes deux
+    de $x$ et $y$, si $G - (K^1 \cup K^2 \cup \{x,y\})$ n'est pas connexe, alors $G - (K^1 \cup K^2 \cup S)$ ne l'est pas non plus pour
+    un certain $S \subsetneq \{x, y\}$
+\end{def*}
+
+La définition est motivée par... le dessin qui n'est pas là
+\\~\\
+On considèrera par la suite que tout les graphes $G$ sont de carte, $3$-connexe, et admettent une carte complète
+
+\begin{lem}\label{contrSanstrou}
+    Soit $xy \in E$ tel que dans une certaine carte complète de $G$, $x$ et $y$ se rencontrent pas qu'en un seul point.
+    Si $xy$ est sans trou, alors $G / xy$ admet une carte complète et reste $3$-connexe
 \end{lem}
 
 \begin{proof}
-    On se donne un témoin de $G$. On subdivise $2$ fois chaque arrête entre $v$ et un de ses voisins. Le graphe obtenu est bien
-    planaire biparti et est donc le témoin d'un graphe de carte, qui est un surgraphe de $G$. On peut contracter $G'$
-    en $G$ en contractant les arrêtes entre $v$ et ses voisins dans $G'$. Ces arrêtes ne sont pas pincées car le voisinage de $v$
-    et d'un de ses voisins dans $G'$ quelconque est disjoint.
+    On se donne une carte complète de $G$ vérifiant ces conditions. Supposons par l'absurde que $x$ et $y$ ne se rencontrent pas selon un chemin.
+    On raisonne selon la nature de $x \cap y$
+    \\~\\
+    Supposons cet ensemble discret, donc fini car compact. Notons alors ses points
+    $u_1, ..., u_k$, $k \geq 2$ dans l'ordre cyclique selon la frontière de $x$. On construit alors $H$ un témoin de $G$ comme suit :
+    on place $x$ et $y$ dans leurs régions respectives, $u_1, ..., u_k$ à leur position respectives et on relie $x$ et $y$ aux
+    $u_i$ par des chemins dans les régions $x$ et $y$. La carte étant complète, en suivant le chemin de $u_1$ à $u_2$ le long de la frontière de
+    $x$, on construit un chemin dans $G$ de la même manière que dans le lemme \ref{cycleCompl}. On place alors les régions et points
+    de rencontre comme discuté dans le lemme \ref{cycleCompl} dans $H$. Ainsi, l'intérieur du cycle $x, u_1, y, u_{k}$ dans $H$
+    contient au moins un sommet de $V$. La carte étant complète, il existe des régions, extérieures aux cycles
+    précedemment décrits, contenant les points $u_1$ et $u_k$. Les régions, distinctes de $x$ et $y$, contenant $u_1$ forment une clique $K^1$ et celle contenant
+    $u_k$ une clique $K^2$, voisines toutes deux de $x$ et $y$. En retirant les sommets de $V$ formant ces cliques du graphe $H$, on remarque
+    qu'il n'est plus connexe, comme l'intérieur du cycle $x, u_1, y, u_k$ ne peut plus accéder aux sommets extérieurs à ce dernier, le seul chemin
+    possible empruntant $u_1$ ou $u_k$ qui n'a plus de voisins extérieurs. Donc $G - (K^1 \cup K^2 \cup \{x,y\})$ n'est pas connexe. Or
+    $G - (K^1 \cup K^2 \cup S)$, $S \subsetneq \{x, y\}$, l'est car le témoin $H$ où l'on retire uniquement les sommets adjacents à $u_1$ ou $u_k$ extérieurs
+    au cycle et éventuellement soit $x$ soit $y$ est connexe par construction de ce dernier
+    \\~\\
+    Si cet ensemble n'est pas discret, son nombre de composantes connexes étant fini par compacité, il est alors union disjointe de chemins
+    et de points.\\
+    Si cet ensemble est connexe, il ne s'agit que d'un chemin, alors on peut construire une carte complète pour $G / xy$ en
+    représentant $xy$ par l'intérieur du chemin obtenu en concaténant les parties disjointes des frontières de $x$ et $y$, auquel on ajoute ce chemin.
+    \\~\\
+    Sinon : cet ensemble ne peut contenir $2$ chemins disjoints par $3$-connexité : en effet dans ce cas $G - \{x, y\}$ n'est pas connexe.
+    Donc il contient un chemin et un point n'appartenant pas à ce dernier. On choisit alors un point $u_1$ dans l'intérieur du chemin (pas à une
+    de ses éxtrémités) et on note $u_2$ un point de $x \cap y$ n'appartenant pas au chemin. On construit un témoin $H$ de la même manière que précédemment.
+    L'intérieur du cycle $x, u_1, y, u_2$ contient un sommet de $V$ pour les mêmes raisons qu'auparavant, sauf qu'ici $u_1$ étant dans l'intérieur
+    du chemin ne peut être adjacent à ce sommet. Notons $K$ la clique formée des sommets extérieurs à ce cycle, excepté $x$ et $y$, contenant le point $u_2$.
+    $G - K$ est connexe, pour les mêmes raisons que pour le cas précédent, tandis que $G - (K \cup \{x, y\})$ ne l'est pas
+    \\~\\
+    La $3$-connexité vient directement de la définition d'arrête sans trou
 \end{proof}
 
 \begin{lem}
-    Soit $G$ un graphe ne possédant pas de sous graphe induit se contractant sans pincement en $K(3, H)$. Il existe un
-    graphe $G'$ $3$-connexe tel que $G$ en soit sous graphe induit, vérifiant la même propriété
+    Pour tout $v \in V$, il existe $u$ un voisin de $v$ tel que $uv$ vérifie les conditions du lemme \ref{contrSanstrou}
 \end{lem}
 
 \begin{proof}
-    Deux idées de preuve : la première rajouter un seul sommet et le relier le plus possible jusqu'à ne plus pouvoir, montrer
-    qu'alors on est $3$-connexe.\\
-    La deuxième, rajouter des sommets entre chaque composante $3$-connexe et prier pour que ça garde la propriété
-    de $K(3, H)$
+    On se donne une carte complète de $G$. La preuve du lemme \ref{cycleCompl} permet d'affirmer qu'il existe des régions $u$ adjacentes à $v$
+    telles que $u \cap v$ ne soit pas discret. On suppose alors par l'absurde que toutes ces régions sont telles que $u \cap v$ ne soit
+    pas connexe. Mais alors, $u \cup v$ sépare $\mathbb{S}^2$ en au moins $2$ composantes connexes, et la carte étant complète les deux sont totalement
+    recouvertes par des régions. Ainsi, $v$ a des voisins tels que leur intersection n'est pas discrète dans les deux composantes connexes ainsi délimitées.
+    On considère alors un voisin dans l'une de ces composantes que l'on note $C$ et on réitère le processus, en choisissant à chaque fois une composante incluse dans $C$.
+    On obtient ainsi une infinité de régions distinctes ce qui est absurde car le graphe est fini.
+    \\~\\
+    Ainsi il existe $u$ voisin de $v$ tel que $u \cap v$ soit un chemin. On montre alors qu'il existe un tel $u$ tel que $uv$ soit sans trou.
+    Bon globalement faut distinguer selon si la frontière est recouverte ou pas
 \end{proof}
+
+\begin{prop}
+    Un graphe $G$ $3$-connexe admet une carte complète si et seulement si il existe une certaine arrête $xy \in E$ telle que $G / xy$ admette une carte
+    complète, reste $3$-connexe, et telle que, blabla condition sur le témoin de $G / xy$, globalement $x$ et $y$ se partagent leurs voisins de manière nice 
+\end{prop}
 
 \section{Algorithmes}
 
-On a déjà $2$ critères permettant de partiellement décider si un graphe quelconque est de carte : si il ne possède pas
-de sous graphe se contractant en $K(3, H)$, le graphe est de carte. Si il possède un graphe se contractant sans pincement
-(la propriété de pincement peut se vérifier en temps polynômial) en $K(3, H)$, il n'est pas de carte.
-Etant donné ces deux trucs, on peut peut être alors préciser ce qu'il se trouve entre les deux, peut être par d'autres
-résultats mathématiques ou alors en restreignant à des sous classes
+La proposition d'avant est la base d'un algorithme
 
 \end{flushleft}
 \end{document}
