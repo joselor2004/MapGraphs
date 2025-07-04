@@ -74,6 +74,19 @@
     Absurde, $K(3, G)$ n'est pas un graphe de carte
 \end{proof}
 
+\begin{def*}[Témoin compact]
+    Un témoin compact est ...
+\end{def*}
+
+Dans l'article ... on a que l'existence d'un témoin compacte équivaut à l'existence d'un témoin de $G$. Ainsi on peut se restreindre
+à l'étude de ces témoins particuliers
+
+\begin{theorem}
+    Un graphe $G$ admet une carte complète si et seulement si il admet un témoin qui est une quadrangulation
+\end{theorem}
+
+On en déduit alors que les graphes admettant des cartes complètes sont $2$-connexes comme une quadrangulation l'est
+
 \begin{comment}
 
 \subsection{Contractibilité des arrêtes}
@@ -305,12 +318,12 @@ La définition est motivée par... le dessin qui n'est pas là
 On considèrera par la suite que tout les graphes $G$ sont de carte, $3$-connexe, et admettent une carte complète
 
 \begin{lem}\label{contrSanstrou}
-    Soit $xy \in E$ tel que dans une certaine carte complète de $G$, $x$ et $y$ se rencontrent pas qu'en un seul point.
-    Si $xy$ est sans trou, alors $G / xy$ admet une carte complète et reste $3$-connexe
+    Soit $xy \in E$. Si $xy$ est sans trou, alors dans toute carte complète de $G$, l'arrête $xy$ est représentée par une adjacence
+    connexe entre les deux régions, soit un chemin, soit un point
 \end{lem}
 
 \begin{proof}
-    On se donne une carte complète de $G$ vérifiant ces conditions. Supposons par l'absurde que $x$ et $y$ ne se rencontrent pas selon un chemin.
+    On se donne une carte complète de $G$ vérifiant ces conditions. Supposons par l'absurde que $x$ et $y$ ne se rencontrent pas en un ensemble connexe
     On raisonne selon la nature de $x \cap y$
     \\~\\
     Supposons cet ensemble discret, donc fini car compact. Notons alors ses points
@@ -329,21 +342,16 @@ On considèrera par la suite que tout les graphes $G$ sont de carte, $3$-connexe
     \\~\\
     Si cet ensemble n'est pas discret, son nombre de composantes connexes étant fini par compacité, il est alors union disjointe de chemins
     et de points.\\
-    Si cet ensemble est connexe, il ne s'agit que d'un chemin, alors on peut construire une carte complète pour $G / xy$ en
-    représentant $xy$ par l'intérieur du chemin obtenu en concaténant les parties disjointes des frontières de $x$ et $y$, auquel on ajoute ce chemin.
-    \\~\\
     Sinon : cet ensemble ne peut contenir $2$ chemins disjoints par $3$-connexité : en effet dans ce cas $G - \{x, y\}$ n'est pas connexe.
     Donc il contient un chemin et un point n'appartenant pas à ce dernier. On choisit alors un point $u_1$ dans l'intérieur du chemin (pas à une
     de ses éxtrémités) et on note $u_2$ un point de $x \cap y$ n'appartenant pas au chemin. On construit un témoin $H$ de la même manière que précédemment.
     L'intérieur du cycle $x, u_1, y, u_2$ contient un sommet de $V$ pour les mêmes raisons qu'auparavant, sauf qu'ici $u_1$ étant dans l'intérieur
     du chemin ne peut être adjacent à ce sommet. Notons $K$ la clique formée des sommets extérieurs à ce cycle, excepté $x$ et $y$, contenant le point $u_2$.
     $G - K$ est connexe, pour les mêmes raisons que pour le cas précédent, tandis que $G - (K \cup \{x, y\})$ ne l'est pas
-    \\~\\
-    La $3$-connexité vient directement de la définition d'arrête sans trou
 \end{proof}
 
 \begin{lem}
-    Pour tout $v \in V$, il existe $u$ un voisin de $v$ tel que $uv$ vérifie les conditions du lemme \ref{contrSanstrou}
+    Pour tout $v \in V$, il existe $u$ un voisin de $v$ tel que $uv$ soit sans trou
 \end{lem}
 
 \begin{proof}
@@ -359,13 +367,56 @@ On considèrera par la suite que tout les graphes $G$ sont de carte, $3$-connexe
 \end{proof}
 
 \begin{prop}
-    Un graphe $G$ $3$-connexe admet une carte complète si et seulement si il existe une certaine arrête $xy \in E$ telle que $G / xy$ admette une carte
-    complète, reste $3$-connexe, et telle que, blabla condition sur le témoin de $G / xy$, globalement $x$ et $y$ se partagent leurs voisins de manière nice 
+    Soit $G$ admettant une carte complète et $xy \in E$.
+    On suppose que $xy$ est représentée dans une certaine carte complète de $G$ par une adjacence en un seul point $u$.
+    Si dans cette même carte, la clique formée des régions contenant $u$ (hors $x$ et $y$) est supportée par d'autres points que $u$,
+    alors $G / xy$ admet une carte complète
 \end{prop}
+
+\begin{proof}
+    On se donne un témoin compact quadrangulé issu de la carte complète de l'énoncé, $H$. On suppose également sans perte de généralité que le plongement
+    de $H$ dans le plan donné est un plongement droit. On construit un nouveau témoin compact quandrangulé
+    $H'$ comme suit : on note $K$ la clique formée des régions contenant $u$, hors $x, y$. On retire toute les arrête entre $K$ et $u$.
+    $u$ devient alors de degré $2$, ayant pour seuls voisins $x$ et $y$. On place alors un sommet $u'$ arbitrairement proche de $u$, que l'on
+    relie à $x$ et $y$ par des segments. Ensuite, par des arguments géométriques, tout sommet de $K$ peut être relié par un segment soit à
+    $u$ soit à $u'$. On obtient alors au final un graphe planaire biparti quandrangulé $H'$. Reste à voir que $H'$ est un témoin compact de $G$.
+    \\~\\
+    Les seuls arrêtes de $G$ impactées par les modifications sont les arrêtes entre sommets de $K$ (celles avec $x$ et $y$ sont préservées
+    comme on relie chaque sommet soit à $u$ soit à $u'$). Hors par hypothèse, la clique $K$ est portée par d'autres points de la carte distincts
+    de $u$. Ainsi la suppression de certaines arrêtes de $K$ à $u$ n'a pas d'impact sur les adjacences des sommets de $K$. $H'$ est bien un témoin
+    de $G$. Il est compact par sa construction comme $H$ est un témoin compact
+    \\~\\
+    Il est alors facile de construire un témoin compact quandrangulé de $G / xy$ comme $H'$ représente une carte où les régions $x$ et $y$
+    se rencontrent en un chemin
+\end{proof}
+
+\begin{prop}
+    Soit $xy \in E$. $xy$ est une arrête à trou si et seulement si pour tout $S \subsetneq \{x, y\}$
+    \begin{itemize}
+        \item Soit pour $K$ une certaine clique max de $G[N(x) \cap N(y)]$, $G - K - \{x,y\}$ n'est pas connexe et $G - K - S$ l'est
+        \item Soit pour $K^1, K^2$ deux cliques max de $G[N(x) \cap N(y)]$, $G - (K^1 \Delta K^2 \cup \{x,y\})$ n'est pas connexe,
+        où $\Delta$ est la différence symétrique sur les sommets des deux cliques, et $G - (K^1 \Delta K^2 \cup S)$ l'est
+    \end{itemize} 
+    
+\end{prop}
+
+\begin{proof}
+    Si $xy$ vérifie ces conditions, alors $xy$ est une arrête à trou : il existe au plus $2$ cliques $K^1, K^2$ voisines de $x$ et $y$
+    telles que $G - (K^1 \cup K^2 \cup \{x,y\})$ ne soit pas connexe, tandis que pour $S \subsetneq \{x,y\}$, $G - (K^1 \cup K^2 \cup S)$
+    le soit.
+    \\~\\
+    Si $xy$ est une arrête à trou : on se donne $K^1, K^2$ les cliques voisines de $x$ et $y$ données par la définition.
+    Si l'on peut prendre $K^2$ vide :\\
+    On notera alors le $K^1$ correspondant comme $K$. On se donne alors une clique max de $G[N(x) \cap N(y)]$ contenant $K$, que l'on note $K'$.
+    Notons $C_1, ..., C_k$ les composantes connexe de $G - K - \{x,y\}$, $k \geq 2$. Si pour tout choix de $K'$, la propriété n'est pas
+    vérifiée : alors pour tout $K'$, il existe un $i$ et un $S \subsetneq \{x,y\}$ tels que $V - (K' \cup S) \subset C_i$
+\end{proof}
 
 \section{Algorithmes}
 
-La proposition d'avant est la base d'un algorithme
+Les propositions et lemmes précédents sont la base d'un algorithme : on élimine d'abord pour un $v \in V$ donné toutes les arrêtes
+à trou (faut encore caractériser ça de manière vérifiable en $P$) depuis $v$. Ensuite, il faut sélectionner une arrête que l'on
+sait qui va marcher pour la fusion (ou alors se tromper un nombre borné de fois) et on vérifie avec la proposition précédente.
 
 \end{flushleft}
 \end{document}
