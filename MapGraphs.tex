@@ -390,6 +390,10 @@ On considèrera par la suite que tout les graphes $G$ sont de carte, $3$-connexe
     se rencontrent en un chemin
 \end{proof}
 
+Reformuler la propriété de sans trou, et reformuler la propriété (typiquement le premier point est pas en équivalence, le deuxième si
+par contre. Toutefois si le premier point échoue, alors on peut reconstruire la carte pour y enlever les trous). Sans trou est peut être
+plus intelligent dans le cas spécifique des graphes de carte, si on a une non instance de toute façon on le verra quand ça devient gênant
+
 \begin{prop}
     Soit $xy \in E$. $xy$ est une arrête à trou si et seulement si pour tout $S \subsetneq \{x, y\}$
     \begin{itemize}
@@ -409,7 +413,7 @@ On considèrera par la suite que tout les graphes $G$ sont de carte, $3$-connexe
     Si l'on peut prendre $K^2$ vide :\\
     On notera alors le $K^1$ correspondant comme $K$. On se donne alors une clique max de $G[N(x) \cap N(y)]$ contenant $K$, que l'on note $K'$.
     Notons $C_1, ..., C_k$ les composantes connexe de $G - K - \{x,y\}$, $k \geq 2$. Si pour tout choix de $K'$, la propriété n'est pas
-    vérifiée : alors pour tout $K'$, il existe un $i$ et un $S \subsetneq \{x,y\}$ tels que $V - (K' \cup S) \subset C_i$
+    vérifiée : alors pour tout $K'$, 
 \end{proof}
 
 \section{Algorithmes}
