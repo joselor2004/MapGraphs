@@ -74,6 +74,19 @@
     Absurde, $K(3, G)$ n'est pas un graphe de carte
 \end{proof}
 
+Notons toutefois que $K(2, G)$ lui est un graphe de carte, et que le join de $2$ graphes à $3$ sommets tous deux non indépendants
+est de carte également.
+
+\begin{prop}
+    $K_{2,2,2,2}$ n'est pas un graphe de carte
+\end{prop}
+
+\begin{proof}
+    
+\end{proof}
+
+Notons que $K_{2,2,2}$ est toutefois un graphe de carte
+
 \begin{def*}[Témoin compact]
     Un témoin compact est ...
 \end{def*}
@@ -249,6 +262,9 @@ On dira qu'une suite de contractions est sans pincement si elle n'exploite aucun
 \section{Etude des cartes complètes $3$-connexes}
 
 On va faire qqes lemmes sur les cartes complètes qui permettront de déblayer un algo
+\\~\\
+Il faudra aussi bien introduire ce que l'on veut dire par "arrête contractile". Le shuffle de l'ordre cyclique des voisins
+peut aider à avoir des conditions
 
 \begin{prop}\label{cyclSep}
     Soit $G$ $3$-connexe admettant une carte complète. Soit $v \in V$. Il existe un témoin compact quadrangulé $H$ de $G$ et
@@ -304,49 +320,51 @@ On va faire qqes lemmes sur les cartes complètes qui permettront de déblayer u
     donné par cette proposition. On suppose sans perte de généralité que $s_1 \in V$. Pour tout $i$, on pose $E_i = \{s_i\}$
     si $i$ est impair, si $i$ est pair, $E_i$ correspond à l'ensemble des voisins de $s_i$ hors cycle, $v$ exclu. On ordonne alors $N(v)$
     comme suit : on ordonne chaque $E_i$ selon un ordre arbitraire. Puis on ordonne ces ordres arbitraires de sorte à ce que
-    tout les élements de $E_i$ soient plus petits que ceux de $E_{i+1}$. Cet ordre est bien total sur $N(v)$
+    tout les élements de $E_i$ soient plus petits que ceux de $E_{i+1}$. Si un élement apparaît dans plusieurs $E_i$, on le placera avec
+    le $E_i$ de plus petit indice auquel il appartient. Cet ordre est bien total sur $N(v)$
     comme $RA(\{s_1, ..., s_{2l}\}) = N[v]$. De plus ce dernier donne bien lieu à un cycle : en effet tout les sommets de $E_i$ sont
     adjacents aux sommets de $E_{i+1}$ (les indices étant pris modulo $2l$), et les $E_i$ pour $i$ pair sont des cliques.
 \end{proof}
 
-\begin{lem}\label{3connCompl}
-    Soit $G$ un graphe de carte $3$-connexe. Il existe un surgraphe de $G$ à un sommet de plus admettant une carte complète.
-\end{lem}
+
+
+\begin{prop}\label{ezDecontr}
+    Soit $G$, $xy \in E$ une arrête. Supposons que $G / xy$ admette une carte complète et soit $3$-connexe. Soit $H$ un témoin compact
+    quadrangulé de $G / xy$ donné par la proposition \ref{cyclSep}. Notons $s_1, ..., s_k$ le cycle séparant $xy$ du reste de $H$.
+    Si les voisins de $x$ distincts de $y$ sont exactement $RA(\{s_i, ..., s_{i+l}\}) - x$ et ceux de $y$
+    $RA(\{s_{i+l}, ..., s_{i-1}, s_i\}) - y$,
+    où $i, l$ sont entiers et les indices sont vus modulo $k$, alors $G$ admet une carte complète
+\end{prop}
 
 \begin{proof}
-    On se donne un témoin $H$ de $G$ et on note $U$ l'ensemble des sommets autres que $V$ de $H$. On peut supposer que $H$
-    est construit de telle sorte à ce que $d(u) \geq 2$ pour $u \in U$. Soit $u \in U$, $x, y \in V$ parmi ses voisins.
-    Si $x$ et $y$ sont adjacents à la même face de $H$, alors on ajoute une arrête entre $x$ et $y$ à l'intérieur de cette face,
-    que l'on subdivise ensuite à l'aide d'un sommet afin de garder le graphe biparti. On répète alors
-    ce processus jusqu'à ce que tout les sommets adjancents dans $G$ soient reliés par deux chemins de longueur $2$.
-    \\~\\
-    Le nouveau graphe $H'$ est planaire biparti et $2$-connexe : si l'on retire un sommet de $V$ le graphe reste clairement
-    connexe comme $G$ est $3$-connexe. Si l'on retire un sommet de $U'$ (l'ensemble $U$ avec les nouveaux sommets ajoutés),
-    $H$ reste aussi connexe :
-    si le sommet retiré est parmi ceux de $U' \backslash U$, la construction de $U'$ donne que le graphe reste connexe. Sinon,
-    on se donne $v_1, ..., v_k$ les voisins de $u$ le sommet retiré, tels que $v_i$ et $v_{i+1}$ soient adjacents à la
-    même face. On a alors qu'après le retrait de $u$, par construction encore de $U'$, les $v_i$ sont tous accessibles
-    entre eux. On peut alors voir que cela implique que le graphe reste connexe et est un témoin de $G$
-    \\~\\
-    On construit alors un surgraphe de $H'$ que l'on va plonger dans le plan. On construit le
-    surgraphe $H''$ en itérant sur tout sommet $v \in V$, et en ajoutant une arrête entre chaque paire $u_1, u_2$
-    voisine de $v$ adjacente à une même face, arrête prenant la forme d'un chemin dans cette face. Si $v$ est
-    un sommet extérieur dans $H'$, et que l'on considère $2$ de ses voisins dans $H'$ eux aussi extérieurs,
-    alors on choisira le chemin de telle sorte à ce que $v$ devienne intérieur dans $H''$.
-    Ainsi tout les élements de $U'$ deviennent de degré au moins $3$. $G$ étant $3$-connexe, on peut alors voir que $H''$
-    le devient également (on ne peut plus isoler de sommet de $U'$). $H''$ est également planaire et par construction,
-    tout les sommets $v \in V$ sont intérieurs.
-    \\~\\
-    \textbf{(merde faut montrer que les adjacences restent cohérentes aussi).}
-    On construit à présent la carte : pour $v \in V$, la région associée à $v$ est l'adhérence de la face dans laquelle se trouve
-    le point $v$ dans $H'' - v$. Cette face est bien homéomorphe à un disque, comme $H'' - v$ est $2$-connexe et qu'alors
-    cette dernière est bordée par un cycle (voir ...), le théorème de Jordan-Schönflies nous donne ce que l'on veut.
-    Cet ensemble de région correspond alors à l'intérieur du cycle de $H''$
-    séparant la face non bornée des autres (comme $H''$ est $2$-connexe). Ainsi, pour les mêmes raisons, la face non bornée, vue dans $\mathbb{S}^2$,
-    est homéomorphe à un disque. On ajoute alors un sommet à $G$ correspondant à cette face et à ses adjacences dans cette carte.
-    La carte est bien complète par construction
-
+    On construit la carte complète comme suit : on part de $H$, on retire $xy$ et on ajoute $x$ et $y$ à l'intérieur du cycle séparant.
+    Ensuite, on relie $x$ à tout ses voisins de la manière suivante : si $s_j \in U$ et que les deux voisins de $s_j$ sur le cycle
+    sont voisins de $x$, on ajoute une arrête entre $x$ et $s_j$.\\
+    Si l'un des voisins de $s_j$ n'est pas voisin de $x$ et l'autre l'est,
+    et que ce dernier n'a pas été pris en compte par l'étape précédente, c'est alors que $x$ n'a qu'un voisin sur le cycle par
+    les conditions précédentes : si il en avait plus de deux, il aurait été possible de tous les couvrir en considérant les sommets
+    de $U$ faisant la liaison. Dans ce cas, on relie $x$ à son voisin par deux arrêtes subdivisées, et on relie $y$ à chaque sommet
+    joignant $x$ à son voisin.\\
+    On effectue les mêmes étapes pour $y$. Si il n'existe aucun $s_j \in U$ tels que ses deux voisins sur le cycle soient également
+    voisins de $x$ et $y$, cela signifie que $s_i$ et $s_{i+l}$ sont dans $V$. On ajoute alors deux sommet, $s$ et $s'$, l'un relié
+    à $s_i, x, y$, l'autre à $s_{i+l}, x, y$. On obtient au final un témoin de $G$, compact et quadrangulé, donc $G$ admet une carte
+    complète
 \end{proof}
+
+\section{Algorithmes}
+
+L'algorithme de reconnaissance que l'on essaiera de développer est le suivant : on choisit une arrête "contractile" du graphe
+(c'est à dire que, si le graphe est de carte, une arrête représentée par une intersection entre les deux régions formant
+un chemin). C'est la partie la plus difficile et qui sera peut être facilitée par la restriction à des sous familles de graphe.
+Ensuite, on teste si le graphe contracté est un graphe de carte sans trou. Après cela, on décontracte à l'aide de la définition
+d'arrête contractile et de la proposition précédente
+\\~\\
+La dernière étape étant polynômiale, la polynômialité de l'algorithme dépend uniquement de celle du choix de l'arrête contractile.
+
+\section*{Annexe}
+
+Pour tout les trucs à moitiés vrais et à moitié utiles
+
 
 \begin{def*}[Arrête sans trou]
     On dit qu'une arrête $xy$ d'un graphe $G$ $3$-connexe est sans trou si elle vérifie l'une des deux conditions suivantes pour un certain
@@ -458,41 +476,44 @@ plus intelligent dans le cas spécifique des graphes de carte, si on a une non i
     vérifiée : alors pour tout $K'$, 
 \end{proof}
 
-\begin{prop}\label{ezDecontr}
-    Soit $G$, $xy \in E$ une arrête. Supposons que $G / xy$ admette une carte complète et soit $3$-connexe. Soit $H$ un témoin compact
-    quadrangulé de $G / xy$. Notons $s_1, ..., s_k$ le cycle séparant $xy$ du reste de $H$.
-    Si les voisins de $x$ distincts de $y$ sont exactement $RA(\{s_i, ..., s_{i+l}\}) - x$ et ceux de $y$
-    $RA(\{s_{i+l}, ..., s_{i-1}, s_i\}) - y$,
-    où $i, l$ sont entiers et les indices sont vus modulo $k$, alors $G$ admet une carte complète
-\end{prop}
-
-\begin{proof}
-    On construit la carte complète comme suit : on part de $H$, on retire $xy$ et on ajoute $x$ et $y$ à l'intérieur du cycle séparant.
-    Ensuite, on relie $x$ à tout ses voisins de la manière suivante : si $s_j \in U$ et que les deux voisins de $s_j$ sur le cycle
-    sont voisins de $x$, on ajoute une arrête entre $x$ et $s_j$.\\
-    Si l'un des voisins de $s_j$ n'est pas voisin de $x$ et l'autre l'est,
-    et que ce dernier n'a pas été pris en compte par l'étape précédente, c'est alors que $x$ n'a qu'un voisin sur le cycle par
-    les conditions précédentes : si il en avait plus de deux, il aurait été possible de tous les couvrir en considérant les sommets
-    de $U$ faisant la liaison. Dans ce cas, on relie $x$ à son voisin par deux arrêtes subdivisées, et on relie $y$ à chaque sommet
-    situé joignant $x$ à son voisin.\\
-    On effectue les mêmes étapes pour $y$. Si il n'existe aucun $s_j \in U$ tels que ses deux voisins sur le cycle soient également
-    voisins de $x$ et $y$, cela signifie que $s_i$ et $s_{i+l}$ sont dans $V$. On ajoute alors deux sommet, $s$ et $s'$, l'un relié
-    à $s_i, x, y$, l'autre à $s_{i+l}, x, y$. On obtient au final un témoin de $G$, compact et quadrangulé, donc $G$ admet une carte
-    complète
-\end{proof}
-
-\begin{lem}
-    On reprend les notations de la proposition \ref{ezDecontr}. Les hypothèses concernant l'existence d'un tel témoin $H$ sont équivalentes
-    à la proposition suivante : il existe un ordre cyclique des voisins de $xy$ dans $G / xy$ tels que les voisins de $x$ et de $y$
-    y forment deux intervalles (modulaires)
+\begin{lem}\label{3connCompl}
+    Soit $G$ un graphe de carte $3$-connexe. Il existe un surgraphe de $G$ à un sommet de plus admettant une carte complète.
 \end{lem}
 
 \begin{proof}
-    Si 
+    On se donne un témoin $H$ de $G$ et on note $U$ l'ensemble des sommets autres que $V$ de $H$. On peut supposer que $H$
+    est construit de telle sorte à ce que $d(u) \geq 2$ pour $u \in U$. Soit $u \in U$, $x, y \in V$ parmi ses voisins.
+    Si $x$ et $y$ sont adjacents à la même face de $H$, alors on ajoute une arrête entre $x$ et $y$ à l'intérieur de cette face,
+    que l'on subdivise ensuite à l'aide d'un sommet afin de garder le graphe biparti. On répète alors
+    ce processus jusqu'à ce que tout les sommets adjancents dans $G$ soient reliés par deux chemins de longueur $2$.
+    \\~\\
+    Le nouveau graphe $H'$ est planaire biparti et $2$-connexe : si l'on retire un sommet de $V$ le graphe reste clairement
+    connexe comme $G$ est $3$-connexe. Si l'on retire un sommet de $U'$ (l'ensemble $U$ avec les nouveaux sommets ajoutés),
+    $H$ reste aussi connexe :
+    si le sommet retiré est parmi ceux de $U' \backslash U$, la construction de $U'$ donne que le graphe reste connexe. Sinon,
+    on se donne $v_1, ..., v_k$ les voisins de $u$ le sommet retiré, tels que $v_i$ et $v_{i+1}$ soient adjacents à la
+    même face. On a alors qu'après le retrait de $u$, par construction encore de $U'$, les $v_i$ sont tous accessibles
+    entre eux. On peut alors voir que cela implique que le graphe reste connexe et est un témoin de $G$
+    \\~\\
+    On construit alors un surgraphe de $H'$ que l'on va plonger dans le plan. On construit le
+    surgraphe $H''$ en itérant sur tout sommet $v \in V$, et en ajoutant une arrête entre chaque paire $u_1, u_2$
+    voisine de $v$ adjacente à une même face, arrête prenant la forme d'un chemin dans cette face. Si $v$ est
+    un sommet extérieur dans $H'$, et que l'on considère $2$ de ses voisins dans $H'$ eux aussi extérieurs,
+    alors on choisira le chemin de telle sorte à ce que $v$ devienne intérieur dans $H''$.
+    Ainsi tout les élements de $U'$ deviennent de degré au moins $3$. $G$ étant $3$-connexe, on peut alors voir que $H''$
+    le devient également (on ne peut plus isoler de sommet de $U'$). $H''$ est également planaire et par construction,
+    tout les sommets $v \in V$ sont intérieurs.
+    \\~\\
+    \textbf{(merde faut montrer que les adjacences restent cohérentes aussi).}
+    On construit à présent la carte : pour $v \in V$, la région associée à $v$ est l'adhérence de la face dans laquelle se trouve
+    le point $v$ dans $H'' - v$. Cette face est bien homéomorphe à un disque, comme $H'' - v$ est $2$-connexe et qu'alors
+    cette dernière est bordée par un cycle (voir ...), le théorème de Jordan-Schönflies nous donne ce que l'on veut.
+    Cet ensemble de région correspond alors à l'intérieur du cycle de $H''$
+    séparant la face non bornée des autres (comme $H''$ est $2$-connexe). Ainsi, pour les mêmes raisons, la face non bornée, vue dans $\mathbb{S}^2$,
+    est homéomorphe à un disque. On ajoute alors un sommet à $G$ correspondant à cette face et à ses adjacences dans cette carte.
+    La carte est bien complète par construction
+
 \end{proof}
-
-\section{Algorithmes}
-
 
 
 \end{flushleft}
