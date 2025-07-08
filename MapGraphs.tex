@@ -42,8 +42,8 @@
 \end{def*}
 
 \begin{theorem}[Caractérisation des graphes de carte]\label{carCarte}
-    Un graphe $G = (V, E)$ est de carte si et seulement si il existe $H$ un graphe biparti planaire dont un des
-    côtés de la bipartition est $V$, tel que $H^2[V] = G$. Un tel graphe $H$ est appelé graphe témoin de $G$
+    Un graphe $G = (V, E)$ est de carte si et seulement si il existe $H$ un graphe biparti planaire, de bipartition $V, U$,
+    tel que $H^2[V] = G$. Un tel graphe $H$ est appelé graphe témoin de $G$
 \end{theorem}
 
 \begin{prop}
@@ -81,11 +81,20 @@
 Dans l'article ... on a que l'existence d'un témoin compacte équivaut à l'existence d'un témoin de $G$. Ainsi on peut se restreindre
 à l'étude de ces témoins particuliers
 
-\begin{theorem}
+\begin{theorem}\label{complQuadr}
     Un graphe $G$ admet une carte complète si et seulement si il admet un témoin qui est une quadrangulation
 \end{theorem}
 
 On en déduit alors que les graphes admettant des cartes complètes sont $2$-connexes comme une quadrangulation l'est
+
+\begin{def*}[Adjacence réelle]
+    Pour $H = (V \cup U, E')$ un témoin de $G$, on définit l'adjacence réelle, $RA(x)$ d'un sommet $x \in V \cup U$ comme suit :
+    \begin{itemize}
+        \item Si $x \in V$, $RA(x) = \{x\}$
+        \item Si $x \in U$, $RA(x) = N(x)$
+    \end{itemize}
+    On peut alors définir l'adjacence réelle $RA(S)$ d'un sous ensemble $S \subset V \cup U$ en faisant l'union sommet par sommet.
+\end{def*}
 
 \begin{comment}
 
@@ -236,36 +245,68 @@ On dira qu'une suite de contractions est sans pincement si elle n'exploite aucun
 
 \end{comment}
 
+
 \section{Etude des cartes complètes $3$-connexes}
 
 On va faire qqes lemmes sur les cartes complètes qui permettront de déblayer un algo
 
-\begin{lem}[Cycle recouvrant]\label{cycleCompl}
-    Soit $G$ un graphe de carte $3$-connexe à carte complète. Il existe un cycle, ou chemin de taille $2$, $C$ inclus dans le voisinage de $v$,
-    tel que $N(v) \subset N(C)$
-\end{lem}
-
-Faut prendre en compte le cas où la fusion de $v$ et d'une région n'est pas simplement connexe et intersecte en au moins $2$ segments
-disjoints
+\begin{prop}\label{cyclSep}
+    Soit $G$ $3$-connexe admettant une carte complète. Soit $v \in V$. Il existe un témoin compact quadrangulé $H$ de $G$ et
+    un cycle $C$ tel que
+    \begin{itemize}
+        \item $RA(C) = N[v]$ (on considère ici les voisins dans $G$)
+        \item L'intérieur de $C$ ne contient que $v$ et les seules arrêtes dans cet intérieur sont celles entre $v$ et
+        les élements de $C \cap U$
+    \end{itemize}
+\end{prop}
 
 \begin{proof}
-    On se donne une carte complète de $G$ et on confondra alors sommets et régions. Les voisins de $v$ sont exactement les régions
-    rencontrant la frontière de $v$. Comme $v$ est homéomorphe à un disque, on se donne $\gamma : [0, 1] \rightarrow \mathbb{S}^2$
-    une courbe de Jordan paramétrant sa frontière. Notons $u_0$ une région distincte de $v$ contenant $\gamma([t_0, \varepsilon[)$ pour $\varepsilon$
-    assez petit, où $t_0 = 0$, cette dernière existe comme la carte est complète. On note $I_0 = \{ t \in [0, 1] \mid \gamma(t) \in u_0 \}$
-    et $t_1 = \max(I_0)$. Si $t_1 = 1$, comme $v$ est de degré au moins $2$, il existe une autre région adjacente à $v$, en un point uniquement
-    comme $t_1 = 1$. On peut alors montrer que $\gamma$ n'est pas un lacet contractile dans $u_0$ et donc que $u_0$ n'est pas simplement connexe, absurde.
-    Donc $t_1 < 1$. Par maximalité, $\gamma(t_1)$ est sur le bord de $u_0$ et donc il existe un $u_1$ vérifiant les mêmes propriétés que $u_0$
-    relativement à $t_1$. On a alors $u_0u_1 \in E$. On répète alors le processus afin de trouver $u_0, ..., u_k$, $k \geq 1$ formant un cycle
+    On se donne une carte complète de $G$. On ne s'intéressera ici qu'à la construction du témoin impliquant le voisinage de $v$,
+    le reste du témoin pouvant être construit comme souhaité à partir de la carte complète grâce au théorème \ref{complQuadr}.
     \\~\\
-    On construit alors le graphe témoin $H$ comme suit : on commence par se donner un graphe témoin quelconque de $G - v$ construit à partir de la carte
-    complète donnée, que l'on considèrera alors plongé dans le plan. On ajoute ensuite $v$ : on ajoute au graphe témoin les sommets
-    $\gamma(t_i)$, $1 \leq i \leq k$, à l'exception peut être de $\gamma(t_k)$ si $u_k = u_0$. On relie alors les regions $u_i$ aux $\gamma(t_j)$
-    adjacents à ces dernières par des chemins, et on ajoute enfin un dernier point dans $v$, que l'on relie à chaque $\gamma(t_i)$.
-    Par construction de $\gamma$, s'il existe une région adjacente à $v$ distincte des $u_i$, leur intersection est incluse
-    dans les $\gamma(t_i)$, et il suffit alors de relier $\gamma(t_i)$ au point représentant la région correspondante pour ainsi avoir
-    un témoin de $G$. Notons que $u_0, \gamma(t_1), u_1, \gamma(t_2), ..., u_0$ est un cycle séparant $v$ du reste de $H$ par construction de ce dernier,
-    et la construction des $u_i$ implique que $v$ leur est adjacent dans $G$
+    La région $v$ étant homéomorphe à un disque, on se donne
+    $\gamma : [0, 1] \rightarrow \mathbb{S}^2$ un lacet simple paramétrant sa frontière. Quitte à reparamétrer, on admettra
+    que l'on peut choisir $\gamma(0)$ tel qu'il soit point de rencontre d'au plus $2$ régions
+    (et donc d'exactement $2$ comme la carte est complète), le graphe étant fini. Les mêmes arguments de finitude et
+    le fait que la carte soit complète permettent d'affirmer qu'il existe $v_1 \in V$ tel que l'ensemble
+    $I_1 = \{ t \in [0, 1] \mid \gamma([0, t]) \subset v_1 \}$ soit un intervalle non ponctuel. On note alors $t_1 = \sup(I_1) > 0$.
+    On a que $t_1 < 1$ : en effet si $t_1 = 1$, alors $\gamma$ est un lacet inclus dans $u_1$, et l'on admettra que ce lacet
+    n'est pas homotope à un point, ce qui est absurde comme $u_1$ est homéomorphe à un disque. En utilisant le même argument que
+    celui donnant l'existence de $v_1$, et comme $t_1$ est maximal, on trouve un $v_2 \in V$ distinct de $v_1$ tel que l'ensemble
+    suivant $I_2 = \{ t \in [t_1, 1] \mid \gamma([t_1, t]) \subset v_2\}$ soit un intervalle non ponctuel et on continue ce
+    processus jusqu'à atteindre $1$. A noter que la dernière région considérée se trouve être $v_1$, comme $\gamma(0)$ n'est pas un
+    point de rencontre de $3$ régions pour aller du dernier point, $\gamma(t_k)$, à $1$, il faut longer $v_1$ selon un chemin.
+    On notera alors $v_1, ..., v_k$ les régions obtenues par ce processus, où $v_k$ est l'avant dernière région considérée.
+    \\~\\
+    Supposons que $v_i = v_j$ où $j > i$. Par construction, on a donc $j > i + 1$. Donc la région $v_i$ rencontre
+    $v$ en au moins deux chemins. On a alors que $G - \{v, v_i\}$ n'est pas connexe, $v_{i+1}$ et $v_{j+1}$ sont séparés, absurde
+    par $3$-connexité. Donc les $v_i$ sont tous distincts. On construit à présent le témoin.\\
+    On place chaque sommet de $V$ à l'intérieur de la région lui correspondant. On ajoute les points $\gamma(t_i)$ au
+    graphe, en les placant à leurs positions, et l'on relie $v$ à tout ces points par des chemins dans sa région. On relie
+    également toutes les régions contenant un point $\gamma(t_i)$ à ce dernier par des chemins.\\
+    On a ainsi obtenu un cycle vérifiant par construction la seconde propriété de l'énoncé. Pour la première, pour un sens,
+    il suffit de voir que tout les sommets adjacents à des $\gamma(t_i)$ dans ce graphe sont des régions rencontrant $v$, donc des
+    voisins. Réciproquement, un voisin de $v$ est soit un $v_i$, soit rencontre ponctuellement $v$ en un des $\gamma(t_i)$ : si un
+    voisin de $v$ rencontre sa frontière en un point entre deux $\gamma(t_i)$ et $\gamma(t_{i+1})$, $v_i$ n'est pas homéomorphe à
+    un disque. On a bien la première propriété\\
+    Les sommets $\gamma(t_1), ..., \gamma(t_k)$, qui correspondront à des élements de $U$, sont tous utiles,
+    et les faces présentes à l'intérieur du cycle sont bien bordées par $4$ arrêtes. On complète ensuite le graphe pour obtenir un
+    témoin compact de $G$ quadrangulé
+\end{proof}
+
+\begin{cor}\label{ordCycl}
+    Soit $G$ $3$-connexe admettant une carte complète et $v \in V$. Il existe un ordre total $v_1, ..., v_k$ sur les voisins de $v$
+    induisant un cycle
+\end{cor}
+
+\begin{proof}
+    On se donne un témoin $H$ vérifiant les propriétés de la proprosition \ref{cyclSep}. Soit $s_1, ..., s_{2l}$ le cycle dans $H$
+    donné par cette proposition. On suppose sans perte de généralité que $s_1 \in V$. Pour tout $i$, on pose $E_i = \{s_i\}$
+    si $i$ est impair, si $i$ est pair, $E_i$ correspond à l'ensemble des voisins de $s_i$ hors cycle, $v$ exclu. On ordonne alors $N(v)$
+    comme suit : on ordonne chaque $E_i$ selon un ordre arbitraire. Puis on ordonne ces ordres arbitraires de sorte à ce que
+    tout les élements de $E_i$ soient plus petits que ceux de $E_{i+1}$. Cet ordre est bien total sur $N(v)$
+    comme $RA(\{s_1, ..., s_{2l}\}) = N[v]$. De plus ce dernier donne bien lieu à un cycle : en effet tout les sommets de $E_i$ sont
+    adjacents aux sommets de $E_{i+1}$ (les indices étant pris modulo $2l$), et les $E_i$ pour $i$ pair sont des cliques.
 \end{proof}
 
 \begin{lem}\label{3connCompl}
@@ -308,9 +349,13 @@ disjoints
 \end{proof}
 
 \begin{def*}[Arrête sans trou]
-    On dit qu'une arrête $xy$ d'un graphe $G$ $3$-connexe est sans trou si et seulement si pour toute paire de cliques $K^1, K^2$, voisines toutes deux
-    de $x$ et $y$, si $G - (K^1 \cup K^2 \cup \{x,y\})$ n'est pas connexe, alors $G - (K^1 \cup K^2 \cup S)$ ne l'est pas non plus pour
-    un certain $S \subsetneq \{x, y\}$
+    On dit qu'une arrête $xy$ d'un graphe $G$ $3$-connexe est sans trou si elle vérifie l'une des deux conditions suivantes pour un certain
+    $S \subsetneq \{x, y\}$ :
+    \begin{itemize}
+        \item Pour toute clique max $K$ de $G[N(x) \cap N(y)]$, si $G - (K \cup \{x,y\})$ n'est pas connexe, $G - (K \cup S)$ l'est aussi.
+        \item Pour toute paire de cliques indépendantes maximales $K^1, K^2$ de $G[N(x) \cap N(y)]$, si $G - (K^1 \Delta K^2 \cup \{x,y\})$ n'est pas connexe,
+        $G - (K^1 \Delta K^2 \cup S)$ l'est aussi, où $\Delta$ est la différence symétrique sur les sommets de $K^1$ et $K^2$
+    \end{itemize}
 \end{def*}
 
 La définition est motivée par... le dessin qui n'est pas là
@@ -327,19 +372,17 @@ On considèrera par la suite que tout les graphes $G$ sont de carte, $3$-connexe
     On raisonne selon la nature de $x \cap y$
     \\~\\
     Supposons cet ensemble discret, donc fini car compact. Notons alors ses points
-    $u_1, ..., u_k$, $k \geq 2$ dans l'ordre cyclique selon la frontière de $x$. On construit alors $H$ un témoin de $G$ comme suit :
-    on place $x$ et $y$ dans leurs régions respectives, $u_1, ..., u_k$ à leur position respectives et on relie $x$ et $y$ aux
-    $u_i$ par des chemins dans les régions $x$ et $y$. La carte étant complète, en suivant le chemin de $u_1$ à $u_2$ le long de la frontière de
-    $x$, on construit un chemin dans $G$ de la même manière que dans le lemme \ref{cycleCompl}. On place alors les régions et points
-    de rencontre comme discuté dans le lemme \ref{cycleCompl} dans $H$. Ainsi, l'intérieur du cycle $x, u_1, y, u_{k}$ dans $H$
-    contient au moins un sommet de $V$. La carte étant complète, il existe des régions, extérieures aux cycles
-    précedemment décrits, contenant les points $u_1$ et $u_k$. Les régions, distinctes de $x$ et $y$, contenant $u_1$ forment une clique $K^1$ et celle contenant
-    $u_k$ une clique $K^2$, voisines toutes deux de $x$ et $y$. En retirant les sommets de $V$ formant ces cliques du graphe $H$, on remarque
-    qu'il n'est plus connexe, comme l'intérieur du cycle $x, u_1, y, u_k$ ne peut plus accéder aux sommets extérieurs à ce dernier, le seul chemin
-    possible empruntant $u_1$ ou $u_k$ qui n'a plus de voisins extérieurs. Donc $G - (K^1 \cup K^2 \cup \{x,y\})$ n'est pas connexe. Or
-    $G - (K^1 \cup K^2 \cup S)$, $S \subsetneq \{x, y\}$, l'est car le témoin $H$ où l'on retire uniquement les sommets adjacents à $u_1$ ou $u_k$ extérieurs
-    au cycle et éventuellement soit $x$ soit $y$ est connexe par construction de ce dernier
-    \\~\\
+    $u_1, ..., u_k$, $k \geq 2$ dans l'ordre cyclique selon la frontière de $x$. On construit alors $H$ un témoin compact quadrangulé de $G$
+    à partir de cette carte, contenant les points $u_1, ..., u_k$ dont le voisinage correspond aux régions les contenant dans cette carte.\\
+    Si $k \geq 4$, alors en retirant les cliques max suivantes : $K^1$ est l'ensemble des régions hors $x, y$ contenant $u_1$,
+    $K^2$ celles contenant $u_k$. Notons alors que ce témoin contient un cycle, $x, u_1, y, u_k$, dont les sommets de $V$ à l'intérieur
+    de ce dernier ne peuvent accéder à l'extérieur qu'en utilisant les points $u_1$ et $u_k$. De même les sommets de $K^1$ intérieurs
+    à ce cycle ne peuvent se trouver dans $K^2$, car alors on aurait une arrête d'un sommet à l'intérieur du cycle $x, u_1, y, u_2$
+    à $u_k$, ou à tous les sommets de $K^2$, qui sont tous à l'extérieur de ce cycle. En retirant $K^1 \Delta K^2 \cup \{x,y\}$, on sépare
+    alors l'intérieur du cycle $x, u_2, y, u_3$ du reste du graphe. Cela n'est plus le cas si on ne retire que $x$ ou $y$, ainsi $xy$
+    est à trou.\\
+    S
+
     Si cet ensemble n'est pas discret, son nombre de composantes connexes étant fini par compacité, il est alors union disjointe de chemins
     et de points.\\
     Sinon : cet ensemble ne peut contenir $2$ chemins disjoints par $3$-connexité : en effet dans ce cas $G - \{x, y\}$ n'est pas connexe.
@@ -397,7 +440,6 @@ plus intelligent dans le cas spécifique des graphes de carte, si on a une non i
 \begin{prop}
     Soit $xy \in E$. $xy$ est une arrête à trou si et seulement si pour tout $S \subsetneq \{x, y\}$
     \begin{itemize}
-        \item Soit pour $K$ une certaine clique max de $G[N(x) \cap N(y)]$, $G - K - \{x,y\}$ n'est pas connexe et $G - K - S$ l'est
         \item Soit pour $K^1, K^2$ deux cliques max de $G[N(x) \cap N(y)]$, $G - (K^1 \Delta K^2 \cup \{x,y\})$ n'est pas connexe,
         où $\Delta$ est la différence symétrique sur les sommets des deux cliques, et $G - (K^1 \Delta K^2 \cup S)$ l'est
     \end{itemize} 
@@ -416,11 +458,42 @@ plus intelligent dans le cas spécifique des graphes de carte, si on a une non i
     vérifiée : alors pour tout $K'$, 
 \end{proof}
 
+\begin{prop}\label{ezDecontr}
+    Soit $G$, $xy \in E$ une arrête. Supposons que $G / xy$ admette une carte complète et soit $3$-connexe. Soit $H$ un témoin compact
+    quadrangulé de $G / xy$. Notons $s_1, ..., s_k$ le cycle séparant $xy$ du reste de $H$.
+    Si les voisins de $x$ distincts de $y$ sont exactement $RA(\{s_i, ..., s_{i+l}\}) - x$ et ceux de $y$
+    $RA(\{s_{i+l}, ..., s_{i-1}, s_i\}) - y$,
+    où $i, l$ sont entiers et les indices sont vus modulo $k$, alors $G$ admet une carte complète
+\end{prop}
+
+\begin{proof}
+    On construit la carte complète comme suit : on part de $H$, on retire $xy$ et on ajoute $x$ et $y$ à l'intérieur du cycle séparant.
+    Ensuite, on relie $x$ à tout ses voisins de la manière suivante : si $s_j \in U$ et que les deux voisins de $s_j$ sur le cycle
+    sont voisins de $x$, on ajoute une arrête entre $x$ et $s_j$.\\
+    Si l'un des voisins de $s_j$ n'est pas voisin de $x$ et l'autre l'est,
+    et que ce dernier n'a pas été pris en compte par l'étape précédente, c'est alors que $x$ n'a qu'un voisin sur le cycle par
+    les conditions précédentes : si il en avait plus de deux, il aurait été possible de tous les couvrir en considérant les sommets
+    de $U$ faisant la liaison. Dans ce cas, on relie $x$ à son voisin par deux arrêtes subdivisées, et on relie $y$ à chaque sommet
+    situé joignant $x$ à son voisin.\\
+    On effectue les mêmes étapes pour $y$. Si il n'existe aucun $s_j \in U$ tels que ses deux voisins sur le cycle soient également
+    voisins de $x$ et $y$, cela signifie que $s_i$ et $s_{i+l}$ sont dans $V$. On ajoute alors deux sommet, $s$ et $s'$, l'un relié
+    à $s_i, x, y$, l'autre à $s_{i+l}, x, y$. On obtient au final un témoin de $G$, compact et quadrangulé, donc $G$ admet une carte
+    complète
+\end{proof}
+
+\begin{lem}
+    On reprend les notations de la proposition \ref{ezDecontr}. Les hypothèses concernant l'existence d'un tel témoin $H$ sont équivalentes
+    à la proposition suivante : il existe un ordre cyclique des voisins de $xy$ dans $G / xy$ tels que les voisins de $x$ et de $y$
+    y forment deux intervalles (modulaires)
+\end{lem}
+
+\begin{proof}
+    Si 
+\end{proof}
+
 \section{Algorithmes}
 
-Les propositions et lemmes précédents sont la base d'un algorithme : on élimine d'abord pour un $v \in V$ donné toutes les arrêtes
-à trou (faut encore caractériser ça de manière vérifiable en $P$) depuis $v$. Ensuite, il faut sélectionner une arrête que l'on
-sait qui va marcher pour la fusion (ou alors se tromper un nombre borné de fois) et on vérifie avec la proposition précédente.
+
 
 \end{flushleft}
 \end{document}
