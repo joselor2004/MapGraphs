@@ -261,12 +261,29 @@ On dira qu'une suite de contractions est sans pincement si elle n'exploite aucun
 
 \section{Etude des cartes complètes $3$-connexes}
 
-On va faire qqes lemmes sur les cartes complètes qui permettront de déblayer un algo
-\\~\\
-Il faudra aussi bien introduire ce que l'on veut dire par "arrête contractile". Le shuffle de l'ordre cyclique des voisins
-peut aider à avoir des conditions
+\begin{def*}[Arrête contractible]
+    Soit $G$ un graphe de carte. On dira que $xy \in E$ est contractible si il existe une carte de $G$ dans laquelle
+    $x \cap y$ est un chemin simple.
+\end{def*}
 
-\begin{prop}\label{cyclSep}
+\begin{prop}
+    Soit $G$ un graphe de carte et $xy \in E$ une arrête contractible. $G / xy$ est également un graphe de carte.
+    De plus si la carte de $G$ est complète, celle de $G / xy$ l'est également
+\end{prop}
+
+\begin{proof}
+    $x \cap y$ étant un chemin simple, on peut alors montrer que $x \cup y$ est homéomorphe à un disque (on peut par
+    exemple dire que $x \cup y$ est l'intérieur du lacet simple obtenu en concaténant des parties des frontières de $x$ et $y$).
+    Ainsi on a une carte de $G / xy$ donnée par la carte de $G$ restreinte à $V - \{x,y\}$ et où le sommet $xy$ est représenté
+    par la région $x \cup y$.
+\end{proof}
+
+On souhaite à présent étudier plus en profondeur les graphes de carte $3$-connexe à carte complète afin de pouvoir plus facilement
+distinguer les potentielles arrêtes contractibles par des critères combinatoires
+
+\subsection{Cycles et voisinages}
+
+\begin{prop}[Cycle séparant]\label{cyclSep}
     Soit $G$ $3$-connexe admettant une carte complète. Soit $v \in V$. Il existe un témoin compact quadrangulé $H$ de $G$ et
     un cycle $C$ tel que
     \begin{itemize}
@@ -310,7 +327,7 @@ peut aider à avoir des conditions
     témoin compact de $G$ quadrangulé
 \end{proof}
 
-\begin{cor}\label{ordCycl}
+\begin{cor}[Ordre cyclique]\label{ordCycl}
     Soit $G$ $3$-connexe admettant une carte complète et $v \in V$. Il existe un ordre total $v_1, ..., v_k$ sur les voisins de $v$
     induisant un cycle
 \end{cor}
@@ -326,7 +343,40 @@ peut aider à avoir des conditions
     adjacents aux sommets de $E_{i+1}$ (les indices étant pris modulo $2l$), et les $E_i$ pour $i$ pair sont des cliques.
 \end{proof}
 
+\subsection{Permutations de cycle et arrêtes contractibles}
 
+Une inversion totale sur $n$ élements est la permutation suivante $ i \in \llbracket 1, n \rrbracket \longmapsto n - i + 1$,
+les permutations cycliques sont les puissances du cycle $ i \in \llbracket 1, n \rrbracket \longmapsto (i+1 \mod n) + 1$.
+Notons que ces permutations engendrent exactement les automorphismes du graphe $C_n$.\\
+On appelera $\operatorname*{Iso}(C_n)$ l'ensemble des permutations sur $n$ élements quotientées par les automorphismes de
+$C_n$, décrit plus tôt. On obtient alors un ensemble intéressant pour l'étude des cycles : on peut l'identifier
+au quotient de l'ensemble des graphes sur les sommets $1, ..., n$ isomorphes à $C_n$ par la relation d'équivalence de différer
+d'un automorphisme.
+
+\begin{def*}[Permutations de cycle]
+    Soit $n \geq 4$, et $C'_n$ un surgraphe à $n$ sommets de $C_n$, dont le cycle canonique sera numéroté $1, 2, ..., n$.
+    On dira qu'une permutation $\sigma$ préserve les cycles si $\sigma(1), ..., \sigma(n)$ est également un cycle de $C'_n$.
+    Une permutation de cycle est alors $[\sigma] \in \operatorname*{Iso}(C_n)$ telle que $\sigma$ préserve les cycles.
+\end{def*}
+
+La définition est bien cohérente car si $\sigma$ et $\sigma'$ sont équivalents, ils diffèrent d'un produit d'une inversion totale
+et d'une permutation cyclique. Le cycle $\sigma(1), ..., \sigma(n)$ est préservé par inversion totale et permutation cyclique donc
+$\sigma'(1), ..., \sigma'(n)$ est également un cycle.
+
+\begin{def*}[Echange]
+    Un échange de $i$ est une permutation de cycle $[\sigma]$ telle que, en notant $E$ l'ensemble des arrêtes de $C_n$,
+    on ait $\sigma(i)\sigma(i+1) \notin E$ ou $\sigma(i-1)\sigma(i) \notin E$. Si le nombre d'échanges de $i$ est non nul,
+    on le dira échangeable
+\end{def*}
+
+La définition est là encore indépendante du choix du représentant de $[\sigma]$ : si $\sigma'$ est équivalent à $\sigma$,
+ils diffèrent par un automorphisme de $C_n$. Donc si $\sigma(i)\sigma(i+1) \notin E$, $\sigma'(i)\sigma'(i+1)$ également
+\\~\\
+Ce que l'on remarque en faisant les dessins : on se donne $v \in V$ dans un graphe de carte et on fixe un ordre
+cyclique de $N(v)$ donné par le corollaire \ref{ordCycl}. On étudie ses permutations de cycle. On remarque que les sommets
+$u$ non échangeables font de bons candidats pour que $uv$ soit contractible (à vraiment peu de choses près)
+
+\subsection{Jsp encore}
 
 \begin{prop}\label{ezDecontr}
     Soit $G$, $xy \in E$ une arrête. Supposons que $G / xy$ admette une carte complète et soit $3$-connexe. Soit $H$ un témoin compact
@@ -360,6 +410,11 @@ Ensuite, on teste si le graphe contracté est un graphe de carte sans trou. Apr�
 d'arrête contractile et de la proposition précédente
 \\~\\
 La dernière étape étant polynômiale, la polynômialité de l'algorithme dépend uniquement de celle du choix de l'arrête contractile.
+
+\subsection{Cas des graphes d'intervalle}
+
+Avant de passer aux cordaux, on va regarder plus simple avec les graphes d'intervalle. On va surabuser de l'existence d'un ordre
+cyclique parmi les voisins de tout sommet de $G$ pour trouver des arrêtes contractiles très facilement
 
 \section*{Annexe}
 
