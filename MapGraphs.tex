@@ -98,7 +98,16 @@ Dans l'article ... on a que l'existence d'un témoin compacte équivaut à l'exi
     Un graphe $G$ admet une carte complète si et seulement si il admet un témoin qui est une quadrangulation
 \end{theorem}
 
-On en déduit alors que les graphes admettant des cartes complètes sont $2$-connexes comme une quadrangulation l'est
+On en déduit alors que les graphes admettant des cartes complètes sont $2$-connexes comme une quadrangulation l'est (ce que l'on pouvait
+également voir par un argument concernant la topologie des régions). En fait on a même la propriété suivante concernant la
+$2$-connexité
+
+\begin{prop}
+    Un graphe $G$ est de carte si et seulement si toutes ses composantes $2$-connexes le sont
+\end{prop}
+
+On peut par exemple en déduire q'un block graph, c'est à dire un graphe dont les composantes $2$-connexes sont des cliques,
+est alors toujours un graphe de carte, et admet une carte complète si et seulement si ce dernier est $2$-connexe.
 
 \begin{def*}[Adjacence réelle]
     Pour $H = (V \cup U, E')$ un témoin de $G$, on définit l'adjacence réelle, $RA(x)$ d'un sommet $x \in V \cup U$ comme suit :
@@ -261,6 +270,11 @@ On dira qu'une suite de contractions est sans pincement si elle n'exploite aucun
 
 \section{Etude des cartes complètes $3$-connexes}
 
+Dans la suite, le terme chemin pourra désigner soit un chemin dans un graphe, soit un chemin au sens topologique, c'est à dire
+l'image d'une application continue $\gamma : [0, 1] \rightarrow \mathbb{S}^2$. On dira qu'un chemin (topologique) est un lacet
+si $\gamma(0) = \gamma(1)$. Un chemin sera dit simple s'il est injectif. Un lacet sera dit simple si la seule valeur
+atteinte plus d'une fois est $\gamma(0)$. On confondra souvent un chemin et son image
+
 \begin{def*}[Arrête contractible]
     Soit $G$ un graphe de carte. On dira que $xy \in E$ est contractible si il existe une carte de $G$ dans laquelle
     $x \cap y$ est un chemin simple.
@@ -376,13 +390,13 @@ Ce que l'on remarque en faisant les dessins : on se donne $v \in V$ dans un grap
 cyclique de $N(v)$ donné par le corollaire \ref{ordCycl}. On étudie ses permutations de cycle. On remarque que les sommets
 $u$ non échangeables font de bons candidats pour que $uv$ soit contractible (à vraiment peu de choses près)
 
-\subsection{Jsp encore}
+\subsection{Décontractions d'arrêtes}
 
 \begin{prop}\label{ezDecontr}
     Soit $G$, $xy \in E$ une arrête. Supposons que $G / xy$ admette une carte complète et soit $3$-connexe. Soit $H$ un témoin compact
     quadrangulé de $G / xy$ donné par la proposition \ref{cyclSep}. Notons $s_1, ..., s_k$ le cycle séparant $xy$ du reste de $H$.
-    Si les voisins de $x$ distincts de $y$ sont exactement $RA(\{s_i, ..., s_{i+l}\}) - x$ et ceux de $y$
-    $RA(\{s_{i+l}, ..., s_{i-1}, s_i\}) - y$,
+    Si les voisins de $x$ distincts de $y$ sont exactement $RA(\{s_i, ..., s_{i+l}\}) - xy$ et ceux de $y$
+    $RA(\{s_{i+l}, ..., s_{i-1}, s_i\}) - xy$,
     où $i, l$ sont entiers et les indices sont vus modulo $k$, alors $G$ admet une carte complète
 \end{prop}
 
@@ -401,6 +415,36 @@ $u$ non échangeables font de bons candidats pour que $uv$ soit contractible (à
     complète
 \end{proof}
 
+\begin{lem}
+    Soit $G$ un graphe admettant une carte complète et $xy \in E$ une arrête telle que $G / xy$ soit un graphe $3$-connexe à
+    carte complète. Soit $H$ un témoin compact quadrangulé de $G / xy$. On suppose que les voisins de $xy$ dans $G / xy$
+    induisent un cycle sans corde.
+    Alors $H$ vérifie la propriété de la proposition \ref{ezDecontr}
+\end{lem}
+
+\begin{proof}
+    Supposons par l'absurde $H$ ne vérifie pas cette propriété. Notons que comme les voisins de $xy$
+    induisent un cycle sans corde, on peut supposer sans perte de généralité que les voisins de $xy$ dans $H$
+    sont tous de degré $3$ : en effet ces derniers ont pour voisins des voisins de $xy$ dans $G / xy$.
+    Si un tel sommet était de degré plus que $3$, alors on aurait un triangle présent parmi les voisins de $xy$.
+    Si ces derniers sont au nombre de $3$, $H$ respecterait la propriété de la proposition \ref{ezDecontr}.
+    Si $xy$ a plus de $4$ voisins, alors le cycle formé par ses voisins dans $G / xy$ possède une corde, absurde.
+    \\~\\
+    On exploite à présent l'hypothèse sur $H$ : notons $v_1, ..., v_l$ l'ordre cyclique sur les voisins de $xy$.
+    De par la forme du témoin, l'hypothèse implique que les voisins de $x$ et de $y$ ne sont pas des intervalles
+    modulo $l$ parmi ces sommets. Comme $G$ est à carte complète et $3$-connexe, les voisins de $x$ et ceux de $y$
+    forment respectivement des cycles. De tels cycles nécessitent la présence d'arrêtes de la forme $v_i v_{i+l}$,
+    $l > 2$, absurde comme le cycle formé par les $v_1, ..., v_l$ est sans corde.
+    \\~\\
+    Ainsi $H$ vérifie la propriété annoncée
+\end{proof}
+
+\begin{lem}
+    Soit $G$ un graphe à carte complète, $xy \in E$ une arrête contractible. Il existe un graphe $G'$
+    à carte complète, tel que $G' / xy$ soit à carte complète et se contracte à l'aide d'arrêtes contractibles
+    en $G / xy$, et vérifiant que les voisins de $xy$ dans $G' / xy$ induisent un cycle sans corde.
+\end{lem}
+
 \section{Algorithmes}
 
 L'algorithme de reconnaissance que l'on essaiera de développer est le suivant : on choisit une arrête "contractile" du graphe
@@ -411,10 +455,10 @@ d'arrête contractile et de la proposition précédente
 \\~\\
 La dernière étape étant polynômiale, la polynômialité de l'algorithme dépend uniquement de celle du choix de l'arrête contractile.
 
-\subsection{Cas des graphes d'intervalle}
+\subsection{Cas des graphes trivialement parfaits}
 
 Avant de passer aux cordaux, on va regarder plus simple avec les graphes d'intervalle. On va surabuser de l'existence d'un ordre
-cyclique parmi les voisins de tout sommet de $G$ pour trouver des arrêtes contractiles très facilement
+cyclique parmi les voisins de tout sommet de $G$ pour trouver des arrêtes contractibles très facilement
 
 \section*{Annexe}
 
