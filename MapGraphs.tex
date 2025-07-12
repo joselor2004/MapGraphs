@@ -102,7 +102,7 @@ On en déduit alors que les graphes admettant des cartes complètes sont $2$-con
 également voir par un argument concernant la topologie des régions). En fait on a même la propriété suivante concernant la
 $2$-connexité
 
-\begin{prop}
+\begin{prop}\label{suffbiconn}
     Un graphe $G$ est de carte si et seulement si toutes ses composantes $2$-connexes le sont
 \end{prop}
 
@@ -366,39 +366,6 @@ distinguer les potentielles arrêtes contractibles par des critères combinatoir
     adjacents aux sommets de $E_{i+1}$ (les indices étant pris modulo $2l$), et les $E_i$ pour $i$ pair sont des cliques.
 \end{proof}
 
-\subsection{Permutations de cycle et arrêtes contractibles}
-
-Une inversion totale sur $n$ élements est la permutation suivante $ i \in \llbracket 1, n \rrbracket \longmapsto n - i + 1$,
-les permutations cycliques sont les puissances du cycle $ i \in \llbracket 1, n \rrbracket \longmapsto (i+1 \mod n) + 1$.
-Notons que ces permutations engendrent exactement les automorphismes du graphe $C_n$.\\
-On appelera $\operatorname*{Iso}(C_n)$ l'ensemble des permutations sur $n$ élements quotientées par les automorphismes de
-$C_n$, décrit plus tôt. On obtient alors un ensemble intéressant pour l'étude des cycles : on peut l'identifier
-au quotient de l'ensemble des graphes sur les sommets $1, ..., n$ isomorphes à $C_n$ par la relation d'équivalence de différer
-d'un automorphisme.
-
-\begin{def*}[Permutations de cycle]
-    Soit $n \geq 4$, et $C'_n$ un surgraphe à $n$ sommets de $C_n$, dont le cycle canonique sera numéroté $1, 2, ..., n$.
-    On dira qu'une permutation $\sigma$ préserve les cycles si $\sigma(1), ..., \sigma(n)$ est également un cycle de $C'_n$.
-    Une permutation de cycle est alors $[\sigma] \in \operatorname*{Iso}(C_n)$ telle que $\sigma$ préserve les cycles.
-\end{def*}
-
-La définition est bien cohérente car si $\sigma$ et $\sigma'$ sont équivalents, ils diffèrent d'un produit d'une inversion totale
-et d'une permutation cyclique. Le cycle $\sigma(1), ..., \sigma(n)$ est préservé par inversion totale et permutation cyclique donc
-$\sigma'(1), ..., \sigma'(n)$ est également un cycle.
-
-\begin{def*}[Echange]
-    Un échange de $i$ est une permutation de cycle $[\sigma]$ telle que, en notant $E$ l'ensemble des arrêtes de $C_n$,
-    on ait $\sigma(i)\sigma(i+1) \notin E$ ou $\sigma(i-1)\sigma(i) \notin E$. Si le nombre d'échanges de $i$ est non nul,
-    on le dira échangeable
-\end{def*}
-
-La définition est là encore indépendante du choix du représentant de $[\sigma]$ : si $\sigma'$ est équivalent à $\sigma$,
-ils diffèrent par un automorphisme de $C_n$. Donc si $\sigma(i)\sigma(i+1) \notin E$, $\sigma'(i)\sigma'(i+1)$ également
-\\~\\
-Ce que l'on remarque en faisant les dessins : on se donne $v \in V$ dans un graphe de carte et on fixe un ordre
-cyclique de $N(v)$ donné par le corollaire \ref{ordCycl}. On étudie ses permutations de cycle. On remarque que les sommets
-$u$ non échangeables font de bons candidats pour que $uv$ soit contractible (à vraiment peu de choses près)
-
 \subsection{Décontractions d'arrêtes}
 
 \begin{prop}\label{ezDecontr}
@@ -466,8 +433,73 @@ La dernière étape étant polynômiale, la polynômialité de l'algorithme dép
 
 \subsection{Cas des graphes trivialement parfaits}
 
-Avant de passer aux cordaux, on va regarder plus simple avec les graphes d'intervalle. On va surabuser de l'existence d'un ordre
-cyclique parmi les voisins de tout sommet de $G$ pour trouver des arrêtes contractibles très facilement
+Un graphe $G$ sera dit trivialement parfait s'il ne contient pas les graphes $P_4$ et $C_4$ en sous graphe induit.
+Il est équivalent de les définir comme des graphes d'intervalles particuliers. Un graphe trivialement parfait est le graphe
+d'intersection d'un ensemble d'intervalles "emboîtés" : si $I$ et $J$ sont deux intervalles représentant des sommets de $G$,
+si $I \cap J \neq \varnothing$, alors $I \subset J$ ou inversement.\\
+Cette définition par les intervalles permet de voir facilement que l'unique séparateur minimal d'un graphe trivialement parfait $G$ est
+composé de l'ensemble des sommets universels de $G$ (un sommet universel étant un sommet adjacent à tout les sommets du graphe). Ainsi
+$G$ est $3$-connexe si et seulement si il possède au moins $3$ sommets universels.
+
+\subsubsection{Cas $3$-connexe}
+
+On se fixe pour la suite un graphe $G$ trivialement parfait $3$-connexe
+
+\begin{lem}\label{trivPerfind}
+    Si $G$ a $3$ sommets indépendants, il n'est pas de carte
+\end{lem}
+
+\begin{proof}
+    Un tel graphe contient $K(3, K_3)$ parmi ses sous graphes induits, par les remarques précédentes
+\end{proof}
+
+Supposons que $G$ ne soit pas une clique.
+On peut déduire de ce lemme que le séparateur minimal de $G$ le sépare en $2$ composantes connexes. Notons que ce séparateur est une
+clique de taille au moins $3$. Notons $C_1$ et $C_2$ les $2$ composantes connexes séparées par ce séparateur. Le lemme
+\ref{trivPerfind} permet également de déduire que $C_1$ et $C_2$ sont des cliques : en effet si $C_1$ n'est pas une clique,
+il contient $2$ sommets indépendants. On a donc un indépendant de taille $3$ constitué de ces $2$ sommets et d'un sommet de $C_2$.
+On en déduit le lemme suivant :
+
+\begin{lem}\label{trivPar3conn}
+    $G$ est de carte si et seulement c'est une clique ou un $K(K_n, K_p \sqcup K_q)$ avec $n \geq 3$. De plus, la carte
+    donnée est complète
+\end{lem}
+
+\begin{proof}
+    Le sens direct a déjà été traité précedemment.\\
+    Pour le sens réciproque, toute clique admettant une carte complète, on se concentre sur le second cas. On construit
+    alors un témoin compact quandrangulé pour $K(K_n, K_p \sqcup K_q)$ comme illustré figure ??
+\end{proof}
+
+\subsubsection{Cas général}
+
+On s'intéresse à présent au cas où $G$ est $2$-connexe, qui conclura l'analyse des graphes trivialement parfaits par la proposition
+\ref{suffbiconn} et le fait qu'un graphe à carte complète est nécessairement $2$-connexe.\\
+Comme précedemment, la $2$-connexité de $G$ impose l'existence de $2$ sommets universels. S'il y en a $3$, la question
+a déjà été réglée précédemment car $G$ est alors $3$-connexe.
+
+\begin{theorem}
+    Un graphe $G$ trivialement parfait $2$-connexe est de carte si et seulement si chacune de ses composantes $3$-connexe est de carte.
+    De plus la carte de $G$ construite est complète.
+\end{theorem}
+
+\begin{proof}
+    Si $G$ est de carte, toutes ses composantes $3$-connexes sont de carte comme ce sont des sous graphes induits de $G$.\\
+    Pour le sens réciproque, le lemme \ref{trivPar3conn}, nous donne la forme des composantes $3$-connexes de $G$.
+    Notons $C_1, ..., C_k$ les composantes $3$-connexes de $G$. On construit alors une carte comme suit :
+    on place $2$ régions associées aux $2$ universels, $u$ et $v$, de $G$, que l'on fait se rencontrer en $k+1$ chemins disjoints.
+    Ainsi après retrait de ces $2$ régions, la sphère est séparée en $k$ composantes connexes.\\
+    Si $C_i$, $1 \leq i \leq k$, est une clique, on place dans une des $k$ composantes connexes encore libre une clique
+    remplissant entièrement cette composante, portée par un point de rencontre entre $u$ et $v$. Sinon $C_i$ est
+    de la forme $K(K_n, K_p \sqcup K_q)$, $n \geq 3$. On représente alors les sommets distincts de $u$ et $v$ formant le $K_n$
+    par une clique séparant la composante en deux, de telle sorte à ce que chaque partie ait accès à un point portant
+    cette clique. On remplit ensuite chaque partie par une clique portée par un point porteur de la clique $K_n$.
+    (illustré figure ??)
+\end{proof}
+
+On en déduit alors un algorithme en temps polynômial décidant si un graphe $G$ trivialement parfait est de carte : on commence
+par séparer $G$ en ses composantes connexes puis $2$-connexes, puis $3$-connexes. Une simple vérification structurelle sur
+les composantes $3$-connexes permet alors de conclure
 
 \section*{Annexe}
 
@@ -622,6 +654,39 @@ plus intelligent dans le cas spécifique des graphes de carte, si on a une non i
     La carte est bien complète par construction
 
 \end{proof}
+
+\subsection{Permutations de cycle et arrêtes contractibles}
+
+Une inversion totale sur $n$ élements est la permutation suivante $ i \in \llbracket 1, n \rrbracket \longmapsto n - i + 1$,
+les permutations cycliques sont les puissances du cycle $ i \in \llbracket 1, n \rrbracket \longmapsto (i+1 \mod n) + 1$.
+Notons que ces permutations engendrent exactement les automorphismes du graphe $C_n$.\\
+On appelera $\operatorname*{Iso}(C_n)$ l'ensemble des permutations sur $n$ élements quotientées par les automorphismes de
+$C_n$, décrit plus tôt. On obtient alors un ensemble intéressant pour l'étude des cycles : on peut l'identifier
+au quotient de l'ensemble des graphes sur les sommets $1, ..., n$ isomorphes à $C_n$ par la relation d'équivalence de différer
+d'un automorphisme.
+
+\begin{def*}[Permutations de cycle]
+    Soit $n \geq 4$, et $C'_n$ un surgraphe à $n$ sommets de $C_n$, dont le cycle canonique sera numéroté $1, 2, ..., n$.
+    On dira qu'une permutation $\sigma$ préserve les cycles si $\sigma(1), ..., \sigma(n)$ est également un cycle de $C'_n$.
+    Une permutation de cycle est alors $[\sigma] \in \operatorname*{Iso}(C_n)$ telle que $\sigma$ préserve les cycles.
+\end{def*}
+
+La définition est bien cohérente car si $\sigma$ et $\sigma'$ sont équivalents, ils diffèrent d'un produit d'une inversion totale
+et d'une permutation cyclique. Le cycle $\sigma(1), ..., \sigma(n)$ est préservé par inversion totale et permutation cyclique donc
+$\sigma'(1), ..., \sigma'(n)$ est également un cycle.
+
+\begin{def*}[Echange]
+    Un échange de $i$ est une permutation de cycle $[\sigma]$ telle que, en notant $E$ l'ensemble des arrêtes de $C_n$,
+    on ait $\sigma(i)\sigma(i+1) \notin E$ ou $\sigma(i-1)\sigma(i) \notin E$. Si le nombre d'échanges de $i$ est non nul,
+    on le dira échangeable
+\end{def*}
+
+La définition est là encore indépendante du choix du représentant de $[\sigma]$ : si $\sigma'$ est équivalent à $\sigma$,
+ils diffèrent par un automorphisme de $C_n$. Donc si $\sigma(i)\sigma(i+1) \notin E$, $\sigma'(i)\sigma'(i+1)$ également
+\\~\\
+Ce que l'on remarque en faisant les dessins : on se donne $v \in V$ dans un graphe de carte et on fixe un ordre
+cyclique de $N(v)$ donné par le corollaire \ref{ordCycl}. On étudie ses permutations de cycle. On remarque que les sommets
+$u$ non échangeables font de bons candidats pour que $uv$ soit contractible (à vraiment peu de choses près)
 
 
 \end{flushleft}
