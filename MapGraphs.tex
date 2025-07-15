@@ -36,7 +36,7 @@
     $f$ forme un recouvrement de $\mathbb{S}^2$, on la dira sans trou, ou complète. On appelera les $f(v)$ régions
 \end{def*}
 
-\begin{def*}[Graphe de carte]
+\begin{def*}[Graphe de carte \cite{IntroMap}]
     Un graphe $G = (V, E)$ est de carte s'il existe une carte $f$ sur $V$ telle que $xy \in E$ si et seulement si
     $f(x) \cap f(y) \neq \varnothing$
 \end{def*}
@@ -57,7 +57,8 @@
 \begin{def*}[Join]
     Le join de $2$ graphes $G = (V, E)$ et $G' = (V', E')$ est le graphe ayant pour sommet $V'' = V \cup V'$ et pour arrêtes
     \[ E'' = E \cup E' \cup \{ xx' \mid x \in V, x \in V' \} \]
-    On notera pour tout $n \geq 1$ $K(n, G)$ le join d'un indépendant à $n$ sommets avec le graphe $G$
+    On notera pour tout $n \geq 1$ $K(n, G)$ le join d'un indépendant à $n$ sommets avec le graphe $G$. Plus généralement,
+    le join des graphes $G$ et $G'$ sera noté $K(G, G')$
 \end{def*}
 
 \begin{prop}
@@ -77,25 +78,65 @@
 Notons toutefois que $K(2, G)$ lui est un graphe de carte, et que le join de $2$ graphes à $3$ sommets tous deux non indépendants
 est de carte également.
 
-\begin{prop}
-    $K_{2,2,2,2}$ n'est pas un graphe de carte
-\end{prop}
+\begin{lem}\label{CNSK33}
+    Un graphe $G$ a pour mineur $K(3, H)$ si et seulement si il existe $6$ sommets, $s_1, s_2, s_3, t_1, t_2, t_3$ et des chemins
+    $P_{i,j}$ de $s_i$ à $t_j$ pour tout $i, j$ tels que
+    \begin{itemize}
+        \item Pour tout $i$, $j \neq j'$, $P_{i,j}$ et $P_{i,j'}$ ne se rencontrent qu'en leur début et leur intersection est
+        un sous chemin de $P_{i,j}$ et $P_{i,j'}$
+        \item Pour tout $j$, $i \neq i'$, $P_{i,j}$ et $p_{i',j}$ ne se rencontrent qu'en leur fin et on a la même condition
+        \item Pour tout $i \neq i', j \neq j'$, $P_{i',j'}$ et $P_{i, j}$ ne se rencontrent pas
+    \end{itemize}
+\end{lem}
 
 \begin{proof}
     
 \end{proof}
 
+\begin{prop}
+    $K_{2,2,2,2}$ n'est pas un graphe de carte
+\end{prop}
+
+\begin{proof}
+    On numérote les sommets de $1$ à $8$, tels que $\{v_1,v_2\}$, $\{v_3,v_4\}$, $\{v_5,v_6\}$, $\{v_7,v_8\}$ soient les indépendants.
+    On suppose par l'absurde que $K_{2,2,2,2}$ est un graphe de carte, on s'en donne donc un témoin $H$. On le suppose même minimal pour
+    la relation de sous graphe.\\
+    Notons d'abord que les voisinages de $v_1$ et $v_2$ dans $H$ sont disjoints, ces deux sommets étant indépendants. Cela vaut
+    aussi pour toutes les autres paires indépendantes. Ainsi, pour tout $u \in N(v_i)$, $u$ n'est voisin que d'au plus un élement de
+    chaque paire. Ainsi les sommets de $U$ sont de degré au plus $4$. On construit à présent un mineur $K_{3,3}$ de $H$
+    \\~\\
+    Notons que comme $K_{2,2,2,2}$ n'est pas planaire, au moins un sommet de $H$ dans $U$ est de degré au moins $4$. Les remarques
+    précedentes font que ce sommet est de degré exactement $4$. Notons le $u$, et supposons quitte à renommer que ses voisins
+    sont $v_1, v_3, v_5, v_7$. Soit $i \in \{4, 6, 8\}$. Notons $p, q, r$ les voisins de $v_2$ donnant un chemin de longueur
+    $2$ respectivement à $v_3, v_5, v_7$. Depuis $v_i$ on construit un chemin vers $v_{i-1}$ en exploitant un sommet $v_j \in V$ intermédiaire
+    tel que $j \notin \{1, 2, 3, 5, 7, i\}$. Les autres chemins depuis $v_i$ sont ceux de longueurs $2$ donnés par le fait que $H$ soit
+    un témoin de $K_{2,2,2,2}$. On note alors $q', p', r'$ les voisins de $v_i$ participant à chacun de ces $3$ chemins
+    ordonnés de même manière que $p, q, r$. On notera $s'$ le sommet de $U$ venant après $v_j$ dans le chemin de $v_i$ à $v_{i-1}$\\
+    Montrons que l'on peut choisir $i$ et $j$ tels que les chemins de $v_i$ et $v_2$ à $v_3, v_5, v_7$ se rencontrent selon
+    les hypothèse du lemme \ref{CNSK33}.
+    \\~\\
+    On considère les sommets $v_1, v_2, v_i, v_3, v_5, v_7$ et les chemins donnés précedemment (le chemin depuis $v_1$ aux autres est de longueur
+    $2$ et utilise $u$). $u$ étant de degré $4$ donc maximal, et par ce qui précède, ces sommets vérifient les hypothèses du lemme
+    \ref{CNSK33}. Donc $H$ n'est pas planaire. Absurde
+\end{proof}
+
 Notons que $K_{2,2,2}$ est toutefois un graphe de carte
 
-\begin{def*}[Témoin compact]
-    Un témoin compact est ...
+\begin{def*}[Témoin compact \cite{MapFPT}]
+    Un témoin compact d'un graphe de carte $G$, est un témoin $H = (V \cup U, E)$ dont on se donne un plongement dans le plan,
+    ne contenant aucun sommet $u \in U$ tel que
+    \begin{itemize}
+        \item $\deg(u) = 2$ et il existe $u' \in U$ tel que $N(u) \subset N(u')$
+        \item Il existe $u' \in U$ tel que $N(u) = N(u') = \{v, w\}$ et $u, v, u', w$ délimite une face de $H$
+    \end{itemize}
+    Les sommets vérifiant de telles propriétés seront dits inutiles, tout les sommets d'un témoin compact sont alors "utiles"
 \end{def*}
 
-Dans l'article ... on a que l'existence d'un témoin compacte équivaut à l'existence d'un témoin de $G$. Ainsi on peut se restreindre
+Dans l'article ... on a que l'existence d'un témoin compact équivaut à l'existence d'un témoin de $G$. Ainsi on peut se restreindre
 à l'étude de ces témoins particuliers
 
 \begin{theorem}\label{complQuadr}
-    Un graphe $G$ admet une carte complète si et seulement si il admet un témoin qui est une quadrangulation
+    Un graphe $G$ admet une carte complète si et seulement si il admet un témoin compact qui est une quadrangulation
 \end{theorem}
 
 On en déduit alors que les graphes admettant des cartes complètes sont $2$-connexes comme une quadrangulation l'est (ce que l'on pouvait
@@ -108,15 +149,6 @@ $2$-connexité
 
 On peut par exemple en déduire q'un block graph, c'est à dire un graphe dont les composantes $2$-connexes sont des cliques,
 est alors toujours un graphe de carte, et admet une carte complète si et seulement si ce dernier est $2$-connexe.
-
-\begin{def*}[Adjacence réelle]
-    Pour $H = (V \cup U, E')$ un témoin de $G$, on définit l'adjacence réelle, $RA(x)$ d'un sommet $x \in V \cup U$ comme suit :
-    \begin{itemize}
-        \item Si $x \in V$, $RA(x) = \{x\}$
-        \item Si $x \in U$, $RA(x) = N(x)$
-    \end{itemize}
-    On peut alors définir l'adjacence réelle $RA(S)$ d'un sous ensemble $S \subset V \cup U$ en faisant l'union sommet par sommet.
-\end{def*}
 
 \begin{def*}[Adjacence réelle]
     Pour $H = (V \cup U, E')$ un témoin de $G$, on définit l'adjacence réelle, $RA(x)$ d'un sommet $x \in V \cup U$ comme suit :
@@ -398,8 +430,6 @@ distinguer les potentielles arrêtes contractibles par des critères combinatoir
     Alors $H$ vérifie la propriété de la proposition \ref{ezDecontr}
 \end{lem}
 
-Deuxième paragraphe à réviser
-
 \begin{proof}
     Supposons par l'absurde $H$ ne vérifie pas cette propriété. Notons que comme les voisins de $xy$
     induisent un cycle sans corde, on peut supposer sans perte de généralité que les voisins de $xy$ dans $H$
@@ -410,9 +440,17 @@ Deuxième paragraphe à réviser
     \\~\\
     On exploite à présent l'hypothèse sur $H$ : notons $v_1, ..., v_l$ l'ordre cyclique sur les voisins de $xy$.
     De par la forme du témoin, l'hypothèse implique que les voisins de $x$ et de $y$ ne sont pas des intervalles
-    modulo $l$ parmi ces sommets. Comme $G$ est à carte complète et $3$-connexe, les voisins de $x$ et ceux de $y$
-    forment respectivement des cycles. De tels cycles nécessitent la présence d'arrêtes de la forme $v_i v_{i+l}$,
-    $l > 2$, absurde comme le cycle formé par les $v_1, ..., v_l$ est sans corde.
+    modulo $l$ parmi ces sommets (si l'on retire $x$ et $y$). Comme $G$ est à carte complète et $3$-connexe, les voisins de $x$
+    et ceux de $y$ forment respectivement des cycles. Hors les voisins de $x$ ne forment pas un intervalle modulo $l$ parmi
+    $v_1, ..., v_l$ ($y$ est exclu). Donc $N(x) = \{y, v_{a_1}, ..., v_{b_1}, v_{a_2}, ..., v_{b_2}, ..., v_{b_k}\}$
+    où $a_1 = 1$ sans perte de généralité, $k \geq 2$, $b_i < a_{i+1} + 1$ pour $1 \leq i \leq k-1$, et $b_k < l-1$, là encore quitte à effectuer
+    des permutations cycliques.\\
+    On numérote les voisins de $x$ $u_1, ..., u_r$ dans un ordre cyclique. En supposant $u_1 = v_1$ et quitte à inverser l'ordre,
+    on a $u_{b_1} = v_{b_1}$. Le seul sommet adjacent à $v_{b_1}$ encore non utilisé est $y$, donc $u_{b_1 + 1} = y$. Puis
+    $u_{b_1 + 2}$ est un sommet quelconque parmi ceux restants. Supposons pour simplifier le raisonnement qu'il s'agisse de $v_{a_2}$.
+    Le seul sommet adjacent non considéré est $v_{a_2 + 1}$ et ainsi de suite jusqu'à atteindre $v_{b_2}$. $v_{b_2}$ n'a pas de voisins
+    non considérés dans le cycle. Le raisonnement est le même si l'on tombe sur un voisin entre un $v_{a_i}$ et $v_{b_i}$ le sens de
+    progression peut toutefois être différent. Au total, c'est absurde.
     \\~\\
     Ainsi $H$ vérifie la propriété annoncée
 \end{proof}
@@ -499,9 +537,21 @@ a déjà été réglée précédemment car $G$ est alors $3$-connexe.
     (illustré figure ??)
 \end{proof}
 
+Notons alors que les graphes trivialement parfaits de carte sont exactement les graphes ne possédant pas $C_4, P_4, K(3, K_3)$ parmi
+leur sous graphes induits : en effet, un graphe trivialement parfait de carte vérifie cette condition, et réciproquement, un graphe
+n'ayant pas ces $3$ sous graphes induits sera de carte car tout le raisonnement est basé sur le seul lemme \ref{trivPerfind}
+\\~\\
+(A rediscuter avec la possibilité de juste passer en force par les sous graphes interdits)
 On en déduit alors un algorithme en temps polynômial décidant si un graphe $G$ trivialement parfait est de carte : on commence
-par séparer $G$ en ses composantes connexes puis $2$-connexes, puis $3$-connexes. Une simple vérification structurelle sur
-les composantes $3$-connexes permet alors de conclure
+par séparer $G$ en ses composantes connexes puis $2$-connexes, puis $3$-connexes.
+\\~\\
+Puis, afin de décider si les composantes $3$-connexes ont bien la forme souhaitée, on emploie l'algorithme suivant : on liste les cliques
+max de la composante, si la composante elle même est une clique max, il n'y a alors qu'une seule clique max et ce cas est donc
+vu dès la première clique listée. On renvoie alors une réponse positive. Si il n'y a que $2$ cliques max, chaque sommet étant
+dans au moins une clique max, ces deux dernières recouvrent la composante $3$-connexe. La $3$-connexité impose que ces deux dernières
+se rencontrent en au moins $3$ points, le graphe est alors de la forme $K(K_n, K_p \sqcup K_q)$, les $2$ cliques max ayant $n+p$
+et $n+q$ sommets chacune, la clique $K_n$, $n \geq 3$ étant formée des sommets communs aux deux cliques max. On renvoie alors
+aussi une réponse positive. Si il y a plus de $3$ cliques max, on renvoie une réponse négative.
 
 \section*{Annexe}
 
@@ -690,6 +740,8 @@ Ce que l'on remarque en faisant les dessins : on se donne $v \in V$ dans un grap
 cyclique de $N(v)$ donné par le corollaire \ref{ordCycl}. On étudie ses permutations de cycle. On remarque que les sommets
 $u$ non échangeables font de bons candidats pour que $uv$ soit contractible (à vraiment peu de choses près)
 
+\bibliographystyle{plain}
+\bibliography{MapGraphs}
 
 \end{flushleft}
 \end{document}
