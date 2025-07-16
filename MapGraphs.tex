@@ -58,8 +58,55 @@
     Le join de $2$ graphes $G = (V, E)$ et $G' = (V', E')$ est le graphe ayant pour sommet $V'' = V \cup V'$ et pour arrêtes
     \[ E'' = E \cup E' \cup \{ xx' \mid x \in V, x \in V' \} \]
     On notera pour tout $n \geq 1$ $K(n, G)$ le join d'un indépendant à $n$ sommets avec le graphe $G$. Plus généralement,
-    le join des graphes $G$ et $G'$ sera noté $K(G, G')$
+    le join des graphes $G$ et $G'$ sera noté $K(G, G')$. Cette opération étant associative, on se permettra
+    d'écrire $K(G, H, L)$ pour désigner le join successif de $G$ à $H$ puis à $L$
 \end{def*}
+
+\begin{lem}\label{CNSK33}
+    Un graphe $G$ a pour mineur $K_{3,3}$ si et seulement si il existe $6$ sommets, $s_1, s_2, s_3, t_1, t_2, t_3$ et des chemins
+    $P_{i,j}$ de $s_i$ à $t_j$ pour tout $i, j$ tels que
+    \begin{itemize}
+        \item Pour tout $i \neq i', j \neq j'$, $P_{i',j'}$ et $P_{i, j}$ ne se rencontrent pas
+        \item Pour tout $i$, $s_i$ et $t_i$ ne sont sommet intermédiaire d'aucun des chemins
+        \item Si deux de ces chemins se rencontrent, leur intersection est également un chemin
+    \end{itemize}
+\end{lem}
+
+\begin{proof}
+    Supposons que $G$ possède un mineur $K_{3,3}$. Alors il existe des ensembles de sommets connexes, disjoints, $S_1, S_2, S_3, T_1, T_2, T_3$
+    tels qu'une fois contractés, le graphe induit par ces ensembles aie pour sous graphe $K_{3,3}$. Soient $s_i \in S_i$ et $t_i \in T_i$
+    pour $i \in \{1, 2, 3\}$. Comme on a une arrête de $S_i$ à $T_j$ pour tout $i,j$, il existe des sommets $s'_i \in S_i$ et $t'_j \in T_j$
+    tels que $s'_i t'_j \in E$. En se donnant un chemin de $s_i$ à $s'_i$ puis de $t'_j$ à $t_j$, on construit alors des chemins
+    $P_{i,j}$ comme décrits dans l'énoncé. Si $i \neq i'$, $j \neq j'$, les chemins $P_{i,j}$ et $P_{i',j'}$ sont à valeurs dans des
+    ensembles disjoints et ne se rencontrent donc pas. La deuxième condition est vérifiée pour les mêmes raisons. Pour la troisième,
+    si un chemin de $s_i$ à $t_j$ rencontre un chemin de $s_i$ à $t_{j'}$ en un sommet intermédiaire, cette intersection se fait nécessairement
+    dans $S_i$. On modifie alors le chemin $P_{i,j'}$ de sorte à ce qu'il coincide avec $P_{i,j}$ jusqu'à sa dernière intersection avec ce dernier
+    dans $S_i$. On raisonne de manière similaire pour $P_{i,j}$ et $P_{i',j}$
+    \\~\\
+    Supposons à présent qu'il existe de tels $s_i$ et $t_i$ et de tels chemins $P_{i,j}$. On se restreint au sous graphe constitué des
+    chemins $P_{i,j}$. Soient $i,j \in \{1,2,3\}$.
+    Supposons que $P_{i,j}$, hors extérmités, ne soit pas disjoint de tout les autres chemins. On note
+    $P_{i,j} = \{s_i = v_1, v_2, ..., v_l = t_j\}$ dans l'ordre de parcours, et on se donne
+    \begin{equation*}
+    \begin{split}
+        p &= \min \{ k \in \llbracket 1, l \rrbracket \mid \exists i' \neq i, v_k \in P_{i',j}\}\\
+        q &= \max \{ k \in \llbracket 1, l \rrbracket \mid \exists j' \neq j, v_k \in P_{i, j'} \}
+    \end{split}
+    \end{equation*}
+    L'hypothèse faite sur les chemins permet d'affirmer que les deux ensembles décrits sont les seules intersections possibles de $P_{i,j}$
+    avec d'autres chemins.\\
+    Montrons que $p > q$ : on se donne les $i'$ et $j'$ correspondants. Comme l'intersection de deux chemins reste un chemin, et que $P_{i,j'}$
+    contient à la fois $s_i$ et $v_q$, les sommets $v_1, ..., v_q$ font tous partie de $P_{i,j'}$. De même, $v_p, ..., v_l$ font partie
+    de $P_{i',j}$. Supposons maintenant par l'absurde que $p \leq q$. On déduit des remarques précédentes que les sommets $v_p, ..., v_q$
+    font partie de $P_{i,j'}$ et $P_{i',j}$, hors ces chemins ne s'interesctent pas par hypothèse, absurde.\\
+    On contracte alors tout les sommets de $v_1$ à $v_p$ et ceux de $v_q$ à $v_l$ comme il existe un chemin les reliant tous. Puisque
+    $p > q$ et que les sommets de départs et d'arrivée ne sont pas présents sur les chemins hors extrémités,
+    on conserve bien des chemins de $s_i$ à $t_{j'}$ et de $s_{i'}$ à $t_j$. Après cette opération, le nouveau chemin $P_{i,j}$ est disjoint
+    de tout les autres. On répète alors cette opération pour tout $i,j$.\\
+    Une fois cela fait, on obtient des chemins tous disjoints de tout $s_i$ à tout $t_j$, ne reste plus qu'à contracter ces chemins afin
+    d'obtenir un $K_{3,3}$.
+\end{proof}
+
 
 \begin{prop}
     Soit $G$ un graphe à $3$ sommets. $K(3, G)$ n'est pas un graphe de carte
@@ -68,30 +115,16 @@
 \begin{proof}
     Supposons par l'absurde que $K(3, G)$ est un graphe de carte. On se donne alors $H$ vérifiant toutes les propriétés
     du théorème \ref{carCarte}. On note pour tout $v_i$, sommet indépendant de $K(3, G)$, $N_i$ son voisinage dans $H$
-    incluant $v_i$. On note $H'$ le graphe $(((H / N_1) / N_2) / N_3)$, qui est donc un mineur de $H$ et donc planaire.
-    Or $H' = K_{3,3}$ : en effet $N_i$ est adjacent à tout les sommets de $G$, comme le voisinage de $v_i$ dans $H$ l'est,
-    car $v_i$ l'est dans $K(3, G)$. De plus il n'y a pas d'arrêtes entre les sommets de $G$ comme $H$ est biparti, et pas
-    d'arrêtes entre les différents $N_i$ comme les $v_i$ sont indépendants dans $G$.\\
-    Absurde, $K(3, G)$ n'est pas un graphe de carte
+    incluant $v_i$. Notons que pour $i \neq j$, $N_i$ et $N_j$ sont disjoints comme $v_i$ et $v_j$ sont indépendants.
+    Comme les chemins de $v_i$ aux sommets de $G$ n'empruntent que des sommets de $N_i$, mis à part le sommet de $G$,
+    les hypothèses du lemme \ref{CNSK33} sont vérifiées. $H$ a donc pour mineur $K_{3,3}$, absurde par planarité.
+    $K(3, G)$ n'est donc pas un graphe de carte.
 \end{proof}
 
 Notons toutefois que $K(2, G)$ lui est un graphe de carte, et que le join de $2$ graphes à $3$ sommets tous deux non indépendants
-est de carte également.
-
-\begin{lem}\label{CNSK33}
-    Un graphe $G$ a pour mineur $K(3, H)$ si et seulement si il existe $6$ sommets, $s_1, s_2, s_3, t_1, t_2, t_3$ et des chemins
-    $P_{i,j}$ de $s_i$ à $t_j$ pour tout $i, j$ tels que
-    \begin{itemize}
-        \item Pour tout $i$, $j \neq j'$, $P_{i,j}$ et $P_{i,j'}$ ne se rencontrent qu'en leur début et leur intersection est
-        un sous chemin de $P_{i,j}$ et $P_{i,j'}$
-        \item Pour tout $j$, $i \neq i'$, $P_{i,j}$ et $p_{i',j}$ ne se rencontrent qu'en leur fin et on a la même condition
-        \item Pour tout $i \neq i', j \neq j'$, $P_{i',j'}$ et $P_{i, j}$ ne se rencontrent pas
-    \end{itemize}
-\end{lem}
-
-\begin{proof}
-    
-\end{proof}
+est de carte également. Cela pourrait laisser à penser que, comme pour les graphes planaires, les graphes $K(3, G)$ seraient des
+contre exemples "fondamentaux". Ce n'est en fait pas le cas, la proposition suivante montrant qu'un graphe n'a pas besoin
+d'avoir $3$ indépendants pour ne pas être de carte
 
 \begin{prop}
     $K_{2,2,2,2}$ n'est pas un graphe de carte
@@ -112,8 +145,9 @@ est de carte également.
     tel que $j \notin \{1, 2, 3, 5, 7, i\}$. Les autres chemins depuis $v_i$ sont ceux de longueurs $2$ donnés par le fait que $H$ soit
     un témoin de $K_{2,2,2,2}$. On note alors $q', p', r'$ les voisins de $v_i$ participant à chacun de ces $3$ chemins
     ordonnés de même manière que $p, q, r$. On notera $s'$ le sommet de $U$ venant après $v_j$ dans le chemin de $v_i$ à $v_{i-1}$\\
-    Montrons que l'on peut choisir $i$ et $j$ tels que les chemins de $v_i$ et $v_2$ à $v_3, v_5, v_7$ se rencontrent selon
-    les hypothèse du lemme \ref{CNSK33}.
+    Une disjonction de cas basée sur les remarques faites sur le degré des sommets et la minimalité de $H$ montre
+    que l'on peut choisir $i$ et $j$ tels que les chemins de $v_i$ et $v_2$ à $v_3, v_5, v_7$ se rencontrent selon
+    les hypothèse du lemme \ref{CNSK33}. ( à foutre en annexe )
     \\~\\
     On considère les sommets $v_1, v_2, v_i, v_3, v_5, v_7$ et les chemins donnés précedemment (le chemin depuis $v_1$ aux autres est de longueur
     $2$ et utilise $u$). $u$ étant de degré $4$ donc maximal, et par ce qui précède, ces sommets vérifient les hypothèses du lemme
@@ -463,13 +497,7 @@ distinguer les potentielles arrêtes contractibles par des critères combinatoir
 
 \section{Algorithmes}
 
-L'algorithme de reconnaissance que l'on essaiera de développer est le suivant : on choisit une arrête "contractile" du graphe
-(c'est à dire que, si le graphe est de carte, une arrête représentée par une intersection entre les deux régions formant
-un chemin). C'est la partie la plus difficile et qui sera peut être facilitée par la restriction à des sous familles de graphe.
-Ensuite, on teste si le graphe contracté est un graphe de carte sans trou. Après cela, on décontracte à l'aide de la définition
-d'arrête contractile et de la proposition précédente
-\\~\\
-La dernière étape étant polynômiale, la polynômialité de l'algorithme dépend uniquement de celle du choix de l'arrête contractile.
+On discutera ici d'abord du problème de reconnaissance des graphes de carte, restreint à des sous classes particulières, puis l'on s'intéressera
 
 \subsection{Cas des graphes trivialement parfaits}
 
@@ -552,6 +580,74 @@ dans au moins une clique max, ces deux dernières recouvrent la composante $3$-c
 se rencontrent en au moins $3$ points, le graphe est alors de la forme $K(K_n, K_p \sqcup K_q)$, les $2$ cliques max ayant $n+p$
 et $n+q$ sommets chacune, la clique $K_n$, $n \geq 3$ étant formée des sommets communs aux deux cliques max. On renvoie alors
 aussi une réponse positive. Si il y a plus de $3$ cliques max, on renvoie une réponse négative.
+
+\subsection{Cas des cographes}
+
+Une classe plus large que celle des graphes trivialement parfaits est celle des cographes : un graphe est un cographe s'il ne possède pas
+$P_4$ parmi ses sous graphes induits. Il est équivalent de les définir comme le plus petit ensemble de graphes contenant le sommet, stable par
+union disjointe et join. Cette dernière caractérisation s'avèrera plus intéressante pour l'étude.\\
+En effet cette dernière donne lieu à une représentation des cographes par des arbres enracinés : il s'agit en fait d'utiliser l'arbre
+enraciné des opérations, de join (étiquetté par $1$) et union disjointe (étiquettée par $0$), nécessaires afin d'obtenir le cographe en question,
+où les feuilles sont donc les sommets du graphe. Deux sommets sont alors adjacents si et seulement si leur plus petit ancêtre commun est un $1$.
+Les opérations de join et union disjointe étant associatives, il est alors possible de compacter le coarbre de telle sorte à ce qu'un noeud
+$1$ ne puisse avoir comme enfant que des noeuds $0$ ou des sommets et de même pour $0$. La représentation devient alors unique pour un cographe
+donné, on appelle cet arbre le coarbre associé au cographe. Notons d'abord que les opérations de join et union disjointe étant au moins binaires,
+tout les noeuds internes ont au moins $2$ enfants. 
+
+\subsubsection{Connexités et coarbres}
+
+On discutera ici de comment se manifeste les différentes propriétés de connexité des cographes au niveau de leur coarbre associé. Le lemme
+suivant caractérise la connexité par la racine de du coarbre
+
+\begin{lem}
+    Un cographe $G$ est connexe si et seulement si son coarbre $T$ a pour racine un noeud étiquetté $1$
+\end{lem}
+
+Dont on peut déduire la proposition suivante
+
+\begin{prop}
+    Soit $G$ un cographe connexe et $T$ son coarbre. Notons $T_1, ..., T_k$ les sous arbres de $T$ enracinés en les enfants de la racine de $T$.
+    Les séparateurs minimaux de $G$ sont exactement les $\displaystyle \bigcup_{i \neq j} V(T_i)$ où $j$ parcourt l'ensemble des indices de $1, ..., k$
+    tels que $T_i$ ne soit pas une feuille
+\end{prop}
+
+\begin{proof}
+    Les ensembles décrits sont bien des séparateurs minimaux : notons $\displaystyle S_j = \bigcup_{i \neq j} V(T_i)$ pour un tel $j$. $G - S_j$ peut être
+    représenté par l'arbre $T$ où l'on a retiré les sous arbres $T_i, i \neq j$. Mais alors la racine n'a plus qu'un enfant et sa représentation est donc
+    inutile. Donc $G - S_j$ peut être représenté par $T_j$, il s'agit même de son coarbre. Or $T_j$ a un $0$ a sa racine comme ce n'est pas une feuille.
+    \\~\\
+    Réciproquement, soit $S$ un séparateur. Soient $s, t$ deux sommets séparés par $S$. Le plus petit ancêtre commun de $s$ et $t$ dans $T$
+    est donc un noeud $0$. $T$ étant le coarbre de $G$, connexe, $0$ a pour parent un noeud $1$. Tout $r$ descendant de ce noeud, n'étant pas dans le
+    sous arbre contenant $s$ et $t$ fournit un chemin de longueur $3$ de $s$ à $t$. En particulier, en notant $j$ l'indice du sous arbre de la racine
+    contenant $s$ et $t$, $T_j$ n'est pas une feuille et $S$ contient alors $V(T_i)$ pour tout $i \neq j$. Ces ensembles sont bien des séparateurs minimaux.
+\end{proof}
+
+\begin{cor}
+    Un cographe $G$ est $k$-connexe si et seulement si pour tout $j$ tel que $T_j$ n'est pas une feuille, $\sum_{i \neq j} |V(T_i)| \geq k$
+\end{cor}
+
+On mènera alors une étude similaire aux graphes trivialement parfaits, en se concentrant d'abord sur les cographes à forte connexité pour ensuite
+généraliser les résultats
+
+\subsubsection{Structure des cographes de carte}
+
+On a un résultat ULTRA restricif sur les $G$ de carte $3$-connexe. Peut être qu'on peut le généraliser en parlant de sous arbres
+d'un arbre maximal ??
+
+\begin{lem}
+    Soit $G$ un cographe $3$-connexe. $G$ est de carte si et seulement si il s'agit de l'un des graphes suivants,
+    $p, q, r, s \geq 1, n \geq 0$, et où les valeurs minimales des indices dépendent du cas, de manière ce que $G$ soit $3$-connexe :
+    \begin{itemize}
+        \item $K(2,2, K_p \sqcup K_q, K_n)$
+        \item $K(K_p \sqcup K_q, K_r \sqcup K_s, K_n)$
+        \item $K(K_p \sqcup K_q, K_n)$ avec $n \geq 3$
+        \item $K_n$, $n \geq 1$ 
+    \end{itemize}
+\end{lem}
+
+\begin{proof}
+    On distingue selon le nombre de fils de la racine étiquettés $0$
+\end{proof}
 
 \section*{Annexe}
 
