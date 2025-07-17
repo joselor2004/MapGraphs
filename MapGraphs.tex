@@ -55,12 +55,27 @@
 \end{proof}
 
 \begin{def*}[Join]
-    Le join de $2$ graphes $G = (V, E)$ et $G' = (V', E')$ est le graphe ayant pour sommet $V'' = V \cup V'$ et pour arrêtes
+    Le join de $2$ graphes $G = (V, E)$ et $G' = (V', E')$ est le graphe ayant pour sommet $V'' = V \sqcup V'$ et pour arrêtes
     \[ E'' = E \cup E' \cup \{ xx' \mid x \in V, x \in V' \} \]
     On notera pour tout $n \geq 1$ $K(n, G)$ le join d'un indépendant à $n$ sommets avec le graphe $G$. Plus généralement,
     le join des graphes $G$ et $G'$ sera noté $K(G, G')$. Cette opération étant associative, on se permettra
     d'écrire $K(G, H, L)$ pour désigner le join successif de $G$ à $H$ puis à $L$
 \end{def*}
+
+\begin{def*}[Cliques indépendantes]
+    Pour tout $k \geq 1$, $n_1, ..., n_k \geq 1$, on dénotera par $I_{n_1, ..., n_k}$ le graphe complémentaire de $K_{n_1, ..., n_k}$.
+    Ainsi $I_n$ est l'indépendant à $n$ sommets pour $n$ un entier, et $I_{n_1, ..., n_k}$ pour $k \geq 2$ est composé de $k$
+    composantes connexes, qui sont toutes des cliques de tailles $n_1, ..., n_k$
+\end{def*}
+
+\begin{def*}[Union disjointe]
+    L'union disjointe de deux graphes $G = (V, E)$ et $G' = (V', E')$ est le graphe ayant pour sommets $V \cup V'$ et pour arrêtes
+    $E \cup E'$. On notera cette dernière $I(G, G')$. Cette opération étant également associative, on se permettre de reprendre la
+    convention du join.\\
+    On notera pour tout $n \geq 1$, $I(n, G)$ l'union disjointe d'une clique à $n$ sommets et du graphe $G$.
+\end{def*}
+
+\subsection{Premières obstructions à l'existence de cartes}
 
 \begin{lem}\label{CNSK33}
     Un graphe $G$ a pour mineur $K_{3,3}$ si et seulement si il existe $6$ sommets, $s_1, s_2, s_3, t_1, t_2, t_3$ et des chemins
@@ -108,7 +123,7 @@
 \end{proof}
 
 
-\begin{prop}
+\begin{prop}\label{K3G}
     Soit $G$ un graphe à $3$ sommets. $K(3, G)$ n'est pas un graphe de carte
 \end{prop}
 
@@ -126,7 +141,7 @@ est de carte également. Cela pourrait laisser à penser que, comme pour les gra
 contre exemples "fondamentaux". Ce n'est en fait pas le cas, la proposition suivante montrant qu'un graphe n'a pas besoin
 d'avoir $3$ indépendants pour ne pas être de carte
 
-\begin{prop}
+\begin{prop}\label{K2222}
     $K_{2,2,2,2}$ n'est pas un graphe de carte
 \end{prop}
 
@@ -154,44 +169,41 @@ d'avoir $3$ indépendants pour ne pas être de carte
     \ref{CNSK33}. Donc $H$ n'est pas planaire. Absurde
 \end{proof}
 
-Notons que $K_{2,2,2}$ est toutefois un graphe de carte
+Notons que $K_{2,2,2}$ est toutefois un graphe de carte. Ces deux propositions donnent alors des conditions nécessaires au fait
+de posséder une carte : en effet les graphes de carte étant stables par sous graphe induit, ces derniers ne peuvent alors
+posséder ni $K(3, G)$ ni $K_{2,2,2,2}$ parmi ces derniers. Ces conditions ne sont pas suffisantes : une subdivision
+de $K_{3,3}$ quelconque n'est pas un graphe de carte par des arguments similaires à la proposition \ref{K3G}
 
-\begin{def*}[Témoin compact \cite{MapFPT}]
-    Un témoin compact d'un graphe de carte $G$, est un témoin $H = (V \cup U, E)$ dont on se donne un plongement dans le plan,
-    ne contenant aucun sommet $u \in U$ tel que
-    \begin{itemize}
-        \item $\deg(u) = 2$ et il existe $u' \in U$ tel que $N(u) \subset N(u')$
-        \item Il existe $u' \in U$ tel que $N(u) = N(u') = \{v, w\}$ et $u, v, u', w$ délimite une face de $H$
-    \end{itemize}
-    Les sommets vérifiant de telles propriétés seront dits inutiles, tout les sommets d'un témoin compact sont alors "utiles"
-\end{def*}
+\subsection{Cartes et connexités}
 
-Dans l'article ... on a que l'existence d'un témoin compact équivaut à l'existence d'un témoin de $G$. Ainsi on peut se restreindre
-à l'étude de ces témoins particuliers
-
-\begin{theorem}\label{complQuadr}
-    Un graphe $G$ admet une carte complète si et seulement si il admet un témoin compact qui est une quadrangulation
-\end{theorem}
-
-On en déduit alors que les graphes admettant des cartes complètes sont $2$-connexes comme une quadrangulation l'est (ce que l'on pouvait
-également voir par un argument concernant la topologie des régions). En fait on a même la propriété suivante concernant la
-$2$-connexité
+(mettre ici que les cartes complètes sont biconnexes)
 
 \begin{prop}\label{suffbiconn}
     Un graphe $G$ est de carte si et seulement si toutes ses composantes $2$-connexes le sont
 \end{prop}
 
-On peut par exemple en déduire q'un block graph, c'est à dire un graphe dont les composantes $2$-connexes sont des cliques,
-est alors toujours un graphe de carte, et admet une carte complète si et seulement si ce dernier est $2$-connexe.
+On peut par exemple en déduire qu'un block graph, c'est à dire un graphe dont les composantes $2$-connexes sont des cliques,
+est alors toujours un graphe de carte, et admet une carte complète si et seulement si ce dernier est $2$-connexe.\\
+On pourrait alors se demander, à la lumière des exemples de $K(3,G)$ et $K_{2,2,2,2}$ si un graphe n'étant pas $3$-connexe
+peut ne pas être de carte. Le graphe donné par un $K_{3,3}$ auquel on ajoute un sommet de degré $2$ n'est pas $3$-connexe
+et n'est pas de carte.
+\\~\\
+La $3$-connexité jouant un rôle important dans la suite, on se propose de voir comment on peut se ramener à l'étude des
+graphes $3$-connexes à partir d'un graphe $2$-connexe \cite{3connComp}.\\
+Si $\{x,y\} \subset V$ est un séparateur d'un graphe $G$ $2$-connexe, on note $C_1, ..., C_k$ les composantes connexes de
+$G - \{x,y\}$. Pour tout $i$, on note $G_i$ le graphe induit par $C_i \cup \{x,y\}$ auquel on a rajouté l'arrête $xy$.
+$G_i$ est $2$-connexe. Si $G_i$ n'est pas $3$-connexe, il existe alors séparateur de taille $2$ et on peut ainsi recommencer
+ce processus. En répétant ce processus, on finit par obtenir de  obtenus au final ainsi que des $2$-séparateurs permettant de
+les obtenir sera appelée une décomposition $3$-connexe de $G$. Les graphes $3$-connexes obtenus seront appelés des composantes
+$3$-connexes de $G$ associés à cette décomposition.
 
-\begin{def*}[Adjacence réelle]
-    Pour $H = (V \cup U, E')$ un témoin de $G$, on définit l'adjacence réelle, $RA(x)$ d'un sommet $x \in V \cup U$ comme suit :
-    \begin{itemize}
-        \item Si $x \in V$, $RA(x) = \{x\}$
-        \item Si $x \in U$, $RA(x) = N(x)$
-    \end{itemize}
-    On peut alors définir l'adjacence réelle $RA(S)$ d'un sous ensemble $S \subset V \cup U$ en faisant l'union sommet par sommet.
-\end{def*}
+\begin{prop}\label{3connCompCarte}
+    Soit $G$ un graphe de carte $2$-connexe. Pour toute décomposition $3$-connexe de $G$, ses composantes sont des graphes de carte
+\end{prop}
+
+\begin{proof}
+    
+\end{proof}
 
 \begin{comment}
 
@@ -343,37 +355,72 @@ On dira qu'une suite de contractions est sans pincement si elle n'exploite aucun
 \end{comment}
 
 
-\section{Etude des cartes complètes $3$-connexes}
+\section{Propriétés des cartes complètes $3$-connexes}
 
 Dans la suite, le terme chemin pourra désigner soit un chemin dans un graphe, soit un chemin au sens topologique, c'est à dire
 l'image d'une application continue $\gamma : [0, 1] \rightarrow \mathbb{S}^2$. On dira qu'un chemin (topologique) est un lacet
 si $\gamma(0) = \gamma(1)$. Un chemin sera dit simple s'il est injectif. Un lacet sera dit simple si la seule valeur
-atteinte plus d'une fois est $\gamma(0)$. On confondra souvent un chemin et son image
+atteinte plus d'une fois est $\gamma(0)$. On confondra souvent un chemin et son image.
+\\~\\
+Les graphes des graphes $3$-connexes admettant des cartes complètes est motivée par la proposition suivante, qui permet
+de considérer que tout graphe de carte $3$-connexe est "presque" un graphe admettant une carte complète.
 
-\begin{def*}[Arrête contractible]
-    Soit $G$ un graphe de carte. On dira que $xy \in E$ est contractible si il existe une carte de $G$ dans laquelle
-    $x \cap y$ est un chemin simple.
-\end{def*}
-
-\begin{prop}
-    Soit $G$ un graphe de carte et $xy \in E$ une arrête contractible. $G / xy$ est également un graphe de carte.
-    De plus si la carte de $G$ est complète, celle de $G / xy$ l'est également
+\begin{prop}\label{3connCompl}
+    Soit $G$ un graphe de carte $3$-connexe. Il existe un graphe $G'$ sur les sommets $V \sqcup \{\infty\}$ (où $\infty$ est un sommet non
+    présent dans $V$) admettant une carte complète, et tel que $G'[V] = G$
 \end{prop}
 
 \begin{proof}
-    $x \cap y$ étant un chemin simple, on peut alors montrer que $x \cup y$ est homéomorphe à un disque (on peut par
-    exemple dire que $x \cup y$ est l'intérieur du lacet simple obtenu en concaténant des parties des frontières de $x$ et $y$).
-    Ainsi on a une carte de $G / xy$ donnée par la carte de $G$ restreinte à $V - \{x,y\}$ et où le sommet $xy$ est représenté
-    par la région $x \cup y$.
+    On se donne un témoin $H$ de $G$ et on note $U$ l'ensemble des sommets autres que $V$ de $H$. On peut supposer que $H$
+    est construit de telle sorte à ce que $d(u) \geq 2$ pour $u \in U$. Soit $u \in U$, $x, y \in V$ parmi ses voisins.
+    Si $x$ et $y$ sont adjacents à la même face de $H$, alors on ajoute une arrête entre $x$ et $y$ à l'intérieur de cette face,
+    que l'on subdivise ensuite à l'aide d'un sommet afin de garder le graphe biparti. On répète alors
+    ce processus jusqu'à ce que tout les sommets adjancents dans $G$ soient reliés par deux chemins de longueur $2$.
+    \\~\\
+    Le nouveau graphe $H'$ est planaire biparti et $2$-connexe : si l'on retire un sommet de $V$ le graphe reste clairement
+    connexe comme $G$ est $3$-connexe. Si l'on retire un sommet de $U'$ (l'ensemble $U$ avec les nouveaux sommets ajoutés),
+    $H$ reste aussi connexe :
+    si le sommet retiré est parmi ceux de $U' \backslash U$, la construction de $U'$ donne que le graphe reste connexe. Sinon,
+    on se donne $v_1, ..., v_k$ les voisins de $u$ le sommet retiré, tels que $v_i$ et $v_{i+1}$ soient adjacents à la
+    même face. On a alors qu'après le retrait de $u$, par construction encore de $U'$, les $v_i$ sont tous accessibles
+    entre eux. On peut alors voir que cela implique que le graphe reste connexe et est un témoin de $G$
+    \\~\\
+    On construit alors un surgraphe de $H'$ que l'on va plonger dans le plan. On construit le
+    surgraphe $H''$ en itérant sur tout sommet $v \in V$, et en ajoutant une arrête entre chaque paire $u_1, u_2$
+    voisine de $v$ adjacente à une même face, arrête prenant la forme d'un chemin dans cette face. Si $v$ est
+    un sommet extérieur dans $H'$, et que l'on considère $2$ de ses voisins dans $H'$ eux aussi extérieurs,
+    alors on choisira le chemin de telle sorte à ce que $v$ devienne intérieur dans $H''$.
+    Ainsi tout les élements de $U'$ deviennent de degré au moins $3$. $G$ étant $3$-connexe, on peut alors voir que $H''$
+    le devient également (on ne peut plus isoler de sommet de $U'$). $H''$ est également planaire et par construction,
+    tout les sommets $v \in V$ sont intérieurs.
+    \\~\\
+    On construit à présent la carte : pour $v \in V$, la région associée à $v$ est l'adhérence de la face dans laquelle se trouve
+    le point $v$ dans $H'' - v$. Cette face est bien homéomorphe à un disque, comme $H'' - v$ est $2$-connexe et qu'alors
+    cette dernière est bordée par un cycle. Cet ensemble de région correspond alors à l'intérieur du cycle de $H''$
+    séparant la face non bornée des autres (comme $H''$ est $2$-connexe). Ainsi, pour les mêmes raisons, la face non bornée, vue dans $\mathbb{S}^2$,
+    est homéomorphe à un disque. Notons $S$ l'ensemble des sommets de $V$ adjacents à cette dernière dans $H''$.
+    On prends alors $G' = (V \cup \{\infty\}, E \cup \{s\infty \mid s \in S \} )$, et on associe à $\infty$ la face non bornée de $H''$.
+    La carte est bien complète par construction. Cette dernière, restreinte à $V$, donne bien une carte de $G$ : en effet les frontières
+    de la région associée au sommet $v$ est le cycle formé des voisins de $v$ dans $H''$. Si $uv \in E$, $u$ et $v$ partagent un voisin
+    dans $H''$ et donc les régions se rencontrent. Si les régions se rencontrent, $H''$ étant planaire, les cycles ne peuvent se rencontrer
+    que s'ils partagent des sommets, donc $uv \in E$.
+
 \end{proof}
 
-On souhaite à présent étudier plus en profondeur les graphes de carte $3$-connexe à carte complète afin de pouvoir plus facilement
-distinguer les potentielles arrêtes contractibles par des critères combinatoires
+Une propriété sympathique des graphes à carte complète $3$-connexe est que les voisins de chaque sommet $v$ peuvent être organisés afin
+de former un cycle, et on a même plus précis si on regarde les cartes.
 
-\subsection{Cycles et voisinages}
+\begin{def*}[Adjacence réelle]
+    Pour $H = (V \cup U, E')$ un témoin de $G$, on définit l'adjacence réelle, $RA(x)$ d'un sommet $x \in V \cup U$ comme suit :
+    \begin{itemize}
+        \item Si $x \in V$, $RA(x) = \{x\}$
+        \item Si $x \in U$, $RA(x) = N(x)$
+    \end{itemize}
+    On peut alors définir l'adjacence réelle $RA(S)$ d'un sous ensemble $S \subset V \cup U$ en faisant l'union sommet par sommet.
+\end{def*}
 
 \begin{prop}[Cycle séparant]\label{cyclSep}
-    Soit $G$ $3$-connexe admettant une carte complète. Soit $v \in V$. Il existe un témoin compact quadrangulé $H$ de $G$ et
+    Soit $G$ $3$-connexe admettant une carte complète. Soit $v \in V$. Il existe un témoin $H$ de $G$ et
     un cycle $C$ tel que
     \begin{itemize}
         \item $RA(C) = N[v]$ (on considère ici les voisins dans $G$)
@@ -410,10 +457,7 @@ distinguer les potentielles arrêtes contractibles par des critères combinatoir
     il suffit de voir que tout les sommets adjacents à des $\gamma(t_i)$ dans ce graphe sont des régions rencontrant $v$, donc des
     voisins. Réciproquement, un voisin de $v$ est soit un $v_i$, soit rencontre ponctuellement $v$ en un des $\gamma(t_i)$ : si un
     voisin de $v$ rencontre sa frontière en un point entre deux $\gamma(t_i)$ et $\gamma(t_{i+1})$, $v_i$ n'est pas homéomorphe à
-    un disque. On a bien la première propriété\\
-    Les sommets $\gamma(t_1), ..., \gamma(t_k)$, qui correspondront à des élements de $U$, sont tous utiles,
-    et les faces présentes à l'intérieur du cycle sont bien bordées par $4$ arrêtes. On complète ensuite le graphe pour obtenir un
-    témoin compact de $G$ quadrangulé
+    un disque. On a bien la première propriété
 \end{proof}
 
 \begin{cor}[Ordre cyclique]\label{ordCycl}
@@ -431,69 +475,6 @@ distinguer les potentielles arrêtes contractibles par des critères combinatoir
     comme $RA(\{s_1, ..., s_{2l}\}) = N[v]$. De plus ce dernier donne bien lieu à un cycle : en effet tout les sommets de $E_i$ sont
     adjacents aux sommets de $E_{i+1}$ (les indices étant pris modulo $2l$), et les $E_i$ pour $i$ pair sont des cliques.
 \end{proof}
-
-\subsection{Décontractions d'arrêtes}
-
-\begin{prop}\label{ezDecontr}
-    Soit $G$, $xy \in E$ une arrête. Supposons que $G / xy$ admette une carte complète et soit $3$-connexe. Soit $H$ un témoin compact
-    quadrangulé de $G / xy$ donné par la proposition \ref{cyclSep}. Notons $s_1, ..., s_k$ le cycle séparant $xy$ du reste de $H$.
-    Si les voisins de $x$ distincts de $y$ sont exactement $RA(\{s_i, ..., s_{i+l}\}) - xy$ et ceux de $y$
-    $RA(\{s_{i+l}, ..., s_{i-1}, s_i\}) - xy$,
-    où $i, l$ sont entiers et les indices sont vus modulo $k$, alors $G$ admet une carte complète
-\end{prop}
-
-\begin{proof}
-    On construit la carte complète comme suit : on part de $H$, on retire $xy$ et on ajoute $x$ et $y$ à l'intérieur du cycle séparant.
-    Ensuite, on relie $x$ à tout ses voisins de la manière suivante : si $s_j \in U$ et que les deux voisins de $s_j$ sur le cycle
-    sont voisins de $x$, on ajoute une arrête entre $x$ et $s_j$.\\
-    Si l'un des voisins de $s_j$ n'est pas voisin de $x$ et l'autre l'est,
-    et que ce dernier n'a pas été pris en compte par l'étape précédente, c'est alors que $x$ n'a qu'un voisin sur le cycle par
-    les conditions précédentes : si il en avait plus de deux, il aurait été possible de tous les couvrir en considérant les sommets
-    de $U$ faisant la liaison. Dans ce cas, on relie $x$ à son voisin par deux arrêtes subdivisées, et on relie $y$ à chaque sommet
-    joignant $x$ à son voisin.\\
-    On effectue les mêmes étapes pour $y$. Si il n'existe aucun $s_j \in U$ tels que ses deux voisins sur le cycle soient également
-    voisins de $x$ et $y$, cela signifie que $s_i$ et $s_{i+l}$ sont dans $V$. On ajoute alors deux sommet, $s$ et $s'$, l'un relié
-    à $s_i, x, y$, l'autre à $s_{i+l}, x, y$. On obtient au final un témoin de $G$, compact et quadrangulé, donc $G$ admet une carte
-    complète
-\end{proof}
-
-\begin{lem}
-    Soit $G$ un graphe admettant une carte complète et $xy \in E$ une arrête telle que $G / xy$ soit un graphe $3$-connexe à
-    carte complète. Soit $H$ un témoin compact quadrangulé de $G / xy$. On suppose que les voisins de $xy$ dans $G / xy$
-    induisent un cycle sans corde.
-    Alors $H$ vérifie la propriété de la proposition \ref{ezDecontr}
-\end{lem}
-
-\begin{proof}
-    Supposons par l'absurde $H$ ne vérifie pas cette propriété. Notons que comme les voisins de $xy$
-    induisent un cycle sans corde, on peut supposer sans perte de généralité que les voisins de $xy$ dans $H$
-    sont tous de degré $3$ : en effet ces derniers ont pour voisins des voisins de $xy$ dans $G / xy$.
-    Si un tel sommet était de degré plus que $3$, alors on aurait un triangle présent parmi les voisins de $xy$.
-    Si ces derniers sont au nombre de $3$, $H$ respecterait la propriété de la proposition \ref{ezDecontr}.
-    Si $xy$ a plus de $4$ voisins, alors le cycle formé par ses voisins dans $G / xy$ possède une corde, absurde.
-    \\~\\
-    On exploite à présent l'hypothèse sur $H$ : notons $v_1, ..., v_l$ l'ordre cyclique sur les voisins de $xy$.
-    De par la forme du témoin, l'hypothèse implique que les voisins de $x$ et de $y$ ne sont pas des intervalles
-    modulo $l$ parmi ces sommets (si l'on retire $x$ et $y$). Comme $G$ est à carte complète et $3$-connexe, les voisins de $x$
-    et ceux de $y$ forment respectivement des cycles. Hors les voisins de $x$ ne forment pas un intervalle modulo $l$ parmi
-    $v_1, ..., v_l$ ($y$ est exclu). Donc $N(x) = \{y, v_{a_1}, ..., v_{b_1}, v_{a_2}, ..., v_{b_2}, ..., v_{b_k}\}$
-    où $a_1 = 1$ sans perte de généralité, $k \geq 2$, $b_i < a_{i+1} + 1$ pour $1 \leq i \leq k-1$, et $b_k < l-1$, là encore quitte à effectuer
-    des permutations cycliques.\\
-    On numérote les voisins de $x$ $u_1, ..., u_r$ dans un ordre cyclique. En supposant $u_1 = v_1$ et quitte à inverser l'ordre,
-    on a $u_{b_1} = v_{b_1}$. Le seul sommet adjacent à $v_{b_1}$ encore non utilisé est $y$, donc $u_{b_1 + 1} = y$. Puis
-    $u_{b_1 + 2}$ est un sommet quelconque parmi ceux restants. Supposons pour simplifier le raisonnement qu'il s'agisse de $v_{a_2}$.
-    Le seul sommet adjacent non considéré est $v_{a_2 + 1}$ et ainsi de suite jusqu'à atteindre $v_{b_2}$. $v_{b_2}$ n'a pas de voisins
-    non considérés dans le cycle. Le raisonnement est le même si l'on tombe sur un voisin entre un $v_{a_i}$ et $v_{b_i}$ le sens de
-    progression peut toutefois être différent. Au total, c'est absurde.
-    \\~\\
-    Ainsi $H$ vérifie la propriété annoncée
-\end{proof}
-
-\begin{lem}
-    Soit $G$ un graphe à carte complète, $xy \in E$ une arrête contractible. Il existe un graphe $G'$
-    à carte complète, tel que $G' / xy$ soit à carte complète et se contracte à l'aide d'arrêtes contractibles
-    en $G / xy$, et vérifiant que les voisins de $xy$ dans $G' / xy$ induisent un cycle sans corde.
-\end{lem}
 
 \section{Algorithmes}
 
@@ -529,14 +510,14 @@ il contient $2$ sommets indépendants. On a donc un indépendant de taille $3$ c
 On en déduit le lemme suivant :
 
 \begin{lem}\label{trivPar3conn}
-    $G$ est de carte si et seulement c'est une clique ou un $K(K_n, K_p \sqcup K_q)$ avec $n \geq 3$. De plus, la carte
+    $G$ est de carte si et seulement c'est une clique ou un $K(K_n, I_{p,q})$ avec $n \geq 3$. De plus, la carte
     donnée est complète
 \end{lem}
 
 \begin{proof}
     Le sens direct a déjà été traité précedemment.\\
     Pour le sens réciproque, toute clique admettant une carte complète, on se concentre sur le second cas. On construit
-    alors un témoin compact quandrangulé pour $K(K_n, K_p \sqcup K_q)$ comme illustré figure ??
+    alors un témoin compact quandrangulé pour $K(K_n, I_{p,q})$ comme illustré figure ??
 \end{proof}
 
 \subsubsection{Cas général}
@@ -544,7 +525,9 @@ On en déduit le lemme suivant :
 On s'intéresse à présent au cas où $G$ est $2$-connexe, qui conclura l'analyse des graphes trivialement parfaits par la proposition
 \ref{suffbiconn} et le fait qu'un graphe à carte complète est nécessairement $2$-connexe.\\
 Comme précedemment, la $2$-connexité de $G$ impose l'existence de $2$ sommets universels. S'il y en a $3$, la question
-a déjà été réglée précédemment car $G$ est alors $3$-connexe.
+a déjà été réglée précédemment car $G$ est alors $3$-connexe. Notons que le séparateur minimal étant unique et universel,
+$G$ n'a qu'une seule décomposition $3$-connexe. On parlera alors simplement de composantes $3$-connexes de $G$ sans préciser
+de décomposition.
 
 \begin{theorem}
     Un graphe $G$ trivialement parfait $2$-connexe est de carte si et seulement si chacune de ses composantes $3$-connexe est de carte.
@@ -552,14 +535,14 @@ a déjà été réglée précédemment car $G$ est alors $3$-connexe.
 \end{theorem}
 
 \begin{proof}
-    Si $G$ est de carte, toutes ses composantes $3$-connexes sont de carte comme ce sont des sous graphes induits de $G$.\\
+    Si $G$ est de carte, toutes ses composantes $3$-connexes sont de carte par la proposition \ref{3connCompCarte}\\
     Pour le sens réciproque, le lemme \ref{trivPar3conn}, nous donne la forme des composantes $3$-connexes de $G$.
     Notons $C_1, ..., C_k$ les composantes $3$-connexes de $G$. On construit alors une carte comme suit :
     on place $2$ régions associées aux $2$ universels, $u$ et $v$, de $G$, que l'on fait se rencontrer en $k+1$ chemins disjoints.
     Ainsi après retrait de ces $2$ régions, la sphère est séparée en $k$ composantes connexes.\\
     Si $C_i$, $1 \leq i \leq k$, est une clique, on place dans une des $k$ composantes connexes encore libre une clique
     remplissant entièrement cette composante, portée par un point de rencontre entre $u$ et $v$. Sinon $C_i$ est
-    de la forme $K(K_n, K_p \sqcup K_q)$, $n \geq 3$. On représente alors les sommets distincts de $u$ et $v$ formant le $K_n$
+    de la forme $K(K_n, I_{p,q})$, $n \geq 3$. On représente alors les sommets distincts de $u$ et $v$ formant le $K_n$
     par une clique séparant la composante en deux, de telle sorte à ce que chaque partie ait accès à un point portant
     cette clique. On remplit ensuite chaque partie par une clique portée par un point porteur de la clique $K_n$.
     (illustré figure ??)
@@ -577,7 +560,7 @@ Puis, afin de décider si les composantes $3$-connexes ont bien la forme souhait
 max de la composante, si la composante elle même est une clique max, il n'y a alors qu'une seule clique max et ce cas est donc
 vu dès la première clique listée. On renvoie alors une réponse positive. Si il n'y a que $2$ cliques max, chaque sommet étant
 dans au moins une clique max, ces deux dernières recouvrent la composante $3$-connexe. La $3$-connexité impose que ces deux dernières
-se rencontrent en au moins $3$ points, le graphe est alors de la forme $K(K_n, K_p \sqcup K_q)$, les $2$ cliques max ayant $n+p$
+se rencontrent en au moins $3$ points, le graphe est alors de la forme $K(K_n, I_{p,q})$, les $2$ cliques max ayant $n+p$
 et $n+q$ sommets chacune, la clique $K_n$, $n \geq 3$ étant formée des sommets communs aux deux cliques max. On renvoie alors
 aussi une réponse positive. Si il y a plus de $3$ cliques max, on renvoie une réponse négative.
 
@@ -600,7 +583,7 @@ On discutera ici de comment se manifeste les différentes propriétés de connex
 suivant caractérise la connexité par la racine de du coarbre
 
 \begin{lem}
-    Un cographe $G$ est connexe si et seulement si son coarbre $T$ a pour racine un noeud étiquetté $1$
+    Un cographe $G$ est connexe si et seulement si son coarbre $T$ a pour racine un noeud $1$
 \end{lem}
 
 Dont on peut déduire la proposition suivante
@@ -612,17 +595,18 @@ Dont on peut déduire la proposition suivante
 \end{prop}
 
 \begin{proof}
-    Les ensembles décrits sont bien des séparateurs minimaux : notons $\displaystyle S_j = \bigcup_{i \neq j} V(T_i)$ pour un tel $j$. $G - S_j$ peut être
+    Les ensembles décrits sont bien des séparateurs : notons $\displaystyle S_j = \bigcup_{i \neq j} V(T_i)$ pour un tel $j$. $G - S_j$ peut être
     représenté par l'arbre $T$ où l'on a retiré les sous arbres $T_i, i \neq j$. Mais alors la racine n'a plus qu'un enfant et sa représentation est donc
     inutile. Donc $G - S_j$ peut être représenté par $T_j$, il s'agit même de son coarbre. Or $T_j$ a un $0$ a sa racine comme ce n'est pas une feuille.
     \\~\\
-    Réciproquement, soit $S$ un séparateur. Soient $s, t$ deux sommets séparés par $S$. Le plus petit ancêtre commun de $s$ et $t$ dans $T$
+    Soit $S$ un séparateur. Soient $s, t$ deux sommets séparés par $S$. Le plus petit ancêtre commun de $s$ et $t$ dans $T$
     est donc un noeud $0$. $T$ étant le coarbre de $G$, connexe, $0$ a pour parent un noeud $1$. Tout $r$ descendant de ce noeud, n'étant pas dans le
     sous arbre contenant $s$ et $t$ fournit un chemin de longueur $3$ de $s$ à $t$. En particulier, en notant $j$ l'indice du sous arbre de la racine
-    contenant $s$ et $t$, $T_j$ n'est pas une feuille et $S$ contient alors $V(T_i)$ pour tout $i \neq j$. Ces ensembles sont bien des séparateurs minimaux.
+    contenant $s$ et $t$, $T_j$ n'est pas une feuille et $S$ contient alors $V(T_i)$ pour tout $i \neq j$. Donc $S_j \subset S$. On montre
+    alors que les $S_j$ sont des séparateurs minimaux, et que ce sont les seuls
 \end{proof}
 
-\begin{cor}
+\begin{cor}\label{coarbrekconn}
     Un cographe $G$ est $k$-connexe si et seulement si pour tout $j$ tel que $T_j$ n'est pas une feuille, $\sum_{i \neq j} |V(T_i)| \geq k$
 \end{cor}
 
@@ -631,23 +615,39 @@ généraliser les résultats
 
 \subsubsection{Structure des cographes de carte}
 
-On a un résultat ULTRA restricif sur les $G$ de carte $3$-connexe. Peut être qu'on peut le généraliser en parlant de sous arbres
-d'un arbre maximal ??
+On a un résultat ULTRA restricif sur les $G$ de carte $3$-connexe.
 
 \begin{lem}
-    Soit $G$ un cographe $3$-connexe. $G$ est de carte si et seulement si il s'agit de l'un des graphes suivants,
-    $p, q, r, s \geq 1, n \geq 0$, et où les valeurs minimales des indices dépendent du cas, de manière ce que $G$ soit $3$-connexe :
-    \begin{itemize}
-        \item $K(2,2, K_p \sqcup K_q, K_n)$
-        \item $K(K_p \sqcup K_q, K_r \sqcup K_s, K_n)$
-        \item $K(K_p \sqcup K_q, K_n)$ avec $n \geq 3$
-        \item $K_n$, $n \geq 1$ 
-    \end{itemize}
+    Soit $G$ un cographe $3$-connexe. $G$ est de carte si et seulement si son coarbre est de hauteur inférieure à $4$ et la racine de ce dernier
+    a au plus $3$ fils étiquettés $0$. De plus la carte est complète
 \end{lem}
 
 \begin{proof}
-    On distingue selon le nombre de fils de la racine étiquettés $0$
+    Supposons $G$ de carte. Notons $T$ son coarbre. Il n'existe aucun noeud $1$ de $T$ ayant plus de $4$ fils $0$ : en effet chaque fils $0$
+    possède au moins $2$ descendants, on pourrait alors construire un sous graphe induit $K_{2,2,2,2}$ ce qui est impossible comme $G$ est de carte.\\
+    Puis, supposons que $T$ est de hauteur au moins $5$. Il existe donc une branche de $T$ dont les noeuds sont étiquettés, de haut en bas,
+    $1, 0, 1, 0, ...$. Le premier $0$ ayant au moins $2$ fils, on se donne $v$ un sommet descendant de ce noeud ne descendant pas
+    du noeud $1$ situé juste après sur la branche. Le deuxième noeud $0$ nous donne deux sommets $u, w$, indépendants. $u$ et $v$ ont pour
+    plus petit ancêtre commun le premier noeud $0$ de la branche, donc sont indépendants, de même pour $w$ et $v$. On a ainsi un indépendant
+    de taille $3$. $G$ étant $3$-connexe, le corollaire \ref{coarbrekconn} donne que $1$ a au moins $3$ sommets descendants dans un sous arbre ne
+    contenant pas $u,v,w$. Ces descendants ont alors pour plus petit ancêtre commun avec $u,v,w$ la racine $1$.
+    On a ainsi un sous graphe induit $K(3, G)$, absurde comme $G$ est de carte.
+    \\~\\
+    Supposons à présent que $T$ est de la forme souhaitée. On distingue selon $k$, le nombre de fils de la racine étiquettés $0$.
+    On aura $n \geq 0, p,q,r,s,t,u \geq 1$
+    \begin{itemize}
+        \item Si $k = 0$, $G$ est une clique
+        \item Si $k = 1$, $G = K(I_{p,q}, K_n)$ où le $K_n$, est dû aux sommets qui sont fils directs de la racine.
+        $G$ est alors trivialement parfait
+        \item Si $k = 2$ : $G = K(I_{p,q}, I_{r,s}, K_n)$, la figure ?? donne une carte complète de $G$
+        \item Si $k = 3$ : $G = K(I_{p,q}, I_{r,s}, I_{t,u}, K_n)$, la figure ?? donne une carte complète de $G$
+    \end{itemize}
 \end{proof}
+
+(Remarques sur l'unicité relative de la décomposition $3$-connexe)
+\\~\\
+On peut déjà être sûr que ce n'est pas les $K(3, G), K_{2,2,2,2}$ free. MAIS si les séparateurs sont tous des cliques..... (donc chordal donc
+trivially perfect ici)
 
 \section*{Annexe}
 
@@ -764,45 +764,6 @@ plus intelligent dans le cas spécifique des graphes de carte, si on a une non i
     vérifiée : alors pour tout $K'$, 
 \end{proof}
 
-\begin{lem}\label{3connCompl}
-    Soit $G$ un graphe de carte $3$-connexe. Il existe un surgraphe de $G$ à un sommet de plus admettant une carte complète.
-\end{lem}
-
-\begin{proof}
-    On se donne un témoin $H$ de $G$ et on note $U$ l'ensemble des sommets autres que $V$ de $H$. On peut supposer que $H$
-    est construit de telle sorte à ce que $d(u) \geq 2$ pour $u \in U$. Soit $u \in U$, $x, y \in V$ parmi ses voisins.
-    Si $x$ et $y$ sont adjacents à la même face de $H$, alors on ajoute une arrête entre $x$ et $y$ à l'intérieur de cette face,
-    que l'on subdivise ensuite à l'aide d'un sommet afin de garder le graphe biparti. On répète alors
-    ce processus jusqu'à ce que tout les sommets adjancents dans $G$ soient reliés par deux chemins de longueur $2$.
-    \\~\\
-    Le nouveau graphe $H'$ est planaire biparti et $2$-connexe : si l'on retire un sommet de $V$ le graphe reste clairement
-    connexe comme $G$ est $3$-connexe. Si l'on retire un sommet de $U'$ (l'ensemble $U$ avec les nouveaux sommets ajoutés),
-    $H$ reste aussi connexe :
-    si le sommet retiré est parmi ceux de $U' \backslash U$, la construction de $U'$ donne que le graphe reste connexe. Sinon,
-    on se donne $v_1, ..., v_k$ les voisins de $u$ le sommet retiré, tels que $v_i$ et $v_{i+1}$ soient adjacents à la
-    même face. On a alors qu'après le retrait de $u$, par construction encore de $U'$, les $v_i$ sont tous accessibles
-    entre eux. On peut alors voir que cela implique que le graphe reste connexe et est un témoin de $G$
-    \\~\\
-    On construit alors un surgraphe de $H'$ que l'on va plonger dans le plan. On construit le
-    surgraphe $H''$ en itérant sur tout sommet $v \in V$, et en ajoutant une arrête entre chaque paire $u_1, u_2$
-    voisine de $v$ adjacente à une même face, arrête prenant la forme d'un chemin dans cette face. Si $v$ est
-    un sommet extérieur dans $H'$, et que l'on considère $2$ de ses voisins dans $H'$ eux aussi extérieurs,
-    alors on choisira le chemin de telle sorte à ce que $v$ devienne intérieur dans $H''$.
-    Ainsi tout les élements de $U'$ deviennent de degré au moins $3$. $G$ étant $3$-connexe, on peut alors voir que $H''$
-    le devient également (on ne peut plus isoler de sommet de $U'$). $H''$ est également planaire et par construction,
-    tout les sommets $v \in V$ sont intérieurs.
-    \\~\\
-    \textbf{(merde faut montrer que les adjacences restent cohérentes aussi).}
-    On construit à présent la carte : pour $v \in V$, la région associée à $v$ est l'adhérence de la face dans laquelle se trouve
-    le point $v$ dans $H'' - v$. Cette face est bien homéomorphe à un disque, comme $H'' - v$ est $2$-connexe et qu'alors
-    cette dernière est bordée par un cycle (voir ...), le théorème de Jordan-Schönflies nous donne ce que l'on veut.
-    Cet ensemble de région correspond alors à l'intérieur du cycle de $H''$
-    séparant la face non bornée des autres (comme $H''$ est $2$-connexe). Ainsi, pour les mêmes raisons, la face non bornée, vue dans $\mathbb{S}^2$,
-    est homéomorphe à un disque. On ajoute alors un sommet à $G$ correspondant à cette face et à ses adjacences dans cette carte.
-    La carte est bien complète par construction
-
-\end{proof}
-
 \subsection{Permutations de cycle et arrêtes contractibles}
 
 Une inversion totale sur $n$ élements est la permutation suivante $ i \in \llbracket 1, n \rrbracket \longmapsto n - i + 1$,
@@ -835,6 +796,64 @@ ils diffèrent par un automorphisme de $C_n$. Donc si $\sigma(i)\sigma(i+1) \not
 Ce que l'on remarque en faisant les dessins : on se donne $v \in V$ dans un graphe de carte et on fixe un ordre
 cyclique de $N(v)$ donné par le corollaire \ref{ordCycl}. On étudie ses permutations de cycle. On remarque que les sommets
 $u$ non échangeables font de bons candidats pour que $uv$ soit contractible (à vraiment peu de choses près)
+
+
+\subsection{Décontractions d'arrêtes}
+
+\begin{prop}\label{ezDecontr}
+    Soit $G$, $xy \in E$ une arrête. Supposons que $G / xy$ admette une carte complète et soit $3$-connexe. Soit $H$ un témoin compact
+    quadrangulé de $G / xy$ donné par la proposition \ref{cyclSep}. Notons $s_1, ..., s_k$ le cycle séparant $xy$ du reste de $H$.
+    Si les voisins de $x$ distincts de $y$ sont exactement $RA(\{s_i, ..., s_{i+l}\}) - xy$ et ceux de $y$
+    $RA(\{s_{i+l}, ..., s_{i-1}, s_i\}) - xy$,
+    où $i, l$ sont entiers et les indices sont vus modulo $k$, alors $G$ admet une carte complète
+\end{prop}
+
+\begin{proof}
+    On construit la carte complète comme suit : on part de $H$, on retire $xy$ et on ajoute $x$ et $y$ à l'intérieur du cycle séparant.
+    Ensuite, on relie $x$ à tout ses voisins de la manière suivante : si $s_j \in U$ et que les deux voisins de $s_j$ sur le cycle
+    sont voisins de $x$, on ajoute une arrête entre $x$ et $s_j$.\\
+    Si l'un des voisins de $s_j$ n'est pas voisin de $x$ et l'autre l'est,
+    et que ce dernier n'a pas été pris en compte par l'étape précédente, c'est alors que $x$ n'a qu'un voisin sur le cycle par
+    les conditions précédentes : si il en avait plus de deux, il aurait été possible de tous les couvrir en considérant les sommets
+    de $U$ faisant la liaison. Dans ce cas, on relie $x$ à son voisin par deux arrêtes subdivisées, et on relie $y$ à chaque sommet
+    joignant $x$ à son voisin.\\
+    On effectue les mêmes étapes pour $y$. Si il n'existe aucun $s_j \in U$ tels que ses deux voisins sur le cycle soient également
+    voisins de $x$ et $y$, cela signifie que $s_i$ et $s_{i+l}$ sont dans $V$. On ajoute alors deux sommet, $s$ et $s'$, l'un relié
+    à $s_i, x, y$, l'autre à $s_{i+l}, x, y$. On obtient au final un témoin de $G$, compact et quadrangulé, donc $G$ admet une carte
+    complète
+\end{proof}
+
+\begin{lem}
+    Soit $G$ un graphe admettant une carte complète et $xy \in E$ une arrête telle que $G / xy$ soit un graphe $3$-connexe à
+    carte complète. Soit $H$ un témoin compact quadrangulé de $G / xy$. On suppose que les voisins de $xy$ dans $G / xy$
+    induisent un cycle sans corde.
+    Alors $H$ vérifie la propriété de la proposition \ref{ezDecontr}
+\end{lem}
+
+\begin{proof}
+    Supposons par l'absurde $H$ ne vérifie pas cette propriété. Notons que comme les voisins de $xy$
+    induisent un cycle sans corde, on peut supposer sans perte de généralité que les voisins de $xy$ dans $H$
+    sont tous de degré $3$ : en effet ces derniers ont pour voisins des voisins de $xy$ dans $G / xy$.
+    Si un tel sommet était de degré plus que $3$, alors on aurait un triangle présent parmi les voisins de $xy$.
+    Si ces derniers sont au nombre de $3$, $H$ respecterait la propriété de la proposition \ref{ezDecontr}.
+    Si $xy$ a plus de $4$ voisins, alors le cycle formé par ses voisins dans $G / xy$ possède une corde, absurde.
+    \\~\\
+    On exploite à présent l'hypothèse sur $H$ : notons $v_1, ..., v_l$ l'ordre cyclique sur les voisins de $xy$.
+    De par la forme du témoin, l'hypothèse implique que les voisins de $x$ et de $y$ ne sont pas des intervalles
+    modulo $l$ parmi ces sommets (si l'on retire $x$ et $y$). Comme $G$ est à carte complète et $3$-connexe, les voisins de $x$
+    et ceux de $y$ forment respectivement des cycles. Hors les voisins de $x$ ne forment pas un intervalle modulo $l$ parmi
+    $v_1, ..., v_l$ ($y$ est exclu). Donc $N(x) = \{y, v_{a_1}, ..., v_{b_1}, v_{a_2}, ..., v_{b_2}, ..., v_{b_k}\}$
+    où $a_1 = 1$ sans perte de généralité, $k \geq 2$, $b_i < a_{i+1} + 1$ pour $1 \leq i \leq k-1$, et $b_k < l-1$, là encore quitte à effectuer
+    des permutations cycliques.\\
+    On numérote les voisins de $x$ $u_1, ..., u_r$ dans un ordre cyclique. En supposant $u_1 = v_1$ et quitte à inverser l'ordre,
+    on a $u_{b_1} = v_{b_1}$. Le seul sommet adjacent à $v_{b_1}$ encore non utilisé est $y$, donc $u_{b_1 + 1} = y$. Puis
+    $u_{b_1 + 2}$ est un sommet quelconque parmi ceux restants. Supposons pour simplifier le raisonnement qu'il s'agisse de $v_{a_2}$.
+    Le seul sommet adjacent non considéré est $v_{a_2 + 1}$ et ainsi de suite jusqu'à atteindre $v_{b_2}$. $v_{b_2}$ n'a pas de voisins
+    non considérés dans le cycle. Le raisonnement est le même si l'on tombe sur un voisin entre un $v_{a_i}$ et $v_{b_i}$ le sens de
+    progression peut toutefois être différent. Au total, c'est absurde.
+    \\~\\
+    Ainsi $H$ vérifie la propriété annoncée
+\end{proof}
 
 \bibliographystyle{plain}
 \bibliography{MapGraphs}
