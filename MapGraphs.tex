@@ -10,6 +10,7 @@
 \usepackage[french]{babel}
 \usepackage{color}
 \usepackage{tikz}
+\usepackage{graphicx}
 \usetikzlibrary{automata, arrows.meta, positioning}
 \usepackage{MacrosArt}
 
@@ -174,7 +175,7 @@ de posséder une carte : en effet les graphes de carte étant stables par sous g
 posséder ni $K(3, G)$ ni $K_{2,2,2,2}$ parmi ces derniers. Ces conditions ne sont pas suffisantes : une subdivision
 de $K_{3,3}$ quelconque n'est pas un graphe de carte par des arguments similaires à la proposition \ref{K3G}
 
-\subsection{Cartes et connexités}
+\subsection{Cartes et connexités}\label{cartesetconnex}
 
 (mettre ici que les cartes complètes sont biconnexes)
 
@@ -202,7 +203,13 @@ $3$-connexes de $G$ associés à cette décomposition.
 \end{prop}
 
 \begin{proof}
-    
+    On montre uniquement que, étant donné un séparateur $\{x,y\}$ de $G$, tout les $G_i$ associés sont des graphes de carte.
+    Si $xy$ est une arrête de $G$, alors chaque $G_i$ est un sous graphe induit de $G$ et on a ce qu'on veut. Sinon, on construit une
+    carte à $G_i$ à partir de celle de $G$ : comme $\{x,y\}$ est un séparateur, il existe au moins une autre composante connexe de
+    $G - \{x,y\}$, que l'on note $C_j$, $j \neq i$. $x$ et $y$ étant reliés à $C_j$, il existe un chemin de $x$ à $y$ dans $C_j$.
+    On se donne un témoin $H$ associé à $G$. L'existence de ce chemin dans $G$ donne un chemin dans $H$ de $x$ à $y$, jamais voisin
+    d'un sommet de $C_i$ sauf en $x$ et $y$. En considérant le sous graphe de $H$ obtenu en ne considérant que le voisinage de $C_i$ et le chemin
+    de $x$ à $y$ évoqué, on peut en contractant des arrêtes du chemin obtenir un témoin de $G_i$
 \end{proof}
 
 \begin{comment}
@@ -517,7 +524,7 @@ On en déduit le lemme suivant :
 \begin{proof}
     Le sens direct a déjà été traité précedemment.\\
     Pour le sens réciproque, toute clique admettant une carte complète, on se concentre sur le second cas. On construit
-    alors un témoin compact quandrangulé pour $K(K_n, I_{p,q})$ comme illustré figure ??
+    alors une carte complète pour $K(K_n, I_{p,q})$ comme illustré figure ??
 \end{proof}
 
 \subsubsection{Cas général}
@@ -529,7 +536,7 @@ a déjà été réglée précédemment car $G$ est alors $3$-connexe. Notons que
 $G$ n'a qu'une seule décomposition $3$-connexe. On parlera alors simplement de composantes $3$-connexes de $G$ sans préciser
 de décomposition.
 
-\begin{theorem}
+\begin{theorem}\label{maptrivperf}
     Un graphe $G$ trivialement parfait $2$-connexe est de carte si et seulement si chacune de ses composantes $3$-connexe est de carte.
     De plus la carte de $G$ construite est complète.
 \end{theorem}
@@ -588,7 +595,7 @@ suivant caractérise la connexité par la racine de du coarbre
 
 Dont on peut déduire la proposition suivante
 
-\begin{prop}
+\begin{prop}\label{sepcographe}
     Soit $G$ un cographe connexe et $T$ son coarbre. Notons $T_1, ..., T_k$ les sous arbres de $T$ enracinés en les enfants de la racine de $T$.
     Les séparateurs minimaux de $G$ sont exactement les $\displaystyle \bigcup_{i \neq j} V(T_i)$ où $j$ parcourt l'ensemble des indices de $1, ..., k$
     tels que $T_i$ ne soit pas une feuille
@@ -615,9 +622,7 @@ généraliser les résultats
 
 \subsubsection{Structure des cographes de carte}
 
-On a un résultat ULTRA restricif sur les $G$ de carte $3$-connexe.
-
-\begin{lem}
+\begin{lem}\label{cograph3conn}
     Soit $G$ un cographe $3$-connexe. $G$ est de carte si et seulement si son coarbre est de hauteur inférieure à $4$ et la racine de ce dernier
     a au plus $3$ fils étiquettés $0$. De plus la carte est complète
 \end{lem}
@@ -637,17 +642,88 @@ On a un résultat ULTRA restricif sur les $G$ de carte $3$-connexe.
     On aura $n \geq 0, p,q,r,s,t,u \geq 1$
     \begin{itemize}
         \item Si $k = 0$, $G$ est une clique
-        \item Si $k = 1$, $G = K(I_{p,q}, K_n)$ où le $K_n$, est dû aux sommets qui sont fils directs de la racine.
-        $G$ est alors trivialement parfait
+        \item Si $k = 1$, $G = K(I_{p,q}, K_n)$ où le $K_n$ est dû aux sommets qui sont fils directs de la racine.
+        $G$ est alors trivialement parfait. On peut le représenter par exemple par le théorème \ref{maptrivperf}
         \item Si $k = 2$ : $G = K(I_{p,q}, I_{r,s}, K_n)$, la figure ?? donne une carte complète de $G$
         \item Si $k = 3$ : $G = K(I_{p,q}, I_{r,s}, I_{t,u}, K_n)$, la figure ?? donne une carte complète de $G$
     \end{itemize}
 \end{proof}
 
-(Remarques sur l'unicité relative de la décomposition $3$-connexe)
+\begin{lem}
+    Le graphe $K(2, I(1, K_{2,2}))$ n'est pas de carte
+\end{lem}
+
+\begin{proof}
+    On numérote $v_1, ..., v_6$ les sommets du $K_{2,2,2}$ induit, tels que les indépendants soient $\{v_1, v_2\}, \{v_3,v_4\}, \{v_5,v_6\}$.
+    On notera $a$ le sommet relié à deux sommets indépendants de ce sous graphe, que l'on supposera être $v_1, v_2$.\\
+    On suppose le graphe de carte, on s'en donne alors $H$ un témoin. Comme $v_1v_2 \notin E$, les voisins de $a$ sont tous de degré
+    $2$, ou l'un est aussi voisin de $v_1$ et un autre de $v_2$.\\
+    Les sommets $a, v_3, v_4, v_2, v_5, v_6$ et les chemins suivant vérifient alors les hypothèses du lemme \ref{CNSK33}, en reprenant un raisonnement
+    similaire à la proposition \ref{K2222} : les chemins de $v_3, v_4$ à $v_2, v_5, v_6$ sont les arrêtes subdivisées de $H$
+    traduisant les adjacences dans le graphe original, celui de $a$ à $v_2$ est donné par l'arrête subdivisée représentant l'arrête $av_2$,
+    ceux de $a$ à $v_5, v_6$ exploitent les chemins de $a$ à $v_1$ puis de $v_1$ à $v_5, v_6$.\\
+    Absurde, $H$ étant planaire, donc le graphe donné n'est pas de carte
+\end{proof}
+
+On s'intéresse à présent plus généralement à la reconnaissance des cographes de carte $2$-connexe. Le cas $3$-connexe ayant déjà été traité,
+on se limite aux graphes ayant des séparateurs de taille $2$. Notons alors que, par la forme des séparateurs minimaux donnée par la proposition
+\ref{sepcographe}, le seul cographe $2$-connexe n'ayant pas un unique séparateur minimal de taille $2$ est $K_{2,2}$ : en effet si on souhaite avoir
+plus d'un séparateur minimal, la racine du corarbre doit avoir au moins $2$ fils $0$. Elle doit en avoir en fait exactement $2$ sinon le
+graphe devient $3$-connexe. Chaque fils $0$ ayant au moins $2$ sommets descendants, la racine ne peut avoir d'autres fils. Enfin l'existence
+de $2$ séparateurs minimaux de taille $2$ finit d'imposer la structure du coarbre.
 \\~\\
-On peut déjà être sûr que ce n'est pas les $K(3, G), K_{2,2,2,2}$ free. MAIS si les séparateurs sont tous des cliques..... (donc chordal donc
-trivially perfect ici)
+Ainsi, dès que le cographe a plus de $5$ sommets, il ne possède qu'un seul séparateur de taille $2$. Notons que les composantes $3$-connexes
+du cographe $G$ sont alors obtenues en une seule étape de décomposition : en effet le coarbre associé à un des graphes $G_i$, en reprenant
+les notations de \ref{cartesetconnex}, a pour racine $1$, et a pour enfants les sommets $x,y$ séparant le graphe.
+Ses autres enfants sont les fils du noeud $1$ dans le coarbre de $G$ représentant la composante $C_i$, ou un unique sommet si
+cette composante n'est composée que d'un sommet. Dans le deuxième cas, $G_i = K_3$. Dans le premier, si $G_i$ n'est pas $3$-connexe,
+il doit exister un fils de la racine $0$, et les autres sous arbres de la racine ne doivent pas exceder $2$ sommets. Impossible,
+le noeud $1$ racine du coarbre de $C_i$ a au moins $2$ fils, l'un d'entre eux étant ce noeud $0$, les autres venant rejoindre $x$ et $y$
+parmi les fils de la racine distincts de ce noeud $0$. On dépasse alors nécessairement les $3$ sommets. On peut alors parler sans ambiguïté
+des composantes $3$-connexes sans spécifier une décomposition. On déduit de ces remarques le lemme suivant :
+
+\begin{theorem}
+    Soit $G$ un cographe $2$-connexe à plus de $5$ sommets et $\{x,y\}$ un séparateur minimal de $G$. 
+    \begin{itemize}
+        \item Si $xy \in E$, $G$ est de carte si et seulement si toutes ses composantes $3$-connexes le sont
+        \item Sinon, $G$ est de carte si et seulement si chaque composante connexe de $G - \{x,y\}$ est de carte et que
+        le coarbre de chacune vérifie que la racine a au plus un fils $0$
+    \end{itemize}
+\end{theorem}
+
+\begin{proof}
+    Supposons d'abord $xy \in E$. Le sens direct est donné par la proposition \ref{3connCompCarte}.\\
+    Pour le sens réciproque, les remarques précédentes permettent de dire
+    que les composantes $3$-connexes de $G$ sont exactement les $G_i$ donnés par la paire $\{x,y\}$. Notons que comme $xy \in E$, les $G_i$
+    sont des sous graphes induits de $G$. On représente les régions $x$ et $y$ comme décrit dans la démonstration du théorème \ref{maptrivperf}.
+    On se fixe à présent un $G_i$ que l'on va représenter à l'intérieur de l'un des trous laissés par les régions $x$ et $y$\\
+    Le lemme \ref{cograph3conn} donne une carte de $G_i$ ayant la particularité qu'il suffit à une région de contenir au plus $2$ point spécifiques
+    $u$ et $v$ pour être adjacente à toutes les régions de la carte. La carte de $G_i - \{x,y\}$ ainsi obtenue conserve cette particularité. On place alors
+    la carte de $G_i - \{x,y\}$ "dans" une des composantes du complémentaire de la région $x \cup y$, de manière à ce que $u$ et $v$ rencontrent à la fois
+    $x$ et $y$ comme illustré figure ??.
+    \\~\\
+    Supposons maintenant $xy \notin E$. On s'intéresse au sens direct : la stabilité par sous graphe induit donne la première partie de la propriété.
+    Soit $C_i$ une composante connexe de $G - \{x,y\}$. Soit $T_i$ le coarbre de $C_i$.
+    Le coarbre de $G$ est construit de la manière suivante : la racine a $2$ fils, les deux étant des noeuds $0$. L'un a pour enfants les sommets
+    $x$ et $y$. L'autre a pour sous arbres les coarbres des composantes connexes de $G - \{x,y\}$. $G$ étant de carte, la racine de $T_i$
+    ne peut avoir plus de $3$ fils $0$, sinon on aurait un sous graphe induit $K_{2,2,2,2}$ en utilisant $T_i, x$ et $y$. Elle ne peut également avoir $2$
+    fils $0$ : en effet le noeud $0$ ayant pour sous arbres les composantes de $G - \{x,y\}$ amet un sommet descendant $v$ n'appartenant pas à $T_i$.
+    On trouve alors un sous graphe induit $K(2, I(1, K_{2,2}))$ : le premier $2$ est dû à $x,y$, le $1$ à $v$, et $K_{2,2}$ est construit grâce à
+    $T_i$. Au total, $T_i$ vérifie bien la condition de l'énoncé.\\
+    Pour le sens réciproque, comme les composantes $3$-connexes de $G$ sont les $G_i$ et que ces derniers ne peuvent qu'être de la forme
+    $K_n$ ou $K(I_{p,q}, K_n)$ par ce qui précède, la figure ?? donne une carte de $G$ où $x$ et $y$ sont les deux régions indépendantes,
+    représentées à part, et où chaque cas de $G_i - \{x,y\}$ est représenté
+\end{proof}
+
+On peut également déduire de ce théorème que les cographes de carte sont exactement ceux ne possédant pas $K(3, G), K_{2,2,2,2}, K(2, I(1, K_{2,2}))$
+parmi leur sous graphes induits : en effet la démonstration utilise uniquement l'interdiction de ces $3$ classes de graphes comme condition nécessaire
+à être un graphe de carte. Que ce soit par une méthode exploitant cette caractérisation ou par une autre méthode séparant en composantes
+$3$-connexe et vérifiant si ces dernières ont la bonne forme, on obtient un algorithme polynômial reconaissant si un cographe $G$ est de carte
+
+\begin{quest}
+    Est ce que pour $G$ un graphe cordal $2$-connexe, il est vrai que $G$ est de carte si et seulement si ses composantes $3$-connexes pour
+    toutes/une décomposition $3$-connexe sont de carte ?
+\end{quest}
 
 \section*{Annexe}
 
