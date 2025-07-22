@@ -14,6 +14,7 @@
 \usetikzlibrary{automata, arrows.meta, positioning}
 \usepackage{MacrosArt}
 
+\input{figsLabels.tex}
 
 \begin{document}
 
@@ -41,6 +42,34 @@
     Un graphe $G = (V, E)$ est de carte s'il existe une carte $f$ sur $V$ telle que $xy \in E$ si et seulement si
     $f(x) \cap f(y) \neq \varnothing$
 \end{def*}
+
+\begin{figure}[h]
+    \caption{Un graphe et une carte associée à ce dernier}
+
+    \begin{center}
+    \begin{tikzpicture}[auto]
+        \begin{scope}[every node/.style={circle, draw}]
+            
+        \node (a) {$a$};
+        \node (h) [left = of a] {$h$};
+        \node (e) [right = of a] {$e$};
+        \node (b) [below = of h] {$b$};
+        \node (g) [below = of b] {$g$};
+        \node (c) [right = of g] {$c$};
+        \node (d) [below = of e] {$d$};
+        \node (f) [below = of d] {$f$};
+        \end{scope}
+
+        \path
+        (a) edge (b) edge (c) edge (d) edge (e) edge (h)
+        (b) edge (c) edge (d) edge (h) edge (g)
+        (c) edge (d) edge (g) edge (f)
+        (d) edge (e) edge (f);
+    \end{tikzpicture}
+    \0\0\0\0
+    \includegraphics[page=\ipeFigexcarte, scale = 0.5]{figs}
+    \end{center}
+\end{figure}
 
 \begin{theorem}[Caractérisation des graphes de carte]\label{carCarte}
     Un graphe $G = (V, E)$ est de carte si et seulement si il existe $H$ un graphe biparti planaire, de bipartition $V, U$,
@@ -177,14 +206,21 @@ de $K_{3,3}$ quelconque n'est pas un graphe de carte par des arguments similaire
 
 \subsection{Cartes et connexités}\label{cartesetconnex}
 
-(mettre ici que les cartes complètes sont biconnexes)
+La propriété pour un graphe d'admettre une carte a des interactions avec la connexité de ce dernier, et à quel point cette connexité
+est forte. Par exemple, un graphe est de carte si et seulement si chacune de ses composantes connexes l'est, ce qui peut se montrer
+facilement à l'aide d'un témoin. Dans toute la suite, on considèrera alors que tout les graphes que l'on cherche à étudier sont connexes.
+\\~\\
+Les graphes admettant une carte complète ont des propriétés de connexité particulière : on peut en effet montrer par des arguments
+topologiques (en exploitant le fait que chaque région est homéomorphe à un disque) qu'un graphe admettant une telle carte
+est nécesairement $2$-connexe. Ceci couplé à la proposition suivante permet de dire que l'on peut accéder à toutes les propriétés
+intéressantes des cartes en ne regardant que celles $2$-connexes
 
 \begin{prop}\label{suffbiconn}
     Un graphe $G$ est de carte si et seulement si toutes ses composantes $2$-connexes le sont
 \end{prop}
 
 On peut par exemple en déduire qu'un block graph, c'est à dire un graphe dont les composantes $2$-connexes sont des cliques,
-est alors toujours un graphe de carte, et admet une carte complète si et seulement si ce dernier est $2$-connexe.\\
+est alors toujours un graphe de carte, et admet une carte complète si et seulement si ce dernier est une clique\\
 On pourrait alors se demander, à la lumière des exemples de $K(3,G)$ et $K_{2,2,2,2}$ si un graphe n'étant pas $3$-connexe
 peut ne pas être de carte. Le graphe donné par un $K_{3,3}$ auquel on ajoute un sommet de degré $2$ n'est pas $3$-connexe
 et n'est pas de carte.
@@ -194,9 +230,9 @@ graphes $3$-connexes à partir d'un graphe $2$-connexe \cite{3connComp}.\\
 Si $\{x,y\} \subset V$ est un séparateur d'un graphe $G$ $2$-connexe, on note $C_1, ..., C_k$ les composantes connexes de
 $G - \{x,y\}$. Pour tout $i$, on note $G_i$ le graphe induit par $C_i \cup \{x,y\}$ auquel on a rajouté l'arrête $xy$.
 $G_i$ est $2$-connexe. Si $G_i$ n'est pas $3$-connexe, il existe alors séparateur de taille $2$ et on peut ainsi recommencer
-ce processus. En répétant ce processus, on finit par obtenir de  obtenus au final ainsi que des $2$-séparateurs permettant de
-les obtenir sera appelée une décomposition $3$-connexe de $G$. Les graphes $3$-connexes obtenus seront appelés des composantes
-$3$-connexes de $G$ associés à cette décomposition.
+ce processus. En répétant ce processus, on finit par obtenir un ensemble de graphes $3$-connexes. La donnée de ces graphes finaux
+ainsi que celle des $2$-séparateurs permettant de les obtenir sera appelée une décomposition $3$-connexe de $G$.
+Les graphes $3$-connexes finaux seront appelés des composantes $3$-connexes de $G$ associés à cette décomposition.
 
 \begin{prop}\label{3connCompCarte}
     Soit $G$ un graphe de carte $2$-connexe. Pour toute décomposition $3$-connexe de $G$, ses composantes sont des graphes de carte
@@ -211,156 +247,6 @@ $3$-connexes de $G$ associés à cette décomposition.
     d'un sommet de $C_i$ sauf en $x$ et $y$. En considérant le sous graphe de $H$ obtenu en ne considérant que le voisinage de $C_i$ et le chemin
     de $x$ à $y$ évoqué, on peut en contractant des arrêtes du chemin obtenir un témoin de $G_i$
 \end{proof}
-
-\begin{comment}
-
-\subsection{Contractibilité des arrêtes}
-
-On aimerait donner une condition nécessaire et suffisante permettant de contracter les arrêtes d'un graphe de carte.
-Certaines arrêtes sont clairement contractibles, comme celles représentées par $2$ régions partageant une courbe, d'autres ne le sont
-pas, comme l'arrête $xy$ du graphe $G_{pch}$ \ref{Gpch}, qui est un graphe de carte.
-On dénotera par $\mathcal{G}_{pch}$ l'ensemble des graphes obtenu depuis $G_{pch}$,
-en ajoutant des arrêtes entre les sommets distincts de $a, b, c$
-
-\begin{figure}[h]
-    \caption{Le graphe $G_{pch}$}\label{Gpch}
-    \begin{center}
-        \begin{tikzpicture}[auto]
-            \begin{scope}[every node/.style={circle, draw}]
-                \node (a) {$a$};
-                \node (b) [right = 20mm of a] {$b$};
-                \node (c) [right = of b] {$c$};
-                \node (x) [below left = 12mm and 5mm of a] {$x$};
-                \node (y) [below right = 12mm and 5mm of a] {$y$};
-                \node (u) [below = of b] {$u$};
-                \node (v) [below = of c] {$v$};
-
-                \node (a1) [right = 20mm of v] {$a$};
-                \node (b1) [right = of a1] {$b$};
-                \node (c1) [right = of b1] {$c$};
-                \node (d1) [right = of c1] {$d$};
-                \node (x1) [above = of a1] {$x$};
-                \node (y1) [above = of b1] {$y$};
-                \node (u1) [above = of c1] {$u$};
-                \node (v1) [above = of d1] {$v$};
-            \end{scope}
-
-            \path
-            (a) edge (x) edge (y) edge (u) edge (v)
-            (b) edge (x) edge (u) edge (v)
-            (c) edge (y) edge (u) edge (v)
-            (x) edge (y) edge[bend right] (u)
-            (y) edge (u)
-            (x1) edge (y1) edge (a1) edge (b1) edge (c1)
-            (y1) edge (a1) edge (b1) edge (d1)
-            (u1) edge (a1) edge (c1) edge (d1)
-            (v1) edge (b1) edge (c1) edge (d1)
-            (a1) edge (b1);
-        \end{tikzpicture}
-
-    \end{center}
-\end{figure}
-
-Il sera utile de savoir contracter certaines arrêtes particulières des graphes de carte. Si $G$ est un graphe de carte
-et $H$ un témoin de $G$, si l'arrête $xy$ est représentée par une des $2$ configurations de la figure \ref{IzEdge}, alors
-on peut la contracter en maintenant $G$ de carte : pour la première il s'agit de deux contractions d'arrêtes dans un graphe
-planaire, pour la deuxième, il suffit d'ajouter une arrête subdivisée entre $x$ et $y$ passant par l'intérieur de la face à laquelle
-ces deux derniers sont adjacents pour obtenir un témoin de $G$ présentant le premier cas
-
-\begin{figure}[h]
-    \caption{Cas d'arrêtes dont la contraction laisse $G$ de carte}\label{IzEdge}
-    \begin{center}
-        Le deuxième cas se généralise à des cliques arbitrairement grandes, dès que $x$ et $y$ sont adjacents à une même face
-        \\~\\
-        \begin{tikzpicture}[auto]
-            \begin{scope}[every node/.style={circle, draw}]
-                \node (x1) {$x$};
-                \node (x2) [right = 50mm of x1] {$x$};
-            \end{scope}
-
-            \begin{scope}[every node/.style={rectangle, draw, fill=black}]
-                \node (u) [right = of x1] {$\0$};
-                \node (v) [right = of x2] {$\0$};
-            \end{scope}
-
-            \begin{scope}[every node/.style={circle, draw}]
-                \node (y1) [right = of u] {$y$};
-                \node (y2) [above = of v] {$y$};
-                \node (z) [below = of v] {$z$};
-                \node (t) [right = of v] {$t$};
-            \end{scope}
-
-            \path
-            (u) edge (x1) edge (y1)
-            (v) edge (x2) edge (y2) edge (z) edge (t);
-        \end{tikzpicture}
-
-    \end{center}
-\end{figure}
-
-\begin{def*}[Arrête pincée]
-    On appellera arrête pincée de $G$ toute arrête $xy$ telle qu'il existe un sous graphe induit de $G$ contenant $xy$ se contractant en
-    $G_p \in \mathcal{G}_{pch}$, et telle que la contraction n'exploite pas les arrêtes du sous graphe induit par $x,y,a,u$.
-\end{def*}
-
-
-(Ouais jpense pas continuer à parler des arrêtes pincées c trop dur)
-
-\begin{prop}
-    Soit $G$ un graphe de carte et $xy \in E$. Si $xy$ n'est pas pincée, $G / xy$ est de carte
-\end{prop}
-
-\begin{proof}
-    On raisonne par contraposée, supposons que $G / xy$ ne soit pas de carte. On se donne $H$ un témoin de $G$.
-    $G / xy$ n'étant pas de carte, il n'admet pas de témoin. Si $xy$ est représentée dans $H$ par l'une des deux configurations
-    de la figure \ref{IzEdge}, $G / xy$ admettrait un témoin ce qui n'est pas le cas. Notons $s$ le sommet faisant la liaison
-    entre $x$ et $y$. On en déduit alors que $x, y$ ne sont pas dans la même face de $H$, donc $s$ est de degré au moins $4$,
-    et il existe un cycle exploitant une arrête de la clique donnée par $s$, arrête que l'on notera $ua$, et contenant $x$
-    en son intérieur sans perte de généralité
-    \\~\\
-    Si $x$ ne peut accéder à un sommet du cycle que par $s$, alors on peut placer $x$ et tout les sommets accessibles
-    depuis ce dernier de manière à ce que $x$ et $y$ soient adjacents à une même face. On en déduit l'existence d'un deuxième
-    cycle exploitant $s$ contenant $y$ en son intérieur, et de chemins reliant $x$ et $y$ à leurs cycles respectifs sans utiliser
-    $s$. On peut même, pour simplifier, supposer que les deux cycles exploitent $ua$, en reliant les sommets adjacents à $s$ par
-    une arrête subdivisée si ils sont adjacents à la même face, on obtient un témoin de $G$ dans lequel on peut agrandir
-    l'un des cycles afin d'utiliser $ua$.
-    \\~\\
-    On note $C_x$ le cycle bordant $x$ et $C_y$ celui bordant $y$. On note $C_{x, y}$ la partie commune de ces deux cycles.
-    On choisit $C_x$ et $C_y$ de manière à minimiser le nombre de sommets de $C_{x,y}$ d'abord, puis ceux de $C_x$ et $C_y$.
-    Cela implique, en particulier, qu'il n'existe pas de chemin disjoint de $C_x$ d'un sommet de $C_{x,y}$ à $C_x$, car
-    cela contredirait la minimalité (cela vaut pour $y$ également). On en déduit que dans les chemins de $x$ à $C_x$ ne passant pas
-    par $s$, dont l'existence a été montrée plus tôt, au moins un a pour destination un sommet hors de $C_{x,y}$, et de même pour $y$.
-    Le cas contraire, on pourrait construire un témoin comme illustré figure ??.
-    \\~\\
-    On suppose dans un premier temps que $C_{x,y}$ est strictement plus grand que $\{u, s, a\}$. On suppose même, sans perte de généralité,
-    que $a$ possède un voisin $q$ dans $C_{x,y}$ distinct de $s$. Cela implique qu'il existe un sommet $p \in V \cap C_{x,y}$, distinct de $u$
-    et $a$, tel que $ap$ soit une arrête de $G$ : en effet si ce n'était pas le cas, les voisins de $q$ distincts de $a$
-    dans $C_x$ ou $C_y$ ne seraient pas dans $C_{x, y}$. Soit $r$ un de ces voisins, supposons dans $C_x$.
-    $r$ et $a$ sont adjacents à la même face : si ce n'est pas le cas, il existe alors un chemin de $q$ à un sommet du cycle contenant $r$
-    séparant $r$ et $a$. On se donne alors $r'$ le voisin de $q$ sur ce chemin, et on réitère le processus jusqu'à obtenir un point $r^*$
-    adjacent à la même face que $a$. Quitte à faire un bon choix de témoin initialement, on peut supposer que les sommets de $V$ formant
-    une arrête et adjacents à une même face de $H$ sont reliés par une arrête subdivisée. Notons $q'$ le sommet entre $a$ et $r^*$.
-    On peut alors construire un nouveau cycle contenant $x$ en exploitant les arrête $aq', q'r^*$ puis le chemin contenant $r^*$ et $C_x$.
-    Ce cycle a une partie commune avec $C_y$ strictement plus petite que $C_{x,y}$, cela contredit la minimalité.
-    \\~\\
-    On distingue alors $2$ grands cas
-    \begin{itemize}
-        \item Si $zt$ n'est pas une arrête de $G$ : alors en considérant les sommets $a, z, t$ et $x, y, u, p$, on obtient par de bon
-        choix de chemins des $a, z, t$ vers les $x, y, u, p$ un graphe se contractant de la manière voulue en un $G_p \in \mathcal{G}_{pch}$
-
-        \item Si $zt$ est une arrête de $G$ : si il n'existe aucun autre chemin hors cycle de $C_x$ à $C_y$, le graphe $G / xy$
-        est de carte, il en existe donc au moins un. 
-    \end{itemize}
-\end{proof}
-
-On dira qu'une suite de contractions est sans pincement si elle n'exploite aucune arrête pincée
-
-\begin{cor}
-    Si $G$ a un sous graphe induit se contractant sans pincement en un $K(3, H)$, $G$ n'est pas de carte
-\end{cor}
-
-\end{comment}
-
 
 \section{Propriétés des cartes complètes $3$-connexes}
 
@@ -497,6 +383,10 @@ Cette définition par les intervalles permet de voir facilement que l'unique sé
 composé de l'ensemble des sommets universels de $G$ (un sommet universel étant un sommet adjacent à tout les sommets du graphe). Ainsi
 $G$ est $3$-connexe si et seulement si il possède au moins $3$ sommets universels.
 
+\begin{figure}[h]
+    \caption{Un graphe trivialement parfait et sa représentation par des intervalles emboîtés}
+\end{figure}
+
 \subsubsection{Cas $3$-connexe}
 
 On se fixe pour la suite un graphe $G$ trivialement parfait $3$-connexe
@@ -524,8 +414,16 @@ On en déduit le lemme suivant :
 \begin{proof}
     Le sens direct a déjà été traité précedemment.\\
     Pour le sens réciproque, toute clique admettant une carte complète, on se concentre sur le second cas. On construit
-    alors une carte complète pour $K(K_n, I_{p,q})$ comme illustré figure ??
+    alors une carte complète pour $K(K_n, I_{p,q})$ comme illustré figure \ref{KKnIpqmap}
 \end{proof}
+
+\begin{figure}[h]
+    \caption{Carte complète pour $K(K_n, I_{p,q})$}\label{KKnIpqmap}
+    \begin{center}
+        Le séparateur en "donut" représente la clique $K_n$\\
+        \includegraphics[page=\ipeFigKKnIpqcompl, scale = 0.5]{figs}
+    \end{center}
+\end{figure}
 
 \subsubsection{Cas général}
 
@@ -552,8 +450,17 @@ de décomposition.
     de la forme $K(K_n, I_{p,q})$, $n \geq 3$. On représente alors les sommets distincts de $u$ et $v$ formant le $K_n$
     par une clique séparant la composante en deux, de telle sorte à ce que chaque partie ait accès à un point portant
     cette clique. On remplit ensuite chaque partie par une clique portée par un point porteur de la clique $K_n$.
-    (illustré figure ??)
 \end{proof}
+
+\begin{figure}[h]
+    \caption{Illustration de la construction du théorème \ref{maptrivperf}}
+    \begin{center}
+        Dans le "trou" de gauche, on a représenté un $K(K_n, I_{p,q})$, alors que dans le "trou" extérieur et de droite,
+        on a représenté des cliques
+        \\~\\
+        \includegraphics[page=\ipeFigcartetrivperf, scale = 0.6]{figs}
+    \end{center}
+\end{figure}
 
 Notons alors que les graphes trivialement parfaits de carte sont exactement les graphes ne possédant pas $C_4, P_4, K(3, K_3)$ parmi
 leur sous graphes induits : en effet, un graphe trivialement parfait de carte vérifie cette condition, et réciproquement, un graphe
