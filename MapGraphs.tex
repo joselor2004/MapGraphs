@@ -44,7 +44,7 @@
 \end{def*}
 
 \begin{figure}[h]
-    \caption{Un graphe et une carte associée à ce dernier}
+    \caption{Un graphe, une carte, et un témoin associés à ce dernier}
 
     \begin{center}
     \begin{tikzpicture}[auto]
@@ -66,8 +66,10 @@
         (c) edge (d) edge (g) edge (f)
         (d) edge (e) edge (f);
     \end{tikzpicture}
-    \hspace*{2.5cm}
+    \hspace*{1.5cm}
     \includegraphics[page=\ipeFigexcarte, scale = 0.5]{figs}
+    \hspace*{1cm}
+    \includegraphics*[page=\ipeFigfirsttemoin, scale = 0.38]{figs}
     \end{center}
 \end{figure}
 
@@ -194,7 +196,7 @@ d'avoir $3$ indépendants pour ne pas être de carte
     ordonnés de même manière que $p, q, r$. On notera $s'$ le sommet de $U$ venant après $v_j$ dans le chemin de $v_i$ à $v_{i-1}$\\
     Une disjonction de cas basée sur les remarques faites sur le degré des sommets et la minimalité de $H$ montre
     que l'on peut choisir $i$ et $j$ tels que les chemins de $v_i$ et $v_2$ à $v_3, v_5, v_7$ se rencontrent selon
-    les hypothèse du lemme \ref{CNSK33}. ( à foutre en annexe )
+    les hypothèse du lemme \ref{CNSK33}.
     \\~\\
     On considère les sommets $v_1, v_2, v_i, v_3, v_5, v_7$ et les chemins donnés précedemment (le chemin depuis $v_1$ aux autres est de longueur
     $2$ et utilise $u$). $u$ étant de degré $4$ donc maximal, et par ce qui précède, ces sommets vérifient les hypothèses du lemme
@@ -312,14 +314,14 @@ $G$ est $3$-connexe si et seulement si il possède au moins $3$ sommets universe
         \begin{scope}[every node/.style={circle, draw}]
             
         \node (u) {$\0$};
-        \node (a0) [above left = 8mm and 30mm of u] {$\0$};
-        \node (a1) [above = of u] {$\0$};
-        \node (a2) [above right = 8mm and 30mm of u] {$\0$};
+        \node (a0) [above left = 7mm and 30mm of u] {$\0$};
+        \node (a1) [above = 7mm of u] {$\0$};
+        \node (a2) [above right = 7mm and 30mm of u] {$\0$};
         \node (b00) [above = of a0] {$\0$};
-        \node (b10) [above left = 10mm and 5mm of a1] {$\0$};
-        \node (b11) [above right = 10mm and 5mm of a1] {$\0$};
-        \node (c000) [above left = 10mm and 5mm of b00] {$\0$};
-        \node (c001) [above right = 10mm and 5mm of b00] {$\0$};
+        \node (b10) [above left = 7mm and 5mm of a1] {$\0$};
+        \node (b11) [above right = 7mm and 5mm of a1] {$\0$};
+        \node (c000) [above left = 7mm and 3mm of b00] {$\0$};
+        \node (c001) [above right = 7mm and 3mm of b00] {$\0$};
         \end{scope}
 
         \path
@@ -428,14 +430,14 @@ aussi une réponse positive. Si il y a plus de $3$ cliques max, on renvoie une r
 
 Une classe plus large que celle des graphes trivialement parfaits est celle des cographes : un graphe est un cographe s'il ne possède pas
 $P_4$ parmi ses sous graphes induits. Il est équivalent de les définir comme le plus petit ensemble de graphes contenant le sommet, stable par
-union disjointe et join. Cette dernière caractérisation s'avèrera plus intéressante pour l'étude.\\
+union disjointe et join \cite{cotrees}. Cette dernière caractérisation s'avèrera plus intéressante pour l'étude.\\
 
 En effet cette dernière donne lieu à une représentation des cographes par des arbres enracinés : il s'agit en fait d'utiliser l'arbre
 enraciné des opérations, de join (étiquetté par $1$) et union disjointe (étiquettée par $0$), nécessaires afin d'obtenir le cographe en question,
 où les feuilles sont donc les sommets du graphe. Deux sommets sont alors adjacents si et seulement si leur plus petit ancêtre commun est un $1$.
 Les opérations de join et union disjointe étant associatives, il est alors possible de compacter le coarbre de telle sorte à ce qu'un noeud
 $1$ ne puisse avoir comme enfant que des noeuds $0$ ou des sommets et de même pour $0$. La représentation devient alors unique pour un cographe
-donné, on appelle cet arbre le coarbre associé au cographe, la figure \ref{excographe} donne un exemple d'un cographe et de son coarbre.
+donné, on appelle cet arbre le coarbre associé au cographe, la figure \ref{excographe} donne un exemple d'un cographe et de son coarbre \cite{cotrees}.
 On remarquera que les opérations de join et union disjointe étant au moins binaires, tout les noeuds internes ont au moins $2$ enfants. 
 
 \begin{figure}[h]
@@ -561,7 +563,7 @@ généraliser les résultats
     coarbre.
 \end{def*}
 
-Les différents graphes obtenables pour chaque type sont détaillés dans la réciproque du lemme \ref{cograph3conn}
+Les différents graphes obtenables pour chaque type sont détaillés dans la réciproque du Théorème \ref{cograph3conn}
 
 \begin{figure}[h]
     \caption{Une carte du graphe $K(I_{p,q}, I_{r,s}, I_{t,u}, K_4)$}\label{IpqIrsItuMap}
@@ -612,7 +614,11 @@ il doit exister un fils de la racine $0$, et les autres sous arbres de la racine
 le noeud $1$ racine du coarbre de $C_i$ a au moins $2$ fils, l'un d'entre eux étant ce noeud $0$, les autres venant rejoindre $x$ et $y$
 parmi les fils de la racine distincts de ce noeud $0$. On dépasse alors nécessairement les $3$ sommets.\\
 On peut alors parler sans ambiguïté des composantes $3$-connexes sans spécifier une décomposition. En effet ces dernières sont
-les $G_i$ associés à l'unique séparateur à $2$ sommets. On déduit de ces remarques le résultat suivant :
+les $G_i$ associés à l'unique séparateur à $2$ sommets.
+\\~\\
+Soit $G_i$ une composante $3$-connexe de $G$. Soit $T_i$ le coarbre de la composante connexe $C_i$ de $G - \{x,y\}$.
+Notons que le coarbre de $G_i$ est obtenu depuis $T_i$ par ajout des sommets $x$ et $y$ comme fils de la racine. Ainsi, le nombre de fils
+$0$ de la racine de $T_i$ coincide avec le type de $G_i$. On déduit de toute ces remarques le résultat suivant :
 
 \begin{theorem}\label{cographe2conn}
     Soit $G$ un cographe $2$-connexe à plus de $5$ sommets et $\{x,y\}$ un séparateur minimal de $G$. 
@@ -625,29 +631,59 @@ les $G_i$ associés à l'unique séparateur à $2$ sommets. On déduit de ces re
 \begin{proof}
     Supposons d'abord $xy \in E$. Pour le sens direct, la première partie est donnée par la proposition \ref{3connCompCarte}. Pour la seconde,
     si une des composantes $3$-connexes de $G$ est de type $3$, cela signifie d'après la discussion précédente, que le coarbre de $G$
-    est de la forme décrite en figure ??. On peut alors trouver un sous graphe induit $K(K_2, I(1, K_{2,2,2}))$.\\
+    a pour sous arbre un arbre tel que décrit figure \ref{3conntype3}. On peut alors trouver un sous graphe induit $K(K_2, I(1, K_{2,2,2}))$.\\
     Pour le sens réciproque, les remarques précédentes permettent de dire que les composantes $3$-connexes de $G$ sont exactement les $G_i$
     donnés par la paire $\{x,y\}$. Notons que comme $xy \in E$, les $G_i$ sont des sous graphes induits de $G$. On représente les régions $x$ et
     $y$ comme décrit dans la démonstration du théorème \ref{maptrivperf}. On se fixe à présent un $G_i$ que l'on va représenter à l'intérieur de
     l'un des trous laissés par les régions $x$ et $y$.\\
-    Le lemme \ref{cograph3conn} donne une carte de $G_i$ ayant la particularité qu'il suffit à une région de contenir au plus $2$ point spécifiques
-    $u$ et $v$ pour être adjacente à toutes les régions de la carte (comme $G_i$ n'a pas $K_{2,2,2}$ en sous graphe induit, la racine de son coarbre
-    a au plus $2$ fils $0$). La carte de $G_i - \{x,y\}$ ainsi obtenue conserve cette particularité. On place alors
-    la carte de $G_i - \{x,y\}$ "dans" une des composantes du complémentaire de l'union $x \cup y$, de manière à ce que $u$ et $v$ rencontrent à la fois
-    $x$ et $y$ comme illustré figure \ref{cographemap}, (a) ou par la figure \ref{maptrivperf} pour les composantes $3$-connexes de type $0$ et $1$.
-    \\~\\
+    Les composantes de type $0,1$ sont alors représentées comme sur la Figure \ref{maptrivperf} et celles de type $2$ comme sur la
+    Figure \ref{cographemap} (a).
+
+    \begin{figure}[h]
+        \caption{Un sous arbre du coarbre de $G$ si une composante est de type $3$}\label{3conntype3}
+        \begin{center}
+            Les arrêtes menant à un fils vide représentent des sous arbres
+            \\~\\
+            \begin{tikzpicture}[auto]
+                \begin{scope}[every node/.style={circle, draw}]
+                    \node (r) {$1$};
+                    \node (0) [below left = of r] {$0$};
+                    \node (1) [below = of r] {$x$};
+                    \node (2) [below right = of r] {$y$};
+                    \node (00) [below left = of 0] {$1$};
+                    \node (000) [below left = of 00] {$0$};
+                    \node (001) [below = of 00] {$0$};
+                    \node (002) [below right = of 00] {$0$};
+                \end{scope}
+                \node (01) [below right = of 0] {};
+                \node (0000) [below left = 10mm and 3mm of 000] {};
+                \node (0001) [below right = 10mm and 3mm of 000] {};
+                \node (0010) [below left = 10mm and 3mm of 001] {};
+                \node (0011) [below right = 10mm and 3mm of 001] {};
+                \node (0020) [below left = 10mm and 3mm of 002] {};
+                \node (0021) [below right = 10mm and 3mm of 002] {};
+
+
+                \path
+                (r) edge (0) edge (1) edge (2)
+                (0) edge (01) edge (00)
+                (00) edge (000) edge (001) edge (002)
+                (000) edge (0000) edge (0001)
+                (001) edge (0010) edge (0011)
+                (002) edge (0020) edge (0021);
+            \end{tikzpicture}
+        \end{center}
+    \end{figure}
+
     Supposons maintenant $xy \notin E$. On s'intéresse au sens direct : la proposition \ref{3connCompCarte} donne la première partie de la propriété.
-    Soit $G_i$ une composante $3$-connexe de $G$. Soit $T_i$ le coarbre de la composante connexe $C_i$ de $G - \{x,y\}$.
-    Notons que le coarbre de $G_i$ est obtenu depuis $T_i$ par ajout des sommets $x$ et $y$ comme fils de la racine. Ainsi, le nombre de fils
-    $0$ de la racine de $T_i$ coincide avec le type de $G_i$. Le coarbre de $G$ lui, est construit de la manière suivante : la racine a $2$ fils,
-    les deux étant des noeuds $0$. L'un a pour enfants les sommets $x$ et $y$. L'autre a pour sous arbres les coarbres des composantes connexes de
-    $G - \{x,y\}$.\\
+    Le coarbre de $G$ est construit de la manière suivante : la racine a $2$ fils, les deux étant des noeuds $0$. L'un a pour enfants les sommets $x$
+    et $y$. L'autre a pour sous arbres les coarbres des composantes connexes de $G - \{x,y\}$.\\
     $G$ étant de carte, $G_i$ ne peut être de type $3$, sinon on aurait un sous graphe induit $K_{2,2,2,2}$ en utilisant $T_i, x$ et $y$.
     $G_i$ ne peut être de type $2$ : en effet le noeud $0$ ayant pour sous arbres les composantes de $G - \{x,y\}$ admet un sommet descendant
     $v$ n'appartenant pas à $T_i$. On trouve alors un sous graphe induit $K(2, I(1, K_{2,2}))$ : le premier $2$ est dû à $x,y$, le $1$ à $v$,
     et $K_{2,2}$ est construit grâce à $T_i$. Au total, $G_i$ vérifie bien la condition de l'énoncé.\\
     Pour le sens réciproque, comme les composantes $3$-connexes de $G$ sont les $G_i$ et que ces derniers ne peuvent qu'être de la forme
-    $K_n$ ou $K(I_{p,q}, K_n)$ par ce qui précède, la figure \ref{cographemap} (b) donne une carte de $G$ où $x$ et $y$ sont les deux régions indépendantes,
+    $K_n$ ou $K(I_{p,q}, K_n)$ par ce qui précède, la Figure \ref{cographemap} (b) donne une carte de $G$ où $x$ et $y$ sont les deux régions indépendantes,
     représentées à part, et où chaque type possible est représenté.
 \end{proof}
 
@@ -656,9 +692,9 @@ les $G_i$ associés à l'unique séparateur à $2$ sommets. On déduit de ces re
     \begin{center}
         A gauche la figure (a), à droite la (b)
         \\~\\
-        \includegraphics[page = \ipeFigpointabuse, scale = 0.5]{figs}
+        \includegraphics[page = \ipeFigpointabuse, scale = 0.4]{figs}
         \hspace*{1.5cm}
-        \includegraphics[page = \ipeFigcographsepind, scale = 0.7]{figs}
+        \includegraphics[page = \ipeFigcographsepind, scale = 0.6]{figs}
     \end{center}
 \end{figure}
 
@@ -676,8 +712,8 @@ par l'interdiction des sous graphes induits $K(3, G)$ et $K_{2,2,2,2}$ et la $3$
 
 \subsection{Généralités}
 
-Les graphes de carte $3$-connexe n'admettent pas tous des cartes complètes. La roue $W_n$ pour tout $n \geq 3$
-en est un contre exemple.\\
+Les graphes de carte $3$-connexe n'admettent pas tous des cartes complètes. La roue $W_n$ (un cycle de longueur $n-1$ auquel on ajoute un sommet universel)
+pour tout $n \geq 5$ en est un contre exemple.\\
 La proposition suivante permet toutefois d'envisager les graphes de carte $3$-connexe de manière très similaire à des graphes admettant
 des cartes complètes, ces derniers étant en effet "presque" à carte complète, à un sommet près.
 
@@ -736,11 +772,9 @@ de former un cycle, et on a même plus précis si on regarde les cartes.
     On peut alors définir l'adjacence réelle $RA(S)$ d'un sous ensemble $S \subset V \cup U$ en faisant l'union sommet par sommet.
 \end{def*}
 
-Il y a une démo plus simple de ça avec les témoins quadrangulés
-
 \begin{prop}[Cycle séparant]\label{cyclSep}
     Soit $G$ $3$-connexe admettant une carte complète. Soit $v \in V$. Il existe un témoin $H$ de $G$ et
-    un cycle $C$ tel que
+    un cycle $C$ dans $H$ tel que
     \begin{itemize}
         \item $RA(C) = N[v]$ (on considère ici les voisins dans $G$)
         \item L'intérieur de $C$ ne contient que $v$ et les seules arrêtes dans cet intérieur sont celles entre $v$ et
@@ -748,35 +782,20 @@ Il y a une démo plus simple de ça avec les témoins quadrangulés
     \end{itemize}
 \end{prop}
 
+On admettra pour la démonstration le lemme suivant :
+\begin{lem}[\cite{FptMap}]
+    Soit $G$ un graphe admettant une carte complète. Alors $G$ admet un témoin $H$ quadrangulé.
+\end{lem}
+
 \begin{proof}
-    On se donne une carte complète de $G$. On ne s'intéressera ici qu'à la construction du témoin impliquant le voisinage de $v$,
-    le reste du témoin pouvant être construit comme souhaité à partir de la carte complète grâce au théorème \ref{complQuadr}.
+    On se donne $H$ un tel témoin quadrangulé de $G$. On note $S$ l'ensemble des sommets de $U$ de degré $2$ ayant $v$ parmi leur voisins, auquels on
+    ajoute $v$. Montrons que l'on peut choisir $H$ tel que $H - S$ soit $2$-connexe. On note $V \backslash \{v\} \cup U'$ la bipartition de $H-S$.
+    Par construction de $S$, aucun sommet de $U'$ n'est de degré $1$. Considérons $v' \in V \backslash \{v\}$. $v'$ est de degré au moins $2$
+    dans $G-v$ par $2$-connexité. Si $v'$ est de degré $1$ dans $H-S$, alors les voisins de ce dernier sont tous voisins de $v'$.
+    L'un de ces derniers est tel que $v'$ et lui se trouvent adjacents à une même face dans $H$ (montrer bien).
+    On ajoute alors à $H$ une arrête subdivisée de $v'$ à ce sommet.
     \\~\\
-    La région $v$ étant homéomorphe à un disque, on se donne
-    $\gamma : [0, 1] \rightarrow \mathbb{S}^2$ un lacet simple paramétrant sa frontière. Quitte à reparamétrer, on admettra
-    que l'on peut choisir $\gamma(0)$ tel qu'il soit point de rencontre d'au plus $2$ régions
-    (et donc d'exactement $2$ comme la carte est complète), le graphe étant fini. Les mêmes arguments de finitude et
-    le fait que la carte soit complète permettent d'affirmer qu'il existe $v_1 \in V$ tel que l'ensemble
-    $I_1 = \{ t \in [0, 1] \mid \gamma([0, t]) \subset v_1 \}$ soit un intervalle non ponctuel. On note alors $t_1 = \sup(I_1) > 0$.
-    On a que $t_1 < 1$ : en effet si $t_1 = 1$, alors $\gamma$ est un lacet inclus dans $u_1$, et l'on admettra que ce lacet
-    n'est pas homotope à un point, ce qui est absurde comme $u_1$ est homéomorphe à un disque. En utilisant le même argument que
-    celui donnant l'existence de $v_1$, et comme $t_1$ est maximal, on trouve un $v_2 \in V$ distinct de $v_1$ tel que l'ensemble
-    suivant $I_2 = \{ t \in [t_1, 1] \mid \gamma([t_1, t]) \subset v_2\}$ soit un intervalle non ponctuel et on continue ce
-    processus jusqu'à atteindre $1$. A noter que la dernière région considérée se trouve être $v_1$, comme $\gamma(0)$ n'est pas un
-    point de rencontre de $3$ régions pour aller du dernier point, $\gamma(t_k)$, à $1$, il faut longer $v_1$ selon un chemin.
-    On notera alors $v_1, ..., v_k$ les régions obtenues par ce processus, où $v_k$ est l'avant dernière région considérée.
-    \\~\\
-    Supposons que $v_i = v_j$ où $j > i$. Par construction, on a donc $j > i + 1$. Donc la région $v_i$ rencontre
-    $v$ en au moins deux chemins. On a alors que $G - \{v, v_i\}$ n'est pas connexe, $v_{i+1}$ et $v_{j+1}$ sont séparés, absurde
-    par $3$-connexité. Donc les $v_i$ sont tous distincts. On construit à présent le témoin.\\
-    On place chaque sommet de $V$ à l'intérieur de la région lui correspondant. On ajoute les points $\gamma(t_i)$ au
-    graphe, en les placant à leurs positions, et l'on relie $v$ à tout ces points par des chemins dans sa région. On relie
-    également toutes les régions contenant un point $\gamma(t_i)$ à ce dernier par des chemins.\\
-    On a ainsi obtenu un cycle vérifiant par construction la seconde propriété de l'énoncé. Pour la première, pour un sens,
-    il suffit de voir que tout les sommets adjacents à des $\gamma(t_i)$ dans ce graphe sont des régions rencontrant $v$, donc des
-    voisins. Réciproquement, un voisin de $v$ est soit un $v_i$, soit rencontre ponctuellement $v$ en un des $\gamma(t_i)$ : si un
-    voisin de $v$ rencontre sa frontière en un point entre deux $\gamma(t_i)$ et $\gamma(t_{i+1})$, $v_i$ n'est pas homéomorphe à
-    un disque. On a bien la première propriété
+    Ainsi $H-S$ est $2$-connexe. Le sommet $v$ se trouvant dans une des faces de $H - S$, ce dernier étant $2$-connexe 
 \end{proof}
 
 \begin{cor}[Ordre cyclique]\label{ordCycl}
