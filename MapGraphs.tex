@@ -53,7 +53,8 @@ sont jamais publiés. Plus récemment, un algorithme FPT a été obtenu \cite{Fp
 J'ai travaillé pendant ce stage à l'élaboration d'algorithmes de reconaissances des graphes de carte : après avoir trouvé quelques
 graphes contre exemple relativement simples, j'ai pu classifier les graphes de carte trivialement parfaits et les cographes de carte.
 Certaines de mes réflexions concernant les graphes $3$-connexes de carte, en vue d'un algorithme généralisant les méthodes utilisées,
-sont également présentées.
+sont également présentées. Certaines de mes contributions apportant peu au rapport, par exemple certaines démonstrations, sont reléguées
+en annexe.
 
 \section{Généralités sur les graphes de carte}
 
@@ -237,7 +238,7 @@ d'avoir $3$ indépendants pour ne pas être de carte
 \end{figure}
 
 \begin{lem}\label{formeK2222}
-    $K_{2,2,2,2}$ est de carte et tout témoin de ce dernier a pour sous graphe un des graphes Figure \ref{witnK2222}
+    $K_{2,2,2,2}$ est de carte et tout témoin de ce dernier a pour sous graphe induit un des graphes Figure \ref{witnK2222}
 \end{lem}
 
 \begin{proof}
@@ -250,8 +251,8 @@ d'avoir $3$ indépendants pour ne pas être de carte
     $v_7$ et $v_8$ étant indépendants, les sommets de $U'$ présents sur les bords des deux faces sont distincts. La nécessité
     pour un sommet universel d'avoir au moins $3$ voisins dans $H'$ (vu dans la proposition précédente), ainsi que des
     arguments de planarité, permettent d'affirmer que, soit les deux bords partagent les mêmes sommets hors $U'$, soit
-    ils n'en partagent aucun. Selon le cas, on obtient soit le premier, soit le second témoin Figure \ref{witnK2222} en sous graphe de $H'$.\\
-    En remettant les sommets retirés, on obtient ce que l'on veut.
+    ils n'en partagent aucun. Selon le cas, on obtient soit le premier, soit le second témoin Figure \ref{witnK2222} en sous
+    graphe induit de $H$.\\
 \end{proof}
 
 \begin{figure}[h]
@@ -269,7 +270,7 @@ d'avoir $3$ indépendants pour ne pas être de carte
 
 \begin{proof}
     Si un témoin d'un de ces deux graphes existe, il est construit depuis un des deux témoins du Lemme \ref{formeK2222} par ajout
-    d'un ou plusieurs sommets et arrêtes.\\
+    d'un ou plusieurs sommets.\\
     Dans le cas $K_{2,2,2,2,1}$, le sommet ajouté doit être universel. Or aucune face des témoins n'a pour adjacence réelle
     l'intégralité des sommets de $V$, donc le graphe ne peut être de carte.\\
     Dans le cas $K(2,2,2,I_{2,1})$, le sommet ajouté doit être adjacent à tout les sommets sauf $1$. Là encore c'est impossible, et le
@@ -467,8 +468,9 @@ enraciné des opérations, de join (étiquetté par $1$) et union disjointe (ét
 où les feuilles sont donc les sommets du graphe. Deux sommets sont alors adjacents si et seulement si leur plus petit ancêtre commun est un $1$.
 Les opérations de join et union disjointe étant associatives, il est alors possible de compacter le coarbre de telle sorte à ce qu'un noeud
 $1$ ne puisse avoir comme enfant que des noeuds $0$ ou des sommets et de même pour $0$. La représentation devient alors unique pour un cographe
-donné, on appelle cet arbre le coarbre associé au cographe, la figure \ref{excographe} donne un exemple d'un cographe et de son coarbre \cite{cotrees}.
-On remarquera que les opérations de join et union disjointe étant au moins binaires, tout les noeuds internes ont au moins $2$ enfants. 
+donné, on appelle cet arbre le coarbre associé au cographe \cite{cotrees}, la Figure \ref{excographe} donne un exemple d'un cographe et de
+son coarbre. On remarquera que les opérations de join et union disjointe étant au moins binaires, tout les noeuds internes ont au moins
+$2$ enfants. 
 
 \begin{figure}[h]
     \caption{Le graphe $K(2,I(1,K_{2,2}))$ et son coarbre}\label{excographe}
@@ -554,48 +556,54 @@ généraliser les résultats
 
 \subsubsection{Structure des cographes de carte}
 
-On s'intéressera d'abord aux cographes $3$-connexes de carte que le Théorème suivant permet de classifier
+On s'intéressera d'abord aux cographes $3$-connexes de carte que le théorème suivant permet de classifier. On utilisera les résultats
+des Propositions \ref{K3G}, \ref{K222K5}, \ref{K22221}.
 
 \begin{theorem}\label{cograph3conn}
-    Soit $G$ un cographe $3$-connexe. $G$ est de carte si et seulement si son coarbre est de hauteur inférieure à $4$ et que l'une des deux
-    conditions est remplie :
+    Soit $G$ un cographe $3$-connexe. $G$ est de carte si et seulement si il est de l'une des formes suivantes
     \begin{itemize}
-        \item La racine a au plus $2$ fils étiquettés $0$
-        \item La racine a $3$ fils étiquettés $0$ et au plus $4$ autres fils 
+        \item $K_n$, $n \geq 3$
+        \item $K(I_{p,q}, K_n)$, $n \geq 3$
+        \item $K(I_{p,q}, I_{r,s}, K_n)$, $p,q,r,s,n \geq 1$, tels que le graphe soit $3$-connexe
+        \item $K(I_{p,q}, I_{r,s}, I_{t,u}, K_n)$, $p,q,r,s,t,u \geq 1$, $n \leq 4$
+        \item $K_{2,2,2,2}$
     \end{itemize}
 \end{theorem}
 
 \begin{proof}
-    Supposons $G$ de carte. Notons $T$ son coarbre. Il n'existe aucun noeud $1$ de $T$ ayant plus de $4$ fils $0$ : en effet chaque fils $0$
-    possède au moins $2$ descendants, on pourrait alors construire un sous graphe induit $K_{2,2,2,2}$ ce qui est impossible comme $G$ est de carte.
-    Si la racine a $3$ fils $0$ et au moins $5$ fils sommets, on peut construire un sous graphe induit $K(2,2,2,K_5)$, là encore contredisant
-    le fait que $G$ est de carte.\\
-    Puis, supposons que $T$ est de hauteur au moins $5$. Il existe donc une branche de $T$ dont les noeuds sont étiquettés, de haut en bas,
-    $1, 0, 1, 0, ...$. Le premier $0$ ayant au moins $2$ fils, on se donne $v$ un sommet descendant de ce noeud ne descendant pas
-    du noeud $1$ situé juste après sur la branche. Le deuxième noeud $0$ nous donne deux sommets $u, w$, indépendants. $u$ et $v$ ont pour
-    plus petit ancêtre commun le premier noeud $0$ de la branche, donc sont indépendants, de même pour $w$ et $v$. On a ainsi un indépendant
-    de taille $3$. $G$ étant $3$-connexe, le corollaire \ref{coarbrekconn} donne que $1$ a au moins $3$ sommets descendants dans un sous arbre ne
-    contenant pas $u,v,w$. Ces descendants ont alors pour plus petit ancêtre commun avec $u,v,w$ la racine $1$.
-    On a ainsi un sous graphe induit $K(3, G)$, absurde comme $G$ est de carte.
+    Supposons $G$ de carte. Notons $T$ son coarbre. On va contraindre de $T$ pour ensuite aboutir aux $5$ formes de l'énoncé.\\
+    Notons d'abord que tout noeud $0$ a exactement $2$ fils : si l'un d'entre eux en avait
+    plus de $3$, on aurait alors $3$ sommets indépendants. $G$ étant $3$-connexe, le Corollaire \ref{coarbrekconn} donne $3$ sommets
+    ayant pour plus petit ancêtre commun avec le noeud $0$ a $3$ fils la racine de $T$. On a ainsi construit un sous graphe induit
+    $K(3, H)$, absurde comme $G$ est de carte.\\
+    On contraint ensuite le nombre d'enfant des noeuds $1$ : il n'existe aucun noeud $1$ de $T$ ayant plus de $5$ fils $0$ :
+    chaque noeud $0$ ayant au moins deux descendants sommets, on pourrait alors construire un sous graphe induit $K_{2,2,2,2,1}$,
+    impossible comme $G$ est de carte. Pour les mêmes raisons, si un noeud a $4$ fils $0$, il ne peut avoir aucun autre enfant.
+    Si un noeud a $3$ fils $0$, il ne peut posséder $5$ autres fils sommets : on pourrait en effet construire un sous graphe induit
+    $K(2,2,2,K_5)$.\\
+    Enfin, $T$ est de hauteur au plus $4$ : supposons qu'il soit de hauteur au moins $5$. Il existe donc une branche de $T$ dont les noeuds
+    sont étiquettés, de haut en bas, $1, 0, 1, 0, ...$. Le premier $0$ ayant au moins $2$ fils, on se donne $v$ un sommet descendant de ce
+    noeud ne descendant pas du noeud $1$ situé juste après sur la branche. Le deuxième noeud $0$ nous donne deux sommets $u, w$, indépendants.
+    $u$ et $v$ ont pour plus petit ancêtre commun le premier noeud $0$ de la branche, donc sont indépendants, de même pour $w$ et $v$. On a
+    ainsi un indépendant de taille $3$. $G$ étant $3$-connexe, le Corollaire \ref{coarbrekconn} donne comme précedemment un sous
+    graphe induit $K(3, H)$, absurde comme $G$ est de carte.
     \\~\\
-    Supposons à présent que $T$ est de la forme souhaitée. On distingue selon $k$, le nombre de fils de la racine étiquettés $0$.
-    On aura $n \geq 0, p,q,r,s,t,u \geq 1$
+    On distingue à présent selon $k$, le nombre de fils $0$ de la racine. Les remarques précédentes donnent que :
     \begin{itemize}
         \item Si $k = 0$, $G$ est une clique
-        \item Si $k = 1$, $G = K(I_{p,q}, K_n)$ où le $K_n$ est dû aux sommets qui sont fils directs de la racine.
-        $G$ est alors trivialement parfait. On peut le représenter par exemple par le lemme \ref{trivPar3conn}
-        \item Si $k = 2$ : $G = K(I_{p,q}, I_{r,s}, K_n)$, la figure \ref{IpqIrsItuMap}, après retrait d'une des composantes roses et des régions
-        grises donne une carte de $G$
-        \item Si $k = 3$ : $G = K(I_{p,q}, I_{r,s}, I_{t,u}, K_n)$, $n \leq 4$, la figure \ref{IpqIrsItuMap} donne une carte de $G$
+        \item Si $k = 1$, $G = K(I_{p,q}, K_n)$
+        \item Si $k = 2$, $G = K(I_{p,q}, I_{r,s}, K_n)$
+        \item Si $k = 3$, $G = K(I_{p,q}, K_{r,s}, I_{t,u}, K_n)$, $n \leq 4$
+        \item Si $k = 4$ : supposons $T$ de hauteur au moins $4$. Donc l'un des $4$ fils $0$ de la racine a un fils $1$, ayant au moins
+        $2$ descendants sommets. En considérant un descendant sommet de ce noeud $0$ n'étant pas dans le même sous arbre que celui
+        enraciné en le fils $1$, et $2$ sommets indépendants par autres fils $0$ de la racine, on obtient un sous graphe induit
+        $K(2,2,2,I_{2,1})$, absurde $G$ étant de carte. Donc $T$ est de hauteur $3$, et on a donc $G = K_{2,2,2,2}$
+        \\~\\
     \end{itemize}
+    On suppose à présent que $G$ est de la forme souhaitée. Le premier cas est trivial, le deuxième a déjà été traités par la Figure
+    \ref{KKnIpqmap}. Le troisième et quatrième cas sont traités par la Figure \ref{IpqIrsItuMap}, quitte à retirer des composantes de
+    couleur ou des sommets spécifiques. Enfin le Lemme \ref{formeK2222} nous donne le cinquième cas.
 \end{proof}
-
-\begin{def*}[Type]
-    Si $G$ est un cographe $3$-connexe de carte, on dira qu'il est de type $0,1,2$ ou $3$ selon le nombre de fils $0$ de la racine de son
-    coarbre.
-\end{def*}
-
-Les différents graphes obtenables pour chaque type sont détaillés dans la réciproque du Théorème \ref{cograph3conn}
 
 \begin{figure}[h]
     \caption{Une carte du graphe $K(I_{p,q}, I_{r,s}, I_{t,u}, K_4)$}\label{IpqIrsItuMap}
@@ -606,36 +614,26 @@ Les différents graphes obtenables pour chaque type sont détaillés dans la ré
     \end{center}
 \end{figure}
 
-\begin{lem}
+\begin{def*}[Type]
+    Si $G$ est un cographe $3$-connexe de carte, on dira qu'il est de type $0,1,2;3$ ou $4$ selon le nombre de fils $0$ de
+    la racine de son coarbre.
+\end{def*}
+
+Les différents graphes obtenables pour chaque type sont respectivement ceux cités dans l'énoncé du Théorème \ref{cograph3conn}.\\
+On s'intéresse à présent plus généralement à la reconnaissance des cographes de carte $2$-connexe. Le cas $3$-connexe ayant déjà été traité,
+on se limite aux graphes ayant des séparateurs de taille $2$. Notons d'abord que, contrairement aux graphes trivialement parfaits, les
+obstructions au fait d'être de carte ne sont pas toutes dues à la forme des composantes $3$-connexes dans une décomposition quelconque,
+mais également à la manière d'assembler ces composantes, comme l'illustre le lemme suivant.
+
+\begin{lem}\label{2connstrictForbid}
     Les graphe $K(2, I(1, K_{2,2}))$ et $K(K_2, I(1, K_{2,2,2}))$ ne sont pas de carte
 \end{lem}
 
-\begin{proof}
-    On commence par $K(2, I(1, K_{2,2}))$.\\
-    On numérote $v_1, ..., v_6$ les sommets du $K_{2,2,2}$ induit, tels que les indépendants soient $\{v_1, v_2\}, \{v_3,v_4\}, \{v_5,v_6\}$.
-    On notera $a$ le sommet relié à deux sommets indépendants de ce sous graphe, que l'on supposera être $v_1, v_2$.\\
-    On suppose le graphe de carte, on s'en donne alors $H$ un témoin. Comme $v_1v_2 \notin E$, les voisins de $a$ sont tous de degré
-    $2$, ou l'un est aussi voisin de $v_1$ et un autre de $v_2$.\\
-    Les sommets $a, v_3, v_4, v_2, v_5, v_6$ et les chemins suivant vérifient alors les hypothèses du lemme \ref{CNSK33}, en reprenant un raisonnement
-    similaire à la proposition \ref{K2222} : les chemins de $v_3, v_4$ à $v_2, v_5, v_6$ sont les arrêtes subdivisées de $H$
-    traduisant les adjacences dans le graphe original, celui de $a$ à $v_2$ est donné par l'arrête subdivisée représentant l'arrête $av_2$,
-    ceux de $a$ à $v_5, v_6$ exploitent les chemins de $a$ à $v_1$ puis de $v_1$ à $v_5, v_6$.\\
-    Absurde, $H$ étant planaire, donc le graphe donné n'est pas de carte
-    \\~\\
-    Pour $K(K_2, I(1, K_{2,2,2}))$, on numérotera $v_1, ..., v_6$ les sommets formant le $K_{2,2,2}$, $x$ le sommet indépendant du $K_{2,2,2}$
-    et $a, b$ les deux sommets universels. On suppose par l'absurde le graphe de carte, on s'en donne un témoin $H$. On considère les sommets
-    $x, v_1, v_2, a, v_3, v_4$ et les chemins suivants : de $v_1, v_2$ à $a, v_3, v_4$ on considère des chemins de longueur $2$, de
-    $x$ à $a$ également, puis de $x$ à $v_3, v_4$, on utilise le sommet intermédiaire $b$. On peut là aussi montrer par des arguments
-    d'indépendance que les chemins vérifient les hypothèses du lemme \ref{CNSK33} et que donc $H$ n'est pas planaire, le graphe
-    n'était donc pas de carte.
-\end{proof}
-
-On s'intéresse à présent plus généralement à la reconnaissance des cographes de carte $2$-connexe. Le cas $3$-connexe ayant déjà été traité,
-on se limite aux graphes ayant des séparateurs de taille $2$. Notons alors que, par la forme des séparateurs minimaux donnée par la proposition
-\ref{sepcographe}, le seul cographe $2$-connexe n'ayant pas un unique séparateur minimal de taille $2$ est $K_{2,2}$ : en effet si on souhaite avoir
-plus d'un séparateur minimal, la racine du corarbre doit avoir au moins $2$ fils $0$. Elle doit en avoir en fait exactement $2$ sinon le
-graphe devient $3$-connexe. Chaque fils $0$ ayant au moins $2$ sommets descendants, la racine ne peut avoir d'autres fils. Enfin l'existence
-de $2$ séparateurs minimaux de taille $2$ finit d'imposer la structure du coarbre.
+On remarque que, par la forme des séparateurs minimaux donnée par la proposition \ref{sepcographe}, le seul cographe $2$-connexe n'ayant
+pas un unique séparateur minimal de taille $2$ est $K_{2,2}$ : en effet si on souhaite avoir plus d'un séparateur minimal,
+la racine du corarbre doit avoir au moins $2$ fils $0$. Elle doit en avoir en fait exactement $2$ sinon le graphe devient $3$-connexe.
+Chaque fils $0$ ayant au moins $2$ sommets descendants, la racine ne peut avoir d'autres fils. Enfin l'existence de $2$ séparateurs minimaux
+de taille $2$ finit d'imposer la structure du coarbre.
 \\~\\
 Ainsi, dès que le cographe a plus de $5$ sommets, il ne possède qu'un seul séparateur de taille $2$. Notons que les composantes $3$-connexes
 du cographe $G$ sont alors obtenues en une seule étape de décomposition : en effet le coarbre associé à un des graphes $G_i$, en reprenant
@@ -662,14 +660,15 @@ $0$ de la racine de $T_i$ coincide avec le type de $G_i$. On déduit de toute ce
 
 \begin{proof}
     Supposons d'abord $xy \in E$. Pour le sens direct, la première partie est donnée par la proposition \ref{3connCompCarte}. Pour la seconde,
-    si une des composantes $3$-connexes de $G$ est de type $3$, cela signifie d'après la discussion précédente, que le coarbre de $G$
-    a pour sous arbre un arbre tel que décrit figure \ref{3conntype3}. On peut alors trouver un sous graphe induit $K(K_2, I(1, K_{2,2,2}))$.\\
+    si une des composantes $3$-connexes de $G$ est de type au moins $3$, cela signifie d'après la discussion précédente, que le coarbre de $G$
+    a pour sous arbre un arbre tel que décrit Figure \ref{3conntype3}. On peut alors trouver un sous graphe induit $K(K_2, I(1, K_{2,2,2}))$.\\
     Pour le sens réciproque, les remarques précédentes permettent de dire que les composantes $3$-connexes de $G$ sont exactement les $G_i$
     donnés par la paire $\{x,y\}$. Notons que comme $xy \in E$, les $G_i$ sont des sous graphes induits de $G$. On représente les régions $x$ et
     $y$ comme décrit dans la démonstration du théorème \ref{maptrivperf}. On se fixe à présent un $G_i$ que l'on va représenter à l'intérieur de
     l'un des trous laissés par les régions $x$ et $y$.\\
     Les composantes de type $0,1$ sont alors représentées comme sur la Figure \ref{maptrivperf} et celles de type $2$ comme sur la
     Figure \ref{cographemap} (a).
+    \\~\\
 
     \begin{figure}[h]
         \caption{Un sous arbre du coarbre de $G$ si une composante est de type $3$}\label{3conntype3}
@@ -730,9 +729,9 @@ $0$ de la racine de $T_i$ coincide avec le type de $G_i$. On déduit de toute ce
     \end{center}
 \end{figure}
 
-On peut déduire de ces théorèmes que les cographes de carte sont exactement ceux ne possédant pas $K(3, G), K_{2,2,2,2},
-K(2,2,2,K_5), K(2, I(1, K_{2,2})), K(K_2, I(1, K_{2,2,2}))$
-parmi leur sous graphes induits : en effet la démonstration utilise uniquement l'interdiction de ces $5$ classes de graphes comme condition nécessaire
+On peut déduire de ces théorèmes que les cographes de carte sont exactement ceux ne possédant pas $K(3, G), K_{2,2,2,2,1},
+K(2,2,2,I_{2,1}), K(2,2,2,K_5), K(2, I(1, K_{2,2})), K(K_2, I(1, K_{2,2,2}))$
+parmi leur sous graphes induits : en effet la démonstration utilise uniquement l'interdiction de ces $6$ classes de graphes comme condition nécessaire
 à être un graphe de carte. Que ce soit par une méthode exploitant cette caractérisation ou par une autre méthode séparant en composantes
 $3$-connexe et vérifiant si ces dernières ont la bonne forme, on obtient un algorithme polynômial reconaissant si un cographe $G$ est de carte
 
@@ -740,12 +739,12 @@ $3$-connexe et vérifiant si ces dernières ont la bonne forme, on obtient un al
 
 L'étude des graphes $3$-connexes est motivée par les méthodes utilisées dans la section précédente : en effet le problème de
 reconaissance des graphes de carte devient plus aisé dans le cas $3$-connexe, certaines structures complexes étant limitées
-par l'interdiction des sous graphes induits $K(3, G)$ et $K_{2,2,2,2}$ et la $3$-connexité.
+par l'interdiction des sous graphes induits $K(3, G)$ et la $3$-connexité.
 
 \subsection{Généralités}
 
-Les graphes de carte $3$-connexe n'admettent pas tous des cartes complètes. La roue $W_n$ (un cycle de longueur $n-1$ auquel on ajoute un sommet universel)
-pour tout $n \geq 5$ en est un contre exemple.\\
+Les graphes de carte $3$-connexe n'admettent pas tous des cartes complètes. La roue $W_n$ (un cycle de longueur $n-1$ auquel on ajoute un
+sommet universel) pour tout $n \geq 5$ en est un contre exemple.\\
 La proposition suivante permet toutefois d'envisager les graphes de carte $3$-connexe de manière très similaire à des graphes admettant
 des cartes complètes, ces derniers étant en effet "presque" à carte complète, à un sommet près.
 
@@ -754,43 +753,7 @@ des cartes complètes, ces derniers étant en effet "presque" à carte complète
     présent dans $V$) admettant une carte complète, et tel que $G'[V] = G$
 \end{prop}
 
-\begin{proof}
-    On se donne un témoin $H$ de $G$ et on note $U$ l'ensemble des sommets autres que $V$ de $H$. On peut supposer que $H$
-    est construit de telle sorte à ce que $d(u) \geq 2$ pour $u \in U$. Soit $u \in U$, $x, y \in V$ parmi ses voisins.
-    Si $x$ et $y$ sont adjacents à la même face de $H$, alors on ajoute une arrête entre $x$ et $y$ à l'intérieur de cette face,
-    que l'on subdivise ensuite à l'aide d'un sommet afin de garder le graphe biparti. On répète alors
-    ce processus jusqu'à ce que tout les sommets adjancents dans $G$ soient reliés par deux chemins de longueur $2$.
-    \\~\\
-    Le nouveau graphe $H'$ est planaire biparti et $2$-connexe : si l'on retire un sommet de $V$ le graphe reste clairement
-    connexe comme $G$ est $3$-connexe. Si l'on retire un sommet de $U'$ (l'ensemble $U$ avec les nouveaux sommets ajoutés),
-    $H$ reste aussi connexe :
-    si le sommet retiré est parmi ceux de $U' \backslash U$, la construction de $U'$ donne que le graphe reste connexe. Sinon,
-    on se donne $v_1, ..., v_k$ les voisins de $u$ le sommet retiré, tels que $v_i$ et $v_{i+1}$ soient adjacents à la
-    même face. On a alors qu'après le retrait de $u$, par construction encore de $U'$, les $v_i$ sont tous accessibles
-    entre eux. On peut alors voir que cela implique que le graphe reste connexe et est un témoin de $G$
-    \\~\\
-    On construit alors un surgraphe de $H'$ que l'on va plonger dans le plan. On construit le
-    surgraphe $H''$ en itérant sur tout sommet $v \in V$, et en ajoutant une arrête entre chaque paire $u_1, u_2$
-    voisine de $v$ adjacente à une même face, arrête prenant la forme d'un chemin dans cette face. Si $v$ est
-    un sommet extérieur dans $H'$, et que l'on considère $2$ de ses voisins dans $H'$ eux aussi extérieurs,
-    alors on choisira le chemin de telle sorte à ce que $v$ devienne intérieur dans $H''$.
-    Ainsi tout les élements de $U'$ deviennent de degré au moins $3$. $G$ étant $3$-connexe, on peut alors voir que $H''$
-    le devient également (on ne peut plus isoler de sommet de $U'$). $H''$ est également planaire et par construction,
-    tout les sommets $v \in V$ sont intérieurs.
-    \\~\\
-    On construit à présent la carte : pour $v \in V$, la région associée à $v$ est l'adhérence de la face dans laquelle se trouve
-    le point $v$ dans $H'' - v$. Cette face est bien homéomorphe à un disque, comme $H'' - v$ est $2$-connexe et qu'alors
-    cette dernière est bordée par un cycle. Cet ensemble de région correspond alors à l'intérieur du cycle de $H''$
-    séparant la face non bornée des autres (comme $H''$ est $2$-connexe). Ainsi, pour les mêmes raisons, la face non bornée, vue dans $\mathbb{S}^2$,
-    est homéomorphe à un disque. Notons $S$ l'ensemble des sommets de $V$ adjacents à cette dernière dans $H''$.
-    On prends alors $G' = (V \cup \{\infty\}, E \cup \{s\infty \mid s \in S \} )$, et on associe à $\infty$ la face non bornée de $H''$.
-    La carte est bien complète par construction. Cette dernière, restreinte à $V$, donne bien une carte de $G$ : en effet les frontières
-    de la région associée au sommet $v$ est le cycle formé des voisins de $v$ dans $H''$. Si $uv \in E$, $u$ et $v$ partagent un voisin
-    dans $H''$ et donc les régions se rencontrent. Si les régions se rencontrent, $H''$ étant planaire, les cycles ne peuvent se rencontrer
-    que s'ils partagent des sommets, donc $uv \in E$.
-
-\end{proof}
-
+On peut par exemple "compléter" la roue $W_n$ en ajoutant un autre sommet adjacent à tout les sommets du cycle.
 En conséquence de cette proposition, on s'intéressera plus particulièrement aux graphes de carte $3$-connexe admettant une carte complète.
 Une propriété sympathique de ces derniers est que les voisins de chaque sommet $v$ peuvent être organisés afin
 de former un cycle, et on a même plus précis si on regarde les cartes.
@@ -894,14 +857,16 @@ On admettra pour la démonstration les lemmes suivants :
     Le sous graphe induit par ces $6$ sommets est $K(3, K_3)$, absurde comme $G$ était de carte.
 \end{proof}
 
-\begin{quest}
-    Est ce que pour $G$ un graphe cordal $2$-connexe, il est vrai que $G$ est de carte si et seulement si ses composantes $3$-connexes pour
-    toutes/une décomposition $3$-connexe sont de carte ?
-\end{quest}
-
 \section*{Conclusion}
 
+
+\bibliographystyle{plain}
+\bibliography{MapGraphs}
+
+
 \section*{Annexe}
+
+Les preuves de certains énoncés admis.
 
 \begin{proof}[Lemme \ref{CNSK33}]
     Supposons que $G$ possède un mineur $K_{3,3}$. Alors il existe des ensembles de sommets connexes, disjoints, $S_1, S_2, S_3, T_1, T_2, T_3$
@@ -938,8 +903,63 @@ On admettra pour la démonstration les lemmes suivants :
     d'obtenir un $K_{3,3}$.
 \end{proof}
 
-\bibliographystyle{plain}
-\bibliography{MapGraphs}
+(retaper ça)
+
+\begin{proof}[Lemme \ref{2connstrictForbid}]
+    On commence par $K(2, I(1, K_{2,2}))$.\\
+    On numérote $v_1, ..., v_6$ les sommets du $K_{2,2,2}$ induit, tels que les indépendants soient $\{v_1, v_2\}, \{v_3,v_4\}, \{v_5,v_6\}$.
+    On notera $a$ le sommet relié à deux sommets indépendants de ce sous graphe, que l'on supposera être $v_1, v_2$.\\
+    On suppose le graphe de carte, on s'en donne alors $H$ un témoin. Comme $v_1v_2 \notin E$, les voisins de $a$ sont tous de degré
+    $2$, ou l'un est aussi voisin de $v_1$ et un autre de $v_2$.\\
+    Les sommets $a, v_3, v_4, v_2, v_5, v_6$ et les chemins suivant vérifient alors les hypothèses du lemme \ref{CNSK33}, en reprenant un raisonnement
+    similaire à la proposition : les chemins de $v_3, v_4$ à $v_2, v_5, v_6$ sont les arrêtes subdivisées de $H$
+    traduisant les adjacences dans le graphe original, celui de $a$ à $v_2$ est donné par l'arrête subdivisée représentant l'arrête $av_2$,
+    ceux de $a$ à $v_5, v_6$ exploitent les chemins de $a$ à $v_1$ puis de $v_1$ à $v_5, v_6$.\\
+    Absurde, $H$ étant planaire, donc le graphe donné n'est pas de carte
+    \\~\\
+    Pour $K(K_2, I(1, K_{2,2,2}))$, on numérotera $v_1, ..., v_6$ les sommets formant le $K_{2,2,2}$, $x$ le sommet indépendant du $K_{2,2,2}$
+    et $a, b$ les deux sommets universels. On suppose par l'absurde le graphe de carte, on s'en donne un témoin $H$. On considère les sommets
+    $x, v_1, v_2, a, v_3, v_4$ et les chemins suivants : de $v_1, v_2$ à $a, v_3, v_4$ on considère des chemins de longueur $2$, de
+    $x$ à $a$ également, puis de $x$ à $v_3, v_4$, on utilise le sommet intermédiaire $b$. On peut là aussi montrer par des arguments
+    d'indépendance que les chemins vérifient les hypothèses du lemme \ref{CNSK33} et que donc $H$ n'est pas planaire, le graphe
+    n'était donc pas de carte.
+\end{proof}
+
+\begin{proof}[Proposition \ref{3connCompl}]
+    On se donne un témoin $H$ de $G$ et on note $U$ l'ensemble des sommets autres que $V$ de $H$. On peut supposer que $H$
+    est construit de telle sorte à ce que $d(u) \geq 2$ pour $u \in U$. Soit $u \in U$, $x, y \in V$ parmi ses voisins.
+    Si $x$ et $y$ sont adjacents à la même face de $H$, alors on ajoute une arrête entre $x$ et $y$ à l'intérieur de cette face,
+    que l'on subdivise ensuite à l'aide d'un sommet afin de garder le graphe biparti. On répète alors
+    ce processus jusqu'à ce que tout les sommets adjancents dans $G$ soient reliés par deux chemins de longueur $2$.
+    \\~\\
+    Le nouveau graphe $H'$ est planaire biparti et $2$-connexe : si l'on retire un sommet de $V$ le graphe reste connexe, par
+    des arguments similaires à ceux de la Proposition \ref{cyclSep}.
+    Si l'on retire un sommet de $U'$ (l'ensemble $U$ avec les nouveaux sommets ajoutés), le graphe reste aussi connexe :
+    si le sommet retiré est parmi ceux de $U' \backslash U$, la construction de $U'$ donne que le graphe reste connexe. Sinon,
+    on se donne $v_1, ..., v_k$ les voisins de $u$ le sommet retiré, tels que $v_i$ et $v_{i+1}$ soient adjacents à la
+    même face. On a alors qu'après le retrait de $u$, par construction encore de $U'$, les $v_i$ sont tous accessibles
+    entre eux. On peut alors voir que cela implique que le graphe reste connexe et est un témoin de $G$
+    \\~\\
+    On construit alors un surgraphe de $H'$ que l'on va plonger dans le plan. On construit le
+    surgraphe $H''$ en itérant sur tout sommet $v \in V$, et en ajoutant une arrête entre chaque paire $u_1, u_2$
+    voisine de $v$ adjacente à une même face, arrête prenant la forme d'un chemin dans cette face. Si $v$ est
+    un sommet extérieur dans $H'$, et que l'on considère $2$ de ses voisins dans $H'$ eux aussi extérieurs,
+    alors on choisira le chemin de telle sorte à ce que $v$ devienne intérieur dans $H''$.
+    Ainsi tout les élements de $U'$ deviennent de degré au moins $3$. $G$ étant $3$-connexe, on peut alors voir que $H''$
+    le devient également (on ne peut plus isoler de sommet de $U'$). $H''$ est également planaire et par construction,
+    tout les sommets $v \in V$ sont intérieurs.
+    \\~\\
+    On construit à présent la carte : pour $v \in V$, la région associée à $v$ est l'adhérence de la face dans laquelle se trouve
+    le point $v$ dans $H'' - v$. Cette face est bien homéomorphe à un disque, comme $H'' - v$ est $2$-connexe et qu'alors
+    cette dernière est bordée par un cycle. Cet ensemble de région correspond alors à l'intérieur du cycle de $H''$
+    séparant la face non bornée des autres (comme $H''$ est $2$-connexe). Ainsi, pour les mêmes raisons, la face non bornée, vue dans $\mathbb{S}^2$,
+    est homéomorphe à un disque. Notons $S$ l'ensemble des sommets de $V$ adjacents à cette dernière dans $H''$.
+    On prends alors $G' = (V \cup \{\infty\}, E \cup \{s\infty \mid s \in S \} )$, et on associe à $\infty$ la face non bornée de $H''$.
+    La carte est bien complète par construction. Cette dernière, restreinte à $V$, donne bien une carte de $G$ : en effet les frontières
+    de la région associée au sommet $v$ est le cycle formé des voisins de $v$ dans $H''$. Si $uv \in E$, $u$ et $v$ partagent un voisin
+    dans $H''$ et donc les régions se rencontrent. Si les régions se rencontrent, $H''$ étant planaire, les cycles ne peuvent se rencontrer
+    que s'ils partagent des sommets, donc $uv \in E$.
+\end{proof}
 
 \end{flushleft}
 \end{document}
