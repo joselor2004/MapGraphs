@@ -26,11 +26,40 @@
 
 \begin{flushleft}
 
+\tableofcontents
+
 \section*{Introduction}
 
-\section{Trucs généraux}
+La notion de planarité est une des notions les plus influentes de la théorie des graphes, ayant motivé le célèbre théorème des $4$ couleurs,
+et l'étude des liens et apports mutuels entre graphes et surfaces topologiques \cite{face2conn}. En $1998$, Chen, Grigni et Papdimitriou
+introduisent une notion proche de la planarité, et une nouvelle classe de graphe, les graphes de carte \cite{IntroMap}. Ces derniers
+sont définis comme graphes d'intersection de régions d'intérieurs disjoints sur la sphère : les sommets du graphe sont les régions,
+si deux régions se touchent, il y a une arrête entre ces dernières. Cette notion peut faire penser à la formulation originale la plus
+connue du théorème des $4$ couleurs qui énonce que l'on peut colorier toute carte en $4$ couleurs sans que deux régions voisines
+n'aient la même couleur. Les graphes planaires sont en fait tous des graphes de carte. Toutefois, la classe des graphes de carte
+est bien plus large que celle des graphes planaires, contenant par exemple des cliques de toutes tailles. Cette dernière a des
+propriétés structurelles intéressantes, par exemple, son nombre de cliques maximales étant linéaire en le nombre de ses sommets
+\cite{IntroMap}, et l'on peut borner la taille de ses cliques maximales par $\frac{3k}{2}$ où $k$ est le nombre maximal de régions
+autorisées à se rencontrer en un point \cite{IntroMap}. Cette classe a également des propriétés algorithmiques intéressantes :
+le problème de l'indépendant maximum admet un schéma d'approximation en temps polynômial et le nombre chromatique
+peut être $2$-approché en temps polynômial \cite{approxMap}.
+\\~\\
+Dans leur articule introductif, Chen et al. posent la question de la reconnaissance de cette nouvelle classe de graphe : décider si un
+graphe donné est de carte ou non. Il montrent que ce problème est dans NP, et donnent un algorithme polynômial dans un cas particulier,
+lorsque les régions recouvrent la sphère et qu'en tout point au plus $4$ régions se rencontrent. En $1998$, Thorup annonce avoir un algorithme
+polynômial résolvant le problème \cite{Thorup}. Toutefois, l'algorithme a une complexité estimée de $O(n^{120})$ \cite{n120} et les détails ne
+sont jamais publiés. Plus récemment, un algorithme FPT a été obtenu \cite{FptMap} ou le paramètre est la largeur arborescente du graphe.
+\\~\\
+J'ai travaillé pendant ce stage à l'élaboration d'algorithmes de reconaissances des graphes de carte : après avoir trouvé quelques
+graphes contre exemple relativement simples, j'ai pu classifier les graphes de carte trivialement parfaits et les cographes de carte.
+Certaines de mes réflexions concernant les graphes $3$-connexes de carte, en vue d'un algorithme généralisant les méthodes utilisées,
+sont également présentées.
+
+\section{Généralités sur les graphes de carte}
 
 \subsection{Résultats et définitions préliminaires}
+
+On commence par définir plus formellement ce que l'on entend lorsque l'on parle de régions et donc de graphes de carte.
 
 \begin{def*}[Carte]
     Une carte est une fonction $f : V \rightarrow \mathcal{P}(\mathbb{S}^2)$ telle que pour tout $v \in V$, $f(v)$
@@ -73,10 +102,18 @@
     \end{center}
 \end{figure}
 
-\begin{theorem}[Caractérisation des graphes de carte]\label{carCarte}
+La caractérisation suivante permet d'envisager les graphes de carte de manière bien plus combinatoire que la définition précédente.
+Si $G$ est un graphe et $S \subset V$, $G[S]$ désigne le sous graphe induit de $G$ par $S$.
+
+\begin{theorem}[Témoins des graphes de carte \cite{IntroMap}]\label{carCarte}
     Un graphe $G = (V, E)$ est de carte si et seulement si il existe $H$ un graphe biparti planaire, de bipartition $V, U$,
     tel que $H^2[V] = G$. Un tel graphe $H$ est appelé graphe témoin de $G$
 \end{theorem}
+
+Le témoin est construit depuis une carte comme suit : les sommets de $V$ sont placés à l'intérieur de leur région respective.
+Les sommets de $U$ quand à eux représentent les points de rencontre entre différentes régions : si deux régions se rencontrent, on place
+un sommet de $U$ dans leur frontière commune et on relie les sommets de $V$ respectifs à ce sommet par des chemins à valeur
+dans les régions respectives.
 
 \begin{prop}
     Si $G$ est un graphe de carte, et $H = G[A]$ où $A \subset V$, alors $H$ est un graphe de carte
@@ -85,6 +122,8 @@
 \begin{proof}
     On reprend la carte de $G$ où l'on ne garde que les régions identifées aux sommets présents dans $A$
 \end{proof}
+
+On introduit ici quelques concepts communs et plus principalement des notations
 
 \begin{def*}[Join]
     Le join de $2$ graphes $G = (V, E)$ et $G' = (V', E')$ est le graphe ayant pour sommet $V'' = V \sqcup V'$ et pour arrêtes
@@ -107,7 +146,24 @@
     On notera pour tout $n \geq 1$, $I(n, G)$ l'union disjointe d'une clique à $n$ sommets et du graphe $G$.
 \end{def*}
 
+Enfin on introduit le concept d'adjacence réelle pour les témoins, permettant de simplifier les preuves et les notations
+
+\begin{def*}[Adjacence réelle]
+    Pour $H = (V \cup U, E')$ un témoin de $G$, on définit l'adjacence réelle, $RA(x)$ d'un sommet $x \in V \cup U$ comme suit :
+    \begin{itemize}
+        \item Si $x \in V$, $RA(x) = \{x\}$
+        \item Si $x \in U$, $RA(x) = N(x)$
+    \end{itemize}
+    On peut alors définir l'adjacence réelle $RA(S)$ d'un sous ensemble $S \subset V \cup U$ en faisant l'union sommet par sommet.
+\end{def*}
+
 \subsection{Premières obstructions à l'existence de cartes}
+
+Comme beaucoup de problèmes concernant des représentations de graphes, il est bien plus simple de montrer qu'un graphe admet une
+carte que de montrer qu'il ne peut en admettre. On peut bien sûr trouver des graphes n'admettant pas de carte en exploitant
+le fait que le nombre de cliques maximales dans un graphe de carte est linéaire en le nombre de sommets. Les graphes bipartis
+complets ne sont donc plus de carte à partir d'un certain rang, tout comme les graphes $K_{r,...,r}$. Le rang trouvé est toutefois
+élevé. On trouve ici des graphes contre exemple relativement simples.
 
 \begin{lem}\label{CNSK33}
     Un graphe $G$ a pour mineur $K_{3,3}$ si et seulement si il existe $6$ sommets, $s_1, s_2, s_3, t_1, t_2, t_3$ et des chemins
@@ -118,42 +174,6 @@
         \item Si deux de ces chemins se rencontrent, leur intersection est également un chemin
     \end{itemize}
 \end{lem}
-
-\begin{proof}
-    Supposons que $G$ possède un mineur $K_{3,3}$. Alors il existe des ensembles de sommets connexes, disjoints, $S_1, S_2, S_3, T_1, T_2, T_3$
-    tels qu'une fois contractés, le graphe induit par ces ensembles aie pour sous graphe $K_{3,3}$. Soient $s_i \in S_i$ et $t_i \in T_i$
-    pour $i \in \{1, 2, 3\}$. Comme on a une arrête de $S_i$ à $T_j$ pour tout $i,j$, il existe des sommets $s'_i \in S_i$ et $t'_j \in T_j$
-    tels que $s'_i t'_j \in E$. En se donnant un chemin de $s_i$ à $s'_i$ puis de $t'_j$ à $t_j$, on construit alors des chemins
-    $P_{i,j}$ comme décrits dans l'énoncé. Si $i \neq i'$, $j \neq j'$, les chemins $P_{i,j}$ et $P_{i',j'}$ sont à valeurs dans des
-    ensembles disjoints et ne se rencontrent donc pas. La deuxième condition est vérifiée pour les mêmes raisons. Pour la troisième,
-    si un chemin de $s_i$ à $t_j$ rencontre un chemin de $s_i$ à $t_{j'}$ en un sommet intermédiaire, cette intersection se fait nécessairement
-    dans $S_i$. On modifie alors le chemin $P_{i,j'}$ de sorte à ce qu'il coincide avec $P_{i,j}$ jusqu'à sa dernière intersection avec ce dernier
-    dans $S_i$. On raisonne de manière similaire pour $P_{i,j}$ et $P_{i',j}$
-    \\~\\
-    Supposons à présent qu'il existe de tels $s_i$ et $t_i$ et de tels chemins $P_{i,j}$. On se restreint au sous graphe constitué des
-    chemins $P_{i,j}$. Soient $i,j \in \{1,2,3\}$.
-    Supposons que $P_{i,j}$, hors extérmités, ne soit pas disjoint de tout les autres chemins. On note
-    $P_{i,j} = \{s_i = v_1, v_2, ..., v_l = t_j\}$ dans l'ordre de parcours, et on se donne
-    \begin{equation*}
-    \begin{split}
-        p &= \min \{ k \in \llbracket 1, l \rrbracket \mid \exists i' \neq i, v_k \in P_{i',j}\}\\
-        q &= \max \{ k \in \llbracket 1, l \rrbracket \mid \exists j' \neq j, v_k \in P_{i, j'} \}
-    \end{split}
-    \end{equation*}
-    L'hypothèse faite sur les chemins permet d'affirmer que les deux ensembles décrits sont les seules intersections possibles de $P_{i,j}$
-    avec d'autres chemins.\\
-    Montrons que $p > q$ : on se donne les $i'$ et $j'$ correspondants. Comme l'intersection de deux chemins reste un chemin, et que $P_{i,j'}$
-    contient à la fois $s_i$ et $v_q$, les sommets $v_1, ..., v_q$ font tous partie de $P_{i,j'}$. De même, $v_p, ..., v_l$ font partie
-    de $P_{i',j}$. Supposons maintenant par l'absurde que $p \leq q$. On déduit des remarques précédentes que les sommets $v_p, ..., v_q$
-    font partie de $P_{i,j'}$ et $P_{i',j}$, hors ces chemins ne s'interesctent pas par hypothèse, absurde.\\
-    On contracte alors tout les sommets de $v_1$ à $v_p$ et ceux de $v_q$ à $v_l$ comme il existe un chemin les reliant tous. Puisque
-    $p > q$ et que les sommets de départs et d'arrivée ne sont pas présents sur les chemins hors extrémités,
-    on conserve bien des chemins de $s_i$ à $t_{j'}$ et de $s_{i'}$ à $t_j$. Après cette opération, le nouveau chemin $P_{i,j}$ est disjoint
-    de tout les autres. On répète alors cette opération pour tout $i,j$.\\
-    Une fois cela fait, on obtient des chemins tous disjoints de tout $s_i$ à tout $t_j$, ne reste plus qu'à contracter ces chemins afin
-    d'obtenir un $K_{3,3}$.
-\end{proof}
-
 
 \begin{prop}\label{K3G}
     Soit $G$ un graphe à $3$ sommets. $K(3, G)$ n'est pas un graphe de carte
@@ -172,36 +192,6 @@ Notons toutefois que $K(2, G)$ lui est un graphe de carte, et que le join de $2$
 est de carte également. Cela pourrait laisser à penser que, comme pour les graphes planaires, les graphes $K(3, G)$ seraient des
 contre exemples "fondamentaux". Ce n'est en fait pas le cas, la proposition suivante montrant qu'un graphe n'a pas besoin
 d'avoir $3$ indépendants pour ne pas être de carte
-\\~\\
-(Trouver une preuve plus simple de $K_{2,2,2,2}$, topologiquement ça a l'air izy)
-
-\begin{prop}\label{K2222}
-    $K_{2,2,2,2}$ n'est pas un graphe de carte
-\end{prop}
-
-\begin{proof}
-    On numérote les sommets de $1$ à $8$, tels que $\{v_1,v_2\}$, $\{v_3,v_4\}$, $\{v_5,v_6\}$, $\{v_7,v_8\}$ soient les indépendants.
-    On suppose par l'absurde que $K_{2,2,2,2}$ est un graphe de carte, on s'en donne donc un témoin $H$. On le suppose même minimal pour
-    la relation de sous graphe.\\
-    Notons d'abord que les voisinages de $v_1$ et $v_2$ dans $H$ sont disjoints, ces deux sommets étant indépendants. Cela vaut
-    aussi pour toutes les autres paires indépendantes. Ainsi, pour tout $u \in N(v_i)$, $u$ n'est voisin que d'au plus un élement de
-    chaque paire. Ainsi les sommets de $U$ sont de degré au plus $4$. On construit à présent un mineur $K_{3,3}$ de $H$
-    \\~\\
-    Notons que comme $K_{2,2,2,2}$ n'est pas planaire, au moins un sommet de $H$ dans $U$ est de degré au moins $4$. Les remarques
-    précedentes font que ce sommet est de degré exactement $4$. Notons le $u$, et supposons quitte à renommer que ses voisins
-    sont $v_1, v_3, v_5, v_7$. Soit $i \in \{4, 6, 8\}$. Notons $p, q, r$ les voisins de $v_2$ donnant un chemin de longueur
-    $2$ respectivement à $v_3, v_5, v_7$. Depuis $v_i$ on construit un chemin vers $v_{i-1}$ en exploitant un sommet $v_j \in V$ intermédiaire
-    tel que $j \notin \{1, 2, 3, 5, 7, i\}$. Les autres chemins depuis $v_i$ sont ceux de longueurs $2$ donnés par le fait que $H$ soit
-    un témoin de $K_{2,2,2,2}$. On note alors $q', p', r'$ les voisins de $v_i$ participant à chacun de ces $3$ chemins
-    ordonnés de même manière que $p, q, r$. On notera $s'$ le sommet de $U$ venant après $v_j$ dans le chemin de $v_i$ à $v_{i-1}$\\
-    Une disjonction de cas basée sur les remarques faites sur le degré des sommets et la minimalité de $H$ montre
-    que l'on peut choisir $i$ et $j$ tels que les chemins de $v_i$ et $v_2$ à $v_3, v_5, v_7$ se rencontrent selon
-    les hypothèse du lemme \ref{CNSK33}.
-    \\~\\
-    On considère les sommets $v_1, v_2, v_i, v_3, v_5, v_7$ et les chemins donnés précedemment (le chemin depuis $v_1$ aux autres est de longueur
-    $2$ et utilise $u$). $u$ étant de degré $4$ donc maximal, et par ce qui précède, ces sommets vérifient les hypothèses du lemme
-    \ref{CNSK33}. Donc $H$ n'est pas planaire. Absurde
-\end{proof}
 
 \begin{prop}\label{K222K5}
     $K(2,2,2,K_5)$ n'est pas un graphe de carte
@@ -213,7 +203,9 @@ d'avoir $3$ indépendants pour ne pas être de carte
     de $U$ tels que tout leurs voisins soient parmi $a_1, ..., a_5$, et des sommets de $U$ de degré $2$ tels que l'un des deux voisins
     est parmi $a_1, ..., a_5$.\\
     $H - S$ est un témoin de $K_{2,2,2}$. On écrit alors $V \cup U \backslash S = \{v_1, ..., v_6\} \cup U'$.
-    Par des arguments similaires à la proposition précédente, les sommets de $U'$ sont de degré au plus $3$ dans $H - S$.
+    Notons que les sommets de $U'$ sont de degré au plus $3$ dans $H - S$ : en effet $H-S$ étant témoin de $K_{2,2,2}$, si on avait
+    un sommet de $U'$ possédant $4$ voisins, le principe des tiroirs nous créerait une adjacence entre deux sommets supposés être
+    indépendants.\\
     Pour tout $i \in \{1, ..., 5\}$, $a_i$ étant adjacent à tout les $v_1, ..., v_6$ dans $K(2,2,2,K_5)$, on en déduit que dans le plongement
     de $H$, $a_i$ est placé dans une face de $H-S$ telle que, en notant $A_i$ les sommets adjacents à cette dernière, $RA(A_i) = \{v_1, ..., v_6\}$.\\
     Montrons à présent que $a_i$ a au moins $3$ voisins : si il n'en avait que $2$, ces voisins que l'on note
@@ -232,7 +224,8 @@ d'avoir $3$ indépendants pour ne pas être de carte
     les sommets de $U'$ sur le bord sont de degré au plus $3$ et ne peuvent avoir des voisinages disjoints. On déduit également de cela que tout les sommets
     de $U'$ sur les bords des faces sont de degré exactement $3$ afin d'avoir $RA(A_i) = \{v_1, ..., v_6\}$.
     \\~\\
-    $H-S$ est alors nécessairement le graphe illustré figure \ref{temoinK222}, quitte à renuméroter.
+    $H-S$ est alors nécessairement le graphe illustré figure \ref{temoinK222}, quitte à renuméroter et à maximiser le nombre de faces
+    vérifiant les hypothèses.
     Ce graphe a $4$ faces. Absurde, $K(2,2,2,K_5)$ n'est donc pas de carte.
 \end{proof}
 
@@ -243,10 +236,46 @@ d'avoir $3$ indépendants pour ne pas être de carte
     \end{center}
 \end{figure}
 
-Notons que $K_{2,2,2}$ est toutefois un graphe de carte. Ces deux propositions donnent alors des conditions nécessaires au fait
-de posséder une carte : en effet les graphes de carte étant stables par sous graphe induit, ces derniers ne peuvent alors
-posséder ni $K(3, G)$ ni $K_{2,2,2,2}$ parmi ces derniers. Ces conditions ne sont pas suffisantes : une subdivision
-de $K_{3,3}$ quelconque n'est pas un graphe de carte par des arguments similaires à la proposition \ref{K3G}
+\begin{lem}\label{formeK2222}
+    $K_{2,2,2,2}$ est de carte et tout témoin de ce dernier a pour sous graphe un des graphes Figure \ref{witnK2222}
+\end{lem}
+
+\begin{proof}
+    Les graphes de la Figure \ref{witnK2222} sont bien des témoins de $K_{2,2,2,2}$, il est donc de carte.\\
+    Soit $H$ un témoin de $K_{2,2,2,2}$. On numérote $v_1, ..., v_8$ les sommets avec les mêmes conventions que pour la Proposition
+    \ref{K222K5}. On considère $H'$ le témoin de $K_{2,2,2}$ obtenu en retirant $v_7, v_8$ et les sommets de $U$ devenus
+    de degré inférieur à $1$ après ce retrait. En reprenant la démonstration de la Proposition \ref{K222K5}, on en déduit
+    qu'il existe deux faces dans $H'$ vérifiant les hypothèses citées dans cette proposition, dont le bord possède $6$
+    sommets et où tout les sommets de $U'$ présents sur ce dernier sont de degré $3$.\\
+    $v_7$ et $v_8$ étant indépendants, les sommets de $U'$ présents sur les bords des deux faces sont distincts. La nécessité
+    pour un sommet universel d'avoir au moins $3$ voisins dans $H'$ (vu dans la proposition précédente), ainsi que des
+    arguments de planarité, permettent d'affirmer que, soit les deux bords partagent les mêmes sommets hors $U'$, soit
+    ils n'en partagent aucun. Selon le cas, on obtient soit le premier, soit le second témoin Figure \ref{witnK2222} en sous graphe de $H'$.\\
+    En remettant les sommets retirés, on obtient ce que l'on veut.
+\end{proof}
+
+\begin{figure}[h]
+    \caption{Des témoins de $K_{2,2,2,2}$}\label{witnK2222}
+    \begin{center}
+        \includegraphics[page=\ipeFigfirsttemoinquatriparti, scale = 0.5]{figs}
+        \hspace*{2cm}
+        \includegraphics[page=\ipeFigsecondtemoinquatriparti, scale = 0.5]{figs}
+    \end{center}
+\end{figure}
+
+\begin{prop}\label{K22221}
+    $K_{2,2,2,2,1}$ et $K(2,2,2,I_{2,1})$ ne sont pas des graphes de carte.
+\end{prop}
+
+\begin{proof}
+    Si un témoin d'un de ces deux graphes existe, il est construit depuis un des deux témoins du Lemme \ref{formeK2222} par ajout
+    d'un ou plusieurs sommets et arrêtes.\\
+    Dans le cas $K_{2,2,2,2,1}$, le sommet ajouté doit être universel. Or aucune face des témoins n'a pour adjacence réelle
+    l'intégralité des sommets de $V$, donc le graphe ne peut être de carte.\\
+    Dans le cas $K(2,2,2,I_{2,1})$, le sommet ajouté doit être adjacent à tout les sommets sauf $1$. Là encore c'est impossible, et le
+    graphe n'est donc pas de carte.
+\end{proof}
+
 
 \subsection{Cartes et connexités}\label{cartesetconnex}
 
@@ -292,9 +321,10 @@ Les graphes $3$-connexes finaux seront appelés des composantes $3$-connexes de 
     de $x$ à $y$ évoqué, on peut en contractant des arrêtes du chemin obtenir un témoin de $G_i$
 \end{proof}
 
-\section{Algorithmes}
+\section{Reconaissance de sous classes}
 
-On discutera ici d'abord du problème de reconnaissance des graphes de carte, restreint à des sous classes particulières, puis l'on s'intéressera
+On a à présent les outils et sous graphes induits interdits nécessaires pour traiter le problème de reconaissance dans certains cas
+particuliers.
 
 \subsection{Cas des graphes trivialement parfaits}
 
@@ -523,6 +553,8 @@ On mènera alors une étude similaire aux graphes trivialement parfaits, en se c
 généraliser les résultats
 
 \subsubsection{Structure des cographes de carte}
+
+On s'intéressera d'abord aux cographes $3$-connexes de carte que le Théorème suivant permet de classifier
 
 \begin{theorem}\label{cograph3conn}
     Soit $G$ un cographe $3$-connexe. $G$ est de carte si et seulement si son coarbre est de hauteur inférieure à $4$ et que l'une des deux
@@ -763,15 +795,6 @@ En conséquence de cette proposition, on s'intéressera plus particulièrement a
 Une propriété sympathique de ces derniers est que les voisins de chaque sommet $v$ peuvent être organisés afin
 de former un cycle, et on a même plus précis si on regarde les cartes.
 
-\begin{def*}[Adjacence réelle]
-    Pour $H = (V \cup U, E')$ un témoin de $G$, on définit l'adjacence réelle, $RA(x)$ d'un sommet $x \in V \cup U$ comme suit :
-    \begin{itemize}
-        \item Si $x \in V$, $RA(x) = \{x\}$
-        \item Si $x \in U$, $RA(x) = N(x)$
-    \end{itemize}
-    On peut alors définir l'adjacence réelle $RA(S)$ d'un sous ensemble $S \subset V \cup U$ en faisant l'union sommet par sommet.
-\end{def*}
-
 \begin{prop}[Cycle séparant]\label{cyclSep}
     Soit $G$ $3$-connexe admettant une carte complète. Soit $v \in V$. Il existe un témoin $H$ de $G$ et
     un cycle $C$ dans $H$ tel que
@@ -782,20 +805,38 @@ de former un cycle, et on a même plus précis si on regarde les cartes.
     \end{itemize}
 \end{prop}
 
-On admettra pour la démonstration le lemme suivant :
+On admettra pour la démonstration les lemmes suivants :
 \begin{lem}[\cite{FptMap}]
-    Soit $G$ un graphe admettant une carte complète. Alors $G$ admet un témoin $H$ quadrangulé.
+    Soit $G$ un graphe admettant une carte complète. Alors $G$ admet un témoin $H$ quadrangulé vérifiant que, pour toute paire
+    $u, u' \in U$ telle que $\deg(u) = 2$, on n'ait pas $N(u) \subset N(u')$.
+\end{lem}
+
+\begin{lem}[\cite{face2conn}]
+    Soit $H$ un graphe planaire $2$-connexe. Toute face de $H$ possède un cycle de $H$ en guise de bord.
 \end{lem}
 
 \begin{proof}
-    On se donne $H$ un tel témoin quadrangulé de $G$. On note $S$ l'ensemble des sommets de $U$ de degré $2$ ayant $v$ parmi leur voisins, auquels on
-    ajoute $v$. Montrons que l'on peut choisir $H$ tel que $H - S$ soit $2$-connexe. On note $V \backslash \{v\} \cup U'$ la bipartition de $H-S$.
-    Par construction de $S$, aucun sommet de $U'$ n'est de degré $1$. Considérons $v' \in V \backslash \{v\}$. $v'$ est de degré au moins $2$
-    dans $G-v$ par $2$-connexité. Si $v'$ est de degré $1$ dans $H-S$, alors les voisins de ce dernier sont tous voisins de $v'$.
-    L'un de ces derniers est tel que $v'$ et lui se trouvent adjacents à une même face dans $H$ (montrer bien).
-    On ajoute alors à $H$ une arrête subdivisée de $v'$ à ce sommet.
+    On se donne $H$ un tel témoin quadrangulé de $G$. $H-v$ est un témoin de $G-v$. Montrons que ce dernier est $2$-connexe.\\
+    Notons que pour tout $u \in U$, son degré dans $H$ est au moins $3$ : en effet si un certain $u$ est de degré $2$,
+    la condition sur le degré de $u$ et le fait que $H$ soit quandrangulé imposent qu'il existe $u' \in U$ tel que $u$,
+    ses deux voisins et $u'$ forment un cycle. Mais alors $N(u) \subset N(u')$, absurde. Donc $u$ est de degré au moins $3$.
     \\~\\
-    Ainsi $H-S$ est $2$-connexe. Le sommet $v$ se trouvant dans une des faces de $H - S$, ce dernier étant $2$-connexe 
+    Soient $s, t$ des sommets non adjacents de $H-v$. Supposons par l'absurde que tout chemin de $s$ à $t$ passe par un sommet
+    $p$. La $2$-connexité de $G-v$ donne que $p \in U$. Notons $p_1, ..., p_k$ les voisins de $p$ ordonnés dans le sens trigonométrique.
+    On a, comme $H$ est quandrangulé, qu'il existe $u_i$ voisin commun de $p_i$ et $p_{i+1}$ pour tout $i$, où les indices sont
+    pris modulo $k$. Ainsi pour toute paire de voisins de $p$, il existe deux chemins disjoints entre ces derniers n'utilisant pas $p$.
+    Soit un chemin de $s$ à $t$. Ce dernier rencontre nécessairement deux voisins de $p$. Notons $q$ le premier voisin de $p$
+    visité par le chemin et $q'$ le dernier. En exploitant l'un des deux chemins de $q$ à $q'$ ne rencontrant ni $p$, ni $v$,
+    on construit alors un chemin de $s$ à $t$ n'exploitant pas $p$. Absurde. Un seul sommet ne suffit donc pas à séparer $s$ de $t$,
+    $H-v$ est donc $2$-connexe.
+    \\~\\
+    Le sommet $v$ est situé dans une face du graphe $H-v$, $2$-connexe. Notons $C$ le cycle bordant cette face. Le deuxième point
+    est clair par construction de $C$. Pour le premier, considérons $u \in C \cap U$. La paire $vu$ constitue une arrête de $H$ :
+    en effet, $H$ étant quadrangulé, $v$ est adjacent à au moins deux élements de $C \cap U$. Si $u$ n'est pas parmi eux,
+    en considérant $u'$ et $u''$ deux voisins de $v$ "encadrant" $u$ dans l'ordre cyclique, c'est à dire que pour un certain
+    sens de parcours du cycle, $u$ est vu entre $u'$ et $u''$ et aucun sommet de $C \cap U$ vu entre $u'$ et $u''$ n'est voisin
+    de $v$, on obtient un cycle dont l'intérieur forme une face de $H$ bordée par au moins $6$ arrêtes, absurde. Comme les voisins
+    de $v$ sont exactement $C \cap U$, on a bien $N[v] = RA(C)$
 \end{proof}
 
 \begin{cor}[Ordre cyclique]\label{ordCycl}
@@ -862,208 +903,39 @@ On admettra pour la démonstration le lemme suivant :
 
 \section*{Annexe}
 
-Pour tout les trucs à moitiés vrais et à moitié utiles
-
-
-\begin{def*}[Arrête sans trou]
-    On dit qu'une arrête $xy$ d'un graphe $G$ $3$-connexe est sans trou si elle vérifie l'une des deux conditions suivantes pour un certain
-    $S \subsetneq \{x, y\}$ :
-    \begin{itemize}
-        \item Pour toute clique max $K$ de $G[N(x) \cap N(y)]$, si $G - (K \cup \{x,y\})$ n'est pas connexe, $G - (K \cup S)$ l'est aussi.
-        \item Pour toute paire de cliques indépendantes maximales $K^1, K^2$ de $G[N(x) \cap N(y)]$, si $G - (K^1 \Delta K^2 \cup \{x,y\})$ n'est pas connexe,
-        $G - (K^1 \Delta K^2 \cup S)$ l'est aussi, où $\Delta$ est la différence symétrique sur les sommets de $K^1$ et $K^2$
-    \end{itemize}
-\end{def*}
-
-La définition est motivée par... le dessin qui n'est pas là
-\\~\\
-On considèrera par la suite que tout les graphes $G$ sont de carte, $3$-connexe, et admettent une carte complète
-
-\begin{lem}\label{contrSanstrou}
-    Soit $xy \in E$. Si $xy$ est sans trou, alors dans toute carte complète de $G$, l'arrête $xy$ est représentée par une adjacence
-    connexe entre les deux régions, soit un chemin, soit un point
-\end{lem}
-
-\begin{proof}
-    On se donne une carte complète de $G$ vérifiant ces conditions. Supposons par l'absurde que $x$ et $y$ ne se rencontrent pas en un ensemble connexe
-    On raisonne selon la nature de $x \cap y$
+\begin{proof}[Lemme \ref{CNSK33}]
+    Supposons que $G$ possède un mineur $K_{3,3}$. Alors il existe des ensembles de sommets connexes, disjoints, $S_1, S_2, S_3, T_1, T_2, T_3$
+    tels qu'une fois contractés, le graphe induit par ces ensembles aie pour sous graphe $K_{3,3}$. Soient $s_i \in S_i$ et $t_i \in T_i$
+    pour $i \in \{1, 2, 3\}$. Comme on a une arrête de $S_i$ à $T_j$ pour tout $i,j$, il existe des sommets $s'_i \in S_i$ et $t'_j \in T_j$
+    tels que $s'_i t'_j \in E$. En se donnant un chemin de $s_i$ à $s'_i$ puis de $t'_j$ à $t_j$, on construit alors des chemins
+    $P_{i,j}$ comme décrits dans l'énoncé. Si $i \neq i'$, $j \neq j'$, les chemins $P_{i,j}$ et $P_{i',j'}$ sont à valeurs dans des
+    ensembles disjoints et ne se rencontrent donc pas. La deuxième condition est vérifiée pour les mêmes raisons. Pour la troisième,
+    si un chemin de $s_i$ à $t_j$ rencontre un chemin de $s_i$ à $t_{j'}$ en un sommet intermédiaire, cette intersection se fait nécessairement
+    dans $S_i$. On modifie alors le chemin $P_{i,j'}$ de sorte à ce qu'il coincide avec $P_{i,j}$ jusqu'à sa dernière intersection avec ce dernier
+    dans $S_i$. On raisonne de manière similaire pour $P_{i,j}$ et $P_{i',j}$
     \\~\\
-    Supposons cet ensemble discret, donc fini car compact. Notons alors ses points
-    $u_1, ..., u_k$, $k \geq 2$ dans l'ordre cyclique selon la frontière de $x$. On construit alors $H$ un témoin compact quadrangulé de $G$
-    à partir de cette carte, contenant les points $u_1, ..., u_k$ dont le voisinage correspond aux régions les contenant dans cette carte.\\
-    Si $k \geq 4$, alors en retirant les cliques max suivantes : $K^1$ est l'ensemble des régions hors $x, y$ contenant $u_1$,
-    $K^2$ celles contenant $u_k$. Notons alors que ce témoin contient un cycle, $x, u_1, y, u_k$, dont les sommets de $V$ à l'intérieur
-    de ce dernier ne peuvent accéder à l'extérieur qu'en utilisant les points $u_1$ et $u_k$. De même les sommets de $K^1$ intérieurs
-    à ce cycle ne peuvent se trouver dans $K^2$, car alors on aurait une arrête d'un sommet à l'intérieur du cycle $x, u_1, y, u_2$
-    à $u_k$, ou à tous les sommets de $K^2$, qui sont tous à l'extérieur de ce cycle. En retirant $K^1 \Delta K^2 \cup \{x,y\}$, on sépare
-    alors l'intérieur du cycle $x, u_2, y, u_3$ du reste du graphe. Cela n'est plus le cas si on ne retire que $x$ ou $y$, ainsi $xy$
-    est à trou.\\
-    S
-
-    Si cet ensemble n'est pas discret, son nombre de composantes connexes étant fini par compacité, il est alors union disjointe de chemins
-    et de points.\\
-    Sinon : cet ensemble ne peut contenir $2$ chemins disjoints par $3$-connexité : en effet dans ce cas $G - \{x, y\}$ n'est pas connexe.
-    Donc il contient un chemin et un point n'appartenant pas à ce dernier. On choisit alors un point $u_1$ dans l'intérieur du chemin (pas à une
-    de ses éxtrémités) et on note $u_2$ un point de $x \cap y$ n'appartenant pas au chemin. On construit un témoin $H$ de la même manière que précédemment.
-    L'intérieur du cycle $x, u_1, y, u_2$ contient un sommet de $V$ pour les mêmes raisons qu'auparavant, sauf qu'ici $u_1$ étant dans l'intérieur
-    du chemin ne peut être adjacent à ce sommet. Notons $K$ la clique formée des sommets extérieurs à ce cycle, excepté $x$ et $y$, contenant le point $u_2$.
-    $G - K$ est connexe, pour les mêmes raisons que pour le cas précédent, tandis que $G - (K \cup \{x, y\})$ ne l'est pas
-\end{proof}
-
-\begin{lem}
-    Pour tout $v \in V$, il existe $u$ un voisin de $v$ tel que $uv$ soit sans trou
-\end{lem}
-
-\begin{proof}
-    On se donne une carte complète de $G$. La preuve du lemme \ref{cycleCompl} permet d'affirmer qu'il existe des régions $u$ adjacentes à $v$
-    telles que $u \cap v$ ne soit pas discret. On suppose alors par l'absurde que toutes ces régions sont telles que $u \cap v$ ne soit
-    pas connexe. Mais alors, $u \cup v$ sépare $\mathbb{S}^2$ en au moins $2$ composantes connexes, et la carte étant complète les deux sont totalement
-    recouvertes par des régions. Ainsi, $v$ a des voisins tels que leur intersection n'est pas discrète dans les deux composantes connexes ainsi délimitées.
-    On considère alors un voisin dans l'une de ces composantes que l'on note $C$ et on réitère le processus, en choisissant à chaque fois une composante incluse dans $C$.
-    On obtient ainsi une infinité de régions distinctes ce qui est absurde car le graphe est fini.
-    \\~\\
-    Ainsi il existe $u$ voisin de $v$ tel que $u \cap v$ soit un chemin. On montre alors qu'il existe un tel $u$ tel que $uv$ soit sans trou.
-    Bon globalement faut distinguer selon si la frontière est recouverte ou pas
-\end{proof}
-
-\begin{prop}
-    Soit $G$ admettant une carte complète et $xy \in E$.
-    On suppose que $xy$ est représentée dans une certaine carte complète de $G$ par une adjacence en un seul point $u$.
-    Si dans cette même carte, la clique formée des régions contenant $u$ (hors $x$ et $y$) est supportée par d'autres points que $u$,
-    alors $G / xy$ admet une carte complète
-\end{prop}
-
-\begin{proof}
-    On se donne un témoin compact quadrangulé issu de la carte complète de l'énoncé, $H$. On suppose également sans perte de généralité que le plongement
-    de $H$ dans le plan donné est un plongement droit. On construit un nouveau témoin compact quandrangulé
-    $H'$ comme suit : on note $K$ la clique formée des régions contenant $u$, hors $x, y$. On retire toute les arrête entre $K$ et $u$.
-    $u$ devient alors de degré $2$, ayant pour seuls voisins $x$ et $y$. On place alors un sommet $u'$ arbitrairement proche de $u$, que l'on
-    relie à $x$ et $y$ par des segments. Ensuite, par des arguments géométriques, tout sommet de $K$ peut être relié par un segment soit à
-    $u$ soit à $u'$. On obtient alors au final un graphe planaire biparti quandrangulé $H'$. Reste à voir que $H'$ est un témoin compact de $G$.
-    \\~\\
-    Les seuls arrêtes de $G$ impactées par les modifications sont les arrêtes entre sommets de $K$ (celles avec $x$ et $y$ sont préservées
-    comme on relie chaque sommet soit à $u$ soit à $u'$). Hors par hypothèse, la clique $K$ est portée par d'autres points de la carte distincts
-    de $u$. Ainsi la suppression de certaines arrêtes de $K$ à $u$ n'a pas d'impact sur les adjacences des sommets de $K$. $H'$ est bien un témoin
-    de $G$. Il est compact par sa construction comme $H$ est un témoin compact
-    \\~\\
-    Il est alors facile de construire un témoin compact quandrangulé de $G / xy$ comme $H'$ représente une carte où les régions $x$ et $y$
-    se rencontrent en un chemin
-\end{proof}
-
-Reformuler la propriété de sans trou, et reformuler la propriété (typiquement le premier point est pas en équivalence, le deuxième si
-par contre. Toutefois si le premier point échoue, alors on peut reconstruire la carte pour y enlever les trous). Sans trou est peut être
-plus intelligent dans le cas spécifique des graphes de carte, si on a une non instance de toute façon on le verra quand ça devient gênant
-
-\begin{prop}
-    Soit $xy \in E$. $xy$ est une arrête à trou si et seulement si pour tout $S \subsetneq \{x, y\}$
-    \begin{itemize}
-        \item Soit pour $K^1, K^2$ deux cliques max de $G[N(x) \cap N(y)]$, $G - (K^1 \Delta K^2 \cup \{x,y\})$ n'est pas connexe,
-        où $\Delta$ est la différence symétrique sur les sommets des deux cliques, et $G - (K^1 \Delta K^2 \cup S)$ l'est
-    \end{itemize} 
-    
-\end{prop}
-
-\begin{proof}
-    Si $xy$ vérifie ces conditions, alors $xy$ est une arrête à trou : il existe au plus $2$ cliques $K^1, K^2$ voisines de $x$ et $y$
-    telles que $G - (K^1 \cup K^2 \cup \{x,y\})$ ne soit pas connexe, tandis que pour $S \subsetneq \{x,y\}$, $G - (K^1 \cup K^2 \cup S)$
-    le soit.
-    \\~\\
-    Si $xy$ est une arrête à trou : on se donne $K^1, K^2$ les cliques voisines de $x$ et $y$ données par la définition.
-    Si l'on peut prendre $K^2$ vide :\\
-    On notera alors le $K^1$ correspondant comme $K$. On se donne alors une clique max de $G[N(x) \cap N(y)]$ contenant $K$, que l'on note $K'$.
-    Notons $C_1, ..., C_k$ les composantes connexe de $G - K - \{x,y\}$, $k \geq 2$. Si pour tout choix de $K'$, la propriété n'est pas
-    vérifiée : alors pour tout $K'$, 
-\end{proof}
-
-\subsection{Permutations de cycle et arrêtes contractibles}
-
-Une inversion totale sur $n$ élements est la permutation suivante $ i \in \llbracket 1, n \rrbracket \longmapsto n - i + 1$,
-les permutations cycliques sont les puissances du cycle $ i \in \llbracket 1, n \rrbracket \longmapsto (i+1 \mod n) + 1$.
-Notons que ces permutations engendrent exactement les automorphismes du graphe $C_n$.\\
-On appelera $\operatorname*{Iso}(C_n)$ l'ensemble des permutations sur $n$ élements quotientées par les automorphismes de
-$C_n$, décrit plus tôt. On obtient alors un ensemble intéressant pour l'étude des cycles : on peut l'identifier
-au quotient de l'ensemble des graphes sur les sommets $1, ..., n$ isomorphes à $C_n$ par la relation d'équivalence de différer
-d'un automorphisme.
-
-\begin{def*}[Permutations de cycle]
-    Soit $n \geq 4$, et $C'_n$ un surgraphe à $n$ sommets de $C_n$, dont le cycle canonique sera numéroté $1, 2, ..., n$.
-    On dira qu'une permutation $\sigma$ préserve les cycles si $\sigma(1), ..., \sigma(n)$ est également un cycle de $C'_n$.
-    Une permutation de cycle est alors $[\sigma] \in \operatorname*{Iso}(C_n)$ telle que $\sigma$ préserve les cycles.
-\end{def*}
-
-La définition est bien cohérente car si $\sigma$ et $\sigma'$ sont équivalents, ils diffèrent d'un produit d'une inversion totale
-et d'une permutation cyclique. Le cycle $\sigma(1), ..., \sigma(n)$ est préservé par inversion totale et permutation cyclique donc
-$\sigma'(1), ..., \sigma'(n)$ est également un cycle.
-
-\begin{def*}[Echange]
-    Un échange de $i$ est une permutation de cycle $[\sigma]$ telle que, en notant $E$ l'ensemble des arrêtes de $C_n$,
-    on ait $\sigma(i)\sigma(i+1) \notin E$ ou $\sigma(i-1)\sigma(i) \notin E$. Si le nombre d'échanges de $i$ est non nul,
-    on le dira échangeable
-\end{def*}
-
-La définition est là encore indépendante du choix du représentant de $[\sigma]$ : si $\sigma'$ est équivalent à $\sigma$,
-ils diffèrent par un automorphisme de $C_n$. Donc si $\sigma(i)\sigma(i+1) \notin E$, $\sigma'(i)\sigma'(i+1)$ également
-\\~\\
-Ce que l'on remarque en faisant les dessins : on se donne $v \in V$ dans un graphe de carte et on fixe un ordre
-cyclique de $N(v)$ donné par le corollaire \ref{ordCycl}. On étudie ses permutations de cycle. On remarque que les sommets
-$u$ non échangeables font de bons candidats pour que $uv$ soit contractible (à vraiment peu de choses près)
-
-
-\subsection{Décontractions d'arrêtes}
-
-\begin{prop}\label{ezDecontr}
-    Soit $G$, $xy \in E$ une arrête. Supposons que $G / xy$ admette une carte complète et soit $3$-connexe. Soit $H$ un témoin compact
-    quadrangulé de $G / xy$ donné par la proposition \ref{cyclSep}. Notons $s_1, ..., s_k$ le cycle séparant $xy$ du reste de $H$.
-    Si les voisins de $x$ distincts de $y$ sont exactement $RA(\{s_i, ..., s_{i+l}\}) - xy$ et ceux de $y$
-    $RA(\{s_{i+l}, ..., s_{i-1}, s_i\}) - xy$,
-    où $i, l$ sont entiers et les indices sont vus modulo $k$, alors $G$ admet une carte complète
-\end{prop}
-
-\begin{proof}
-    On construit la carte complète comme suit : on part de $H$, on retire $xy$ et on ajoute $x$ et $y$ à l'intérieur du cycle séparant.
-    Ensuite, on relie $x$ à tout ses voisins de la manière suivante : si $s_j \in U$ et que les deux voisins de $s_j$ sur le cycle
-    sont voisins de $x$, on ajoute une arrête entre $x$ et $s_j$.\\
-    Si l'un des voisins de $s_j$ n'est pas voisin de $x$ et l'autre l'est,
-    et que ce dernier n'a pas été pris en compte par l'étape précédente, c'est alors que $x$ n'a qu'un voisin sur le cycle par
-    les conditions précédentes : si il en avait plus de deux, il aurait été possible de tous les couvrir en considérant les sommets
-    de $U$ faisant la liaison. Dans ce cas, on relie $x$ à son voisin par deux arrêtes subdivisées, et on relie $y$ à chaque sommet
-    joignant $x$ à son voisin.\\
-    On effectue les mêmes étapes pour $y$. Si il n'existe aucun $s_j \in U$ tels que ses deux voisins sur le cycle soient également
-    voisins de $x$ et $y$, cela signifie que $s_i$ et $s_{i+l}$ sont dans $V$. On ajoute alors deux sommet, $s$ et $s'$, l'un relié
-    à $s_i, x, y$, l'autre à $s_{i+l}, x, y$. On obtient au final un témoin de $G$, compact et quadrangulé, donc $G$ admet une carte
-    complète
-\end{proof}
-
-\begin{lem}
-    Soit $G$ un graphe admettant une carte complète et $xy \in E$ une arrête telle que $G / xy$ soit un graphe $3$-connexe à
-    carte complète. Soit $H$ un témoin compact quadrangulé de $G / xy$. On suppose que les voisins de $xy$ dans $G / xy$
-    induisent un cycle sans corde.
-    Alors $H$ vérifie la propriété de la proposition \ref{ezDecontr}
-\end{lem}
-
-\begin{proof}
-    Supposons par l'absurde $H$ ne vérifie pas cette propriété. Notons que comme les voisins de $xy$
-    induisent un cycle sans corde, on peut supposer sans perte de généralité que les voisins de $xy$ dans $H$
-    sont tous de degré $3$ : en effet ces derniers ont pour voisins des voisins de $xy$ dans $G / xy$.
-    Si un tel sommet était de degré plus que $3$, alors on aurait un triangle présent parmi les voisins de $xy$.
-    Si ces derniers sont au nombre de $3$, $H$ respecterait la propriété de la proposition \ref{ezDecontr}.
-    Si $xy$ a plus de $4$ voisins, alors le cycle formé par ses voisins dans $G / xy$ possède une corde, absurde.
-    \\~\\
-    On exploite à présent l'hypothèse sur $H$ : notons $v_1, ..., v_l$ l'ordre cyclique sur les voisins de $xy$.
-    De par la forme du témoin, l'hypothèse implique que les voisins de $x$ et de $y$ ne sont pas des intervalles
-    modulo $l$ parmi ces sommets (si l'on retire $x$ et $y$). Comme $G$ est à carte complète et $3$-connexe, les voisins de $x$
-    et ceux de $y$ forment respectivement des cycles. Hors les voisins de $x$ ne forment pas un intervalle modulo $l$ parmi
-    $v_1, ..., v_l$ ($y$ est exclu). Donc $N(x) = \{y, v_{a_1}, ..., v_{b_1}, v_{a_2}, ..., v_{b_2}, ..., v_{b_k}\}$
-    où $a_1 = 1$ sans perte de généralité, $k \geq 2$, $b_i < a_{i+1} + 1$ pour $1 \leq i \leq k-1$, et $b_k < l-1$, là encore quitte à effectuer
-    des permutations cycliques.\\
-    On numérote les voisins de $x$ $u_1, ..., u_r$ dans un ordre cyclique. En supposant $u_1 = v_1$ et quitte à inverser l'ordre,
-    on a $u_{b_1} = v_{b_1}$. Le seul sommet adjacent à $v_{b_1}$ encore non utilisé est $y$, donc $u_{b_1 + 1} = y$. Puis
-    $u_{b_1 + 2}$ est un sommet quelconque parmi ceux restants. Supposons pour simplifier le raisonnement qu'il s'agisse de $v_{a_2}$.
-    Le seul sommet adjacent non considéré est $v_{a_2 + 1}$ et ainsi de suite jusqu'à atteindre $v_{b_2}$. $v_{b_2}$ n'a pas de voisins
-    non considérés dans le cycle. Le raisonnement est le même si l'on tombe sur un voisin entre un $v_{a_i}$ et $v_{b_i}$ le sens de
-    progression peut toutefois être différent. Au total, c'est absurde.
-    \\~\\
-    Ainsi $H$ vérifie la propriété annoncée
+    Supposons à présent qu'il existe de tels $s_i$ et $t_i$ et de tels chemins $P_{i,j}$. On se restreint au sous graphe constitué des
+    chemins $P_{i,j}$. Soient $i,j \in \{1,2,3\}$.
+    Supposons que $P_{i,j}$, hors extérmités, ne soit pas disjoint de tout les autres chemins. On note
+    $P_{i,j} = \{s_i = v_1, v_2, ..., v_l = t_j\}$ dans l'ordre de parcours, et on se donne
+    \begin{equation*}
+    \begin{split}
+        p &= \min \{ k \in \llbracket 1, l \rrbracket \mid \exists i' \neq i, v_k \in P_{i',j}\}\\
+        q &= \max \{ k \in \llbracket 1, l \rrbracket \mid \exists j' \neq j, v_k \in P_{i, j'} \}
+    \end{split}
+    \end{equation*}
+    L'hypothèse faite sur les chemins permet d'affirmer que les deux ensembles décrits sont les seules intersections possibles de $P_{i,j}$
+    avec d'autres chemins.\\
+    Montrons que $p > q$ : on se donne les $i'$ et $j'$ correspondants. Comme l'intersection de deux chemins reste un chemin, et que $P_{i,j'}$
+    contient à la fois $s_i$ et $v_q$, les sommets $v_1, ..., v_q$ font tous partie de $P_{i,j'}$. De même, $v_p, ..., v_l$ font partie
+    de $P_{i',j}$. Supposons maintenant par l'absurde que $p \leq q$. On déduit des remarques précédentes que les sommets $v_p, ..., v_q$
+    font partie de $P_{i,j'}$ et $P_{i',j}$, hors ces chemins ne s'interesctent pas par hypothèse, absurde.\\
+    On contracte alors tout les sommets de $v_1$ à $v_p$ et ceux de $v_q$ à $v_l$ comme il existe un chemin les reliant tous. Puisque
+    $p > q$ et que les sommets de départs et d'arrivée ne sont pas présents sur les chemins hors extrémités,
+    on conserve bien des chemins de $s_i$ à $t_{j'}$ et de $s_{i'}$ à $t_j$. Après cette opération, le nouveau chemin $P_{i,j}$ est disjoint
+    de tout les autres. On répète alors cette opération pour tout $i,j$.\\
+    Une fois cela fait, on obtient des chemins tous disjoints de tout $s_i$ à tout $t_j$, ne reste plus qu'à contracter ces chemins afin
+    d'obtenir un $K_{3,3}$.
 \end{proof}
 
 \bibliographystyle{plain}
