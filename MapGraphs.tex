@@ -50,11 +50,11 @@ lorsque les régions recouvrent la sphère et qu'en tout point au plus $4$ régi
 polynômial résolvant le problème \cite{Thorup}. Toutefois, l'algorithme a une complexité estimée de $O(n^{120})$ \cite{n120} et les détails ne
 sont jamais publiés. Plus récemment, un algorithme FPT a été obtenu \cite{FptMap} ou le paramètre est la largeur arborescente du graphe.
 \\~\\
-J'ai travaillé pendant ce stage à l'élaboration d'algorithmes de reconaissances des graphes de carte : après avoir trouvé quelques
-graphes contre exemple relativement simples, j'ai pu classifier les graphes de carte trivialement parfaits et les cographes de carte.
-Certaines de mes réflexions concernant les graphes $3$-connexes de carte, en vue d'un algorithme généralisant les méthodes utilisées,
-sont également présentées. Certaines de mes contributions apportant peu au rapport, par exemple certaines démonstrations, sont reléguées
-en annexe.
+J'ai travaillé pendant ce stage à l'élaboration d'algorithmes de reconaissances des graphes de carte, et à trouver des caractérisations
+combinatoires de ces derniers : après avoir trouvé quelques graphes contre exemple relativement simples, j'ai pu classifier les graphes
+de carte trivialement parfaits et les cographes de carte. Certaines de mes réflexions concernant les graphes $3$-connexes de carte, en vue
+d'un algorithme généralisant les méthodes utilisées, sont également présentées. Certaines de mes contributions apportant peu au rapport,
+par exemple certaines démonstrations parfois longues, sont reléguées en annexe.
 
 \section{Généralités sur les graphes de carte}
 
@@ -114,7 +114,8 @@ Si $G$ est un graphe et $S \subset V$, $G[S]$ désigne le sous graphe induit de 
 Le témoin est construit depuis une carte comme suit : les sommets de $V$ sont placés à l'intérieur de leur région respective.
 Les sommets de $U$ quand à eux représentent les points de rencontre entre différentes régions : si deux régions se rencontrent, on place
 un sommet de $U$ dans leur frontière commune et on relie les sommets de $V$ respectifs à ce sommet par des chemins à valeur
-dans les régions respectives.
+dans les régions respectives.\\
+La proposition suivante montre une certaine stabilité de la classe des graphes de carte.
 
 \begin{prop}
     Si $G$ est un graphe de carte, et $H = G[A]$ où $A \subset V$, alors $H$ est un graphe de carte
@@ -124,7 +125,9 @@ dans les régions respectives.
     On reprend la carte de $G$ où l'on ne garde que les régions identifées aux sommets présents dans $A$
 \end{proof}
 
-On introduit ici quelques concepts communs et plus principalement des notations
+Toutefois, comme on le verra plus tard, les graphes de carte ne sont ni stables par retrait d'arrêtes, ni par contraction d'arrêtes.
+On ne peut donc espérer obtenir des caractérisations similaires aux graphes planaires, par mineurs interdits.\\
+On introduit ensuite quelques concepts communs et notations utiles pour la suite de l'étude.
 
 \begin{def*}[Join]
     Le join de $2$ graphes $G = (V, E)$ et $G' = (V', E')$ est le graphe ayant pour sommet $V'' = V \sqcup V'$ et pour arrêtes
@@ -190,70 +193,44 @@ complets ne sont donc plus de carte à partir d'un certain rang, tout comme les 
 \end{proof}
 
 Notons toutefois que $K(2, G)$ lui est un graphe de carte, et que le join de $2$ graphes à $3$ sommets tous deux non indépendants
-est de carte également. Cela pourrait laisser à penser que, comme pour les graphes planaires, les graphes $K(3, G)$ seraient des
-contre exemples "fondamentaux". Ce n'est en fait pas le cas, la proposition suivante montrant qu'un graphe n'a pas besoin
-d'avoir $3$ indépendants pour ne pas être de carte
+est de carte également. On peut déduire de cette proposition que la classe des graphes de carte n'est pas stable par retrait d'arrête :
+en effet $K_6$ est de carte mais $K_{3,3}$ ne l'est pas. On peut également en déduire que les graphes de carte ne sont pas stables
+par contraction d'arrêtes, le graphe Figure \ref{nonstabcontrarr} en est un contre exemple.
+
+\begin{figure}[h]
+    \caption{Un graphe de carte dont la contraction de $xy$ le transforme en un $K(3, G)$}\label{nonstabcontrarr}
+    \vspace*{0.5cm}
+    \begin{center}
+        \begin{tikzpicture}[auto]
+            \begin{scope}[every node/.style={circle, draw}]
+
+            \node (a) {$a$};
+            \node (b) [right = 20mm of a] {$b$};
+            \node (c) [right = 10mm of b] {$c$};
+            \node (e) [below = of b] {$e$};
+            \node (f) [below = of c] {$f$};
+            \node (y) [left = 10mm of e] {$y$};
+            \node (x) [left = 15mm of y] {$x$};
+            \end{scope}
+
+            \path
+            (a) edge (x) edge (y) edge (e) edge (f)
+            (b) edge (x) edge (e) edge (f)
+            (c) edge (y) edge (e) edge (f)
+            (x) edge (y) edge[bend right] (e)
+            (y) edge (e);
+        \end{tikzpicture}
+        \hspace*{1.5cm}
+        \includegraphics[page=\ipeFigpinch, scale = 0.6]{figs}
+    \end{center}
+\end{figure}
+
+Il est également possible de trouver des graphes n'étant pas de carte et n'ayant pas $3$ sommets indépendants, comme le montrent les
+propositions suivantes.
 
 \begin{prop}\label{K222K5}
     $K(2,2,2,K_5)$ n'est pas un graphe de carte
 \end{prop}
-
-\begin{proof}
-    Supposons par l'absurde qu'il le soit, on s'en donne alors un témoin $H$. On numérote les indépendants $\{v_1, v_2\}, \{v_3, v_4\}, \{v_5, v_6\}$
-    et $a_1, ..., a_5$ les sommets de la clique $K_5$. On pose $S \subset V \cup U$ le sous ensemble composé de $a_1, ..., a_5$, des sommets
-    de $U$ tels que tout leurs voisins soient parmi $a_1, ..., a_5$, et des sommets de $U$ de degré $2$ tels que l'un des deux voisins
-    est parmi $a_1, ..., a_5$.\\
-    $H - S$ est un témoin de $K_{2,2,2}$. On écrit alors $V \cup U \backslash S = \{v_1, ..., v_6\} \cup U'$.
-    Notons que les sommets de $U'$ sont de degré au plus $3$ dans $H - S$ : en effet $H-S$ étant témoin de $K_{2,2,2}$, si on avait
-    un sommet de $U'$ possédant $4$ voisins, le principe des tiroirs nous créerait une adjacence entre deux sommets supposés être
-    indépendants.\\
-    Pour tout $i \in \{1, ..., 5\}$, $a_i$ étant adjacent à tout les $v_1, ..., v_6$ dans $K(2,2,2,K_5)$, on en déduit que dans le plongement
-    de $H$, $a_i$ est placé dans une face de $H-S$ telle que, en notant $A_i$ les sommets adjacents à cette dernière, $RA(A_i) = \{v_1, ..., v_6\}$.\\
-    Montrons à présent que $a_i$ a au moins $3$ voisins : si il n'en avait que $2$, ces voisins que l'on note
-    $u$ et $u'$ ont respectivement pour voisins dans $H - S$ $v_1, v_3, v_5$ et $v_2, v_4, v_6$. On considère les sommets $v_1, v_2, v_3, a_i, v_5, v_6$
-    et les chemins suivants : de $v_1$ et $v_3$ à $a_i$, on utilise $u$, de $v_2$ à $a_i$ on utilise $u'$, puis pour le reste on prend des sommets
-    intermédiaires quelconques. Ces derniers vérifient les hypothèses du lemme \ref{CNSK33} par indépendances et comme $u \neq u'$, absurde comme $H$
-    est planaire, donc $a_i$ a bien au moins $3$ voisins. Cela permet alors d'affirmer que chaque face vérifiant les hypothèses précédentese
-    ne peut pas accueillir plus d'un $a_i$ par planarité. Il y a donc $5$ faces vérifiant ces hypothèses.
-    \\~\\
-    Considérons une face vérifiant les hypothèse : cette dernière ne peut avoir les $6$ sommets de $K_{2,2,2}$ sur son bord car alors il n'y aurait
-    qu'au plus une seule autre face pouvant vérifier les hypothèses pour des raisons de planarité (on peut par exemple y trouver un mineur
-    $K_{3,3}$). De même si cette dernière contient $5$ sommets. Si cette dernière contient $4$ sommets, alors par les remarques précédentes
-    sur le nombre de voisins minimal de $a_i$, les deux sommet de $U'$ sur le bord de degré $3$ ont des voisinages non disjoints. Cela
-    conduit au fait d'avoir une autre face ayant plus de $5$ sommets de $K_{2,2,2}$ sur son bord, encore impossible. Donc toutes les
-    faces ont au plus $3$ sommets de $K_{2,2,2}$ sur leur bord. En fait il y en a exactement $3$, sinon on ne peut vérifier l'hypothèse comme
-    les sommets de $U'$ sur le bord sont de degré au plus $3$ et ne peuvent avoir des voisinages disjoints. On déduit également de cela que tout les sommets
-    de $U'$ sur les bords des faces sont de degré exactement $3$ afin d'avoir $RA(A_i) = \{v_1, ..., v_6\}$.
-    \\~\\
-    $H-S$ est alors nécessairement le graphe illustré figure \ref{temoinK222}, quitte à renuméroter et à maximiser le nombre de faces
-    vérifiant les hypothèses.
-    Ce graphe a $4$ faces. Absurde, $K(2,2,2,K_5)$ n'est donc pas de carte.
-\end{proof}
-
-\begin{figure}[h]
-    \caption{Le graphe $H - S$ de la proposition \ref{K222K5}}\label{temoinK222}
-    \begin{center}
-        \includegraphics[page=\ipeFigtemoinK, scale = 0.5]{figs}
-    \end{center}
-\end{figure}
-
-\begin{lem}\label{formeK2222}
-    $K_{2,2,2,2}$ est de carte et tout témoin de ce dernier a pour sous graphe induit un des graphes Figure \ref{witnK2222}
-\end{lem}
-
-\begin{proof}
-    Les graphes de la Figure \ref{witnK2222} sont bien des témoins de $K_{2,2,2,2}$, il est donc de carte.\\
-    Soit $H$ un témoin de $K_{2,2,2,2}$. On numérote $v_1, ..., v_8$ les sommets avec les mêmes conventions que pour la Proposition
-    \ref{K222K5}. On considère $H'$ le témoin de $K_{2,2,2}$ obtenu en retirant $v_7, v_8$ et les sommets de $U$ devenus
-    de degré inférieur à $1$ après ce retrait. En reprenant la démonstration de la Proposition \ref{K222K5}, on en déduit
-    qu'il existe deux faces dans $H'$ vérifiant les hypothèses citées dans cette proposition, dont le bord possède $6$
-    sommets et où tout les sommets de $U'$ présents sur ce dernier sont de degré $3$.\\
-    $v_7$ et $v_8$ étant indépendants, les sommets de $U'$ présents sur les bords des deux faces sont distincts. La nécessité
-    pour un sommet universel d'avoir au moins $3$ voisins dans $H'$ (vu dans la proposition précédente), ainsi que des
-    arguments de planarité, permettent d'affirmer que, soit les deux bords partagent les mêmes sommets hors $U'$, soit
-    ils n'en partagent aucun. Selon le cas, on obtient soit le premier, soit le second témoin Figure \ref{witnK2222} en sous
-    graphe induit de $H$.\\
-\end{proof}
 
 \begin{figure}[h]
     \caption{Des témoins de $K_{2,2,2,2}$}\label{witnK2222}
@@ -263,6 +240,10 @@ d'avoir $3$ indépendants pour ne pas être de carte
         \includegraphics[page=\ipeFigsecondtemoinquatriparti, scale = 0.5]{figs}
     \end{center}
 \end{figure}
+
+\begin{lem}\label{formeK2222}
+    $K_{2,2,2,2}$ est de carte et tout témoin de ce dernier a pour sous graphe induit un des graphes Figure \ref{witnK2222}
+\end{lem}
 
 \begin{prop}\label{K22221}
     $K_{2,2,2,2,1}$ et $K(2,2,2,I_{2,1})$ ne sont pas des graphes de carte.
@@ -820,30 +801,15 @@ On admettra pour la démonstration les lemmes suivants :
 
 \subsection{Cas particulier des graphes cordaux}
 
-\begin{lem}
+On s'intéresse à présent aux graphes cordaux, classe définie par l'interdiction des sous graphes induits $C_n$, $n \geq 4$, et contenant
+ainsi strictement les graphes trivialement parfaits. Une autre caractérisation de cette classe est qu'un graphe est cordal si et seulement si
+tout ses séparateurs minimaux sont des cliques \cite{cordSep}. Les résultats suivants sont utiles pour contraindre la forme des graphes cordaux
+de carte $3$-connexe, comme cela a été fait pour les différentes classes précédemment étudiées.
+
+\begin{lem}\label{cordsepintercliquemax}
     Soit $G$ un graphe cordal connexe, $S$ un séparateur minimal de ce dernier, et $C_1, ..., C_l$ les composantes de $G - S$. Pour tout
     $i$, il existe $v_i \in C_i$ tel que $S \subset N(v_i)$
 \end{lem}
-
-\begin{proof}
-    Notons que, $G$ étant cordal, $S$ est une clique. On se fixe un $1 \leq i \leq l$.
-    Notons $k = |S|$. On va montrer par récurrence sur $1 \leq j \leq k$ que pour tout $B \subset S, |B| = j$,
-    il existe $v \in C_i$ tel que $B \subset N(v)$.
-    \\~\\
-    Le cas $j = 1$ est donné par la minimalité de $S$ : en effet si il existait un sommet de $S$ complètement isolé de $C_i$, retirer
-    ce dernier de $S$ redonnerait un séparateur.\\
-    Soit $2 \leq j \leq k$ et supposons la propriété vraie pour $j-1$. On écrit $S = \{s_1, ..., s_k\}$. Supposons par l'absurde la propriété
-    fausse pour $j$. On suppose la numérotation des sommets faite de telle sorte à ce que le sous ensemble $B$ interdit soit
-    $\{s_1, ..., s_j\}$. Il existe par hypothèse $v \in C_i$ tel que $s_1, ..., s_{j-1}$ soient tous voisins de $v$, et $u \in C_i$ tel que
-    $s_2, ..., s_j$ soient voisins de $u$. $C_i$ étant connexe on a un chemin de $u$ à $v$. Ce chemin, concaténé aux arrêtes $vs_1, s_1 s_j, s_j u$
-    donne un cycle de longueur au moins $4$. On choisit alors $u$ et $v$ et le chemin de manière à minimiser la longueur de ce cycle.
-    Ce cycle possède alors des cordes, mais la minimalité impose que ces dernières ne soient pas entre des sommets du chemin de $u$ à $v$,
-    sinon on pourrait le racourcir, ni entre $s_1$ ou $s_j$ et un sommet intermédiaire du chemin de $u$ à $v$. Les seules cordes envisageables
-    sont alors $s_1u$ ou $s_jv$. Supposons sans perte de généralité qu'on se trouve dans le premier cas. Alors $u$ a parmi ses voisins
-    $s_1, ..., s_j$, absurde. Donc la propriété est également vraie pour $j$.
-    \\~\\
-    Au total, on a bien la propriété vraie au rang $k$, c'est à dire qu'il existe $v_i \in C_i$ tel que $S \subset N(v_i)$
-\end{proof}
 
 \begin{cor}
     Soit $G$ un graphe cordal $3$-connexe de carte et $S$ un séparateur minimal de ce dernier. $G - S$ a au plus $2$ composantes
@@ -859,6 +825,15 @@ On admettra pour la démonstration les lemmes suivants :
 
 \section*{Conclusion}
 
+On a obtenu une caractérisation complètement combinatoire des graphes de carte trivialement parfaits, puis des cographes,
+généralisant cette dernière. On a ainsi implicitement obtenu des algorithmes polynômiaux résolvant le problème de reconnaissance
+pour des graphes dans une de ces classes. La prochaine étape aurait été, avec un peu plus de temps, de caractériser et/ou
+reconnaître les graphes cordaux de carte en s'inspirant des méthodes déjà utilisées.
+\\~\\
+Le problème de la reconnaissance des graphes de carte dans le cas général est lui bien plus hardu, notamment à cause des faibles
+stabilités de cette classe, n'étant stable que par sous graphe induit. Le problème est résolu pour des graphes ayant des témoins dont
+les sommets de $U$ sont de degré au plus $4$ \cite{IntroMap},
+mais pour des degrés plus grands que $5$, aucun algorithme n'est aujourd'hui connu.
 
 \bibliographystyle{plain}
 \bibliography{MapGraphs}
@@ -868,7 +843,17 @@ On admettra pour la démonstration les lemmes suivants :
 
 Les preuves de certains énoncés admis.
 
-\begin{proof}[Lemme \ref{CNSK33}]
+\begin{lem*}[\ref{CNSK33}]
+    Un graphe $G$ a pour mineur $K_{3,3}$ si et seulement si il existe $6$ sommets, $s_1, s_2, s_3, t_1, t_2, t_3$ et des chemins
+    $P_{i,j}$ de $s_i$ à $t_j$ pour tout $i, j$ tels que
+    \begin{itemize}
+        \item Pour tout $i \neq i', j \neq j'$, $P_{i',j'}$ et $P_{i, j}$ ne se rencontrent pas
+        \item Pour tout $i$, $s_i$ et $t_i$ ne sont sommet intermédiaire d'aucun des chemins
+        \item Si deux de ces chemins se rencontrent, leur intersection est également un chemin
+    \end{itemize}
+\end{lem*}
+
+\begin{proof}
     Supposons que $G$ possède un mineur $K_{3,3}$. Alors il existe des ensembles de sommets connexes, disjoints, $S_1, S_2, S_3, T_1, T_2, T_3$
     tels qu'une fois contractés, le graphe induit par ces ensembles aie pour sous graphe $K_{3,3}$. Soient $s_i \in S_i$ et $t_i \in T_i$
     pour $i \in \{1, 2, 3\}$. Comme on a une arrête de $S_i$ à $T_j$ pour tout $i,j$, il existe des sommets $s'_i \in S_i$ et $t'_j \in T_j$
@@ -903,19 +888,88 @@ Les preuves de certains énoncés admis.
     d'obtenir un $K_{3,3}$.
 \end{proof}
 
-(retaper ça)
+\begin{prop*}[\ref{K222K5}]
+    $K(2,2,2,K_5)$ n'est pas un graphe de carte
+\end{prop*}
 
-\begin{proof}[Lemme \ref{2connstrictForbid}]
-    On commence par $K(2, I(1, K_{2,2}))$.\\
+\begin{proof}
+    Supposons par l'absurde qu'il le soit, on s'en donne alors un témoin $H$. On numérote les indépendants $\{v_1, v_2\}, \{v_3, v_4\}, \{v_5, v_6\}$
+    et $a_1, ..., a_5$ les sommets de la clique $K_5$. On pose $S \subset V \cup U$ le sous ensemble composé de $a_1, ..., a_5$, des sommets
+    de $U$ tels que tout leurs voisins soient parmi $a_1, ..., a_5$, et des sommets de $U$ de degré $2$ tels que l'un des deux voisins
+    est parmi $a_1, ..., a_5$.\\
+    $H - S$ est un témoin de $K_{2,2,2}$. On écrit alors $V \cup U \backslash S = \{v_1, ..., v_6\} \cup U'$.
+    Notons que les sommets de $U'$ sont de degré au plus $3$ dans $H - S$ : en effet $H-S$ étant témoin de $K_{2,2,2}$, si on avait
+    un sommet de $U'$ possédant $4$ voisins, le principe des tiroirs nous créerait une adjacence entre deux sommets supposés être
+    indépendants.\\
+    Pour tout $i \in \{1, ..., 5\}$, $a_i$ étant adjacent à tout les $v_1, ..., v_6$ dans $K(2,2,2,K_5)$, on en déduit que dans le plongement
+    de $H$, $a_i$ est placé dans une face de $H-S$ telle que, en notant $A_i$ les sommets adjacents à cette dernière, $RA(A_i) = \{v_1, ..., v_6\}$.\\
+    Montrons à présent que $a_i$ a au moins $3$ voisins : si il n'en avait que $2$, ces voisins que l'on note
+    $u$ et $u'$ ont respectivement pour voisins dans $H - S$ $v_1, v_3, v_5$ et $v_2, v_4, v_6$. On considère les sommets $v_1, v_2, v_3, a_i, v_5, v_6$
+    et les chemins suivants : de $v_1$ et $v_3$ à $a_i$, on utilise $u$, de $v_2$ à $a_i$ on utilise $u'$, puis pour le reste on prend des sommets
+    intermédiaires quelconques. Ces derniers vérifient les hypothèses du lemme \ref{CNSK33} par indépendances et comme $u \neq u'$, absurde comme $H$
+    est planaire, donc $a_i$ a bien au moins $3$ voisins. Cela permet alors d'affirmer que chaque face vérifiant les hypothèses précédentese
+    ne peut pas accueillir plus d'un $a_i$ par planarité. Il y a donc $5$ faces vérifiant ces hypothèses.
+    \\~\\
+    Considérons une face vérifiant les hypothèse : cette dernière ne peut avoir les $6$ sommets de $K_{2,2,2}$ sur son bord car alors il n'y aurait
+    qu'au plus une seule autre face pouvant vérifier les hypothèses pour des raisons de planarité (on peut par exemple y trouver un mineur
+    $K_{3,3}$). De même si cette dernière contient $5$ sommets. Si cette dernière contient $4$ sommets, alors par les remarques précédentes
+    sur le nombre de voisins minimal de $a_i$, les deux sommet de $U'$ sur le bord de degré $3$ ont des voisinages non disjoints. Cela
+    conduit au fait d'avoir une autre face ayant plus de $5$ sommets de $K_{2,2,2}$ sur son bord, encore impossible. Donc toutes les
+    faces ont au plus $3$ sommets de $K_{2,2,2}$ sur leur bord. En fait il y en a exactement $3$, sinon on ne peut vérifier l'hypothèse comme
+    les sommets de $U'$ sur le bord sont de degré au plus $3$ et ne peuvent avoir des voisinages disjoints. On déduit également de cela que tout les sommets
+    de $U'$ sur les bords des faces sont de degré exactement $3$ afin d'avoir $RA(A_i) = \{v_1, ..., v_6\}$.
+    \\~\\
+    $H-S$ est alors nécessairement le graphe illustré figure \ref{temoinK222}, quitte à renuméroter et à maximiser le nombre de faces
+    vérifiant les hypothèses.
+    Ce graphe a $4$ faces. Absurde, $K(2,2,2,K_5)$ n'est donc pas de carte.
+\end{proof}
+
+\begin{figure}[h]
+    \caption{Le graphe $H - S$ de la proposition \ref{K222K5}}\label{temoinK222}
+    \begin{center}
+        \includegraphics[page=\ipeFigtemoinK, scale = 0.5]{figs}
+    \end{center}
+\end{figure}
+
+\begin{lem*}[\ref{formeK2222}]
+    $K_{2,2,2,2}$ est de carte et tout témoin de ce dernier a pour sous graphe induit un des graphes Figure \ref{witnK2222}
+\end{lem*}
+
+\begin{proof}
+    Les graphes de la Figure \ref{witnK2222} sont bien des témoins de $K_{2,2,2,2}$, il est donc de carte.\\
+    Soit $H$ un témoin de $K_{2,2,2,2}$. On numérote $v_1, ..., v_8$ les sommets avec les mêmes conventions que pour la Proposition
+    \ref{K222K5}. On considère $H'$ le témoin de $K_{2,2,2}$ obtenu en retirant $v_7, v_8$ et les sommets de $U$ devenus
+    de degré inférieur à $1$ après ce retrait. En reprenant la démonstration de la Proposition \ref{K222K5}, on en déduit
+    qu'il existe deux faces dans $H'$ vérifiant les hypothèses citées dans cette proposition, dont le bord possède $6$
+    sommets et où tout les sommets de $U'$ présents sur ce dernier sont de degré $3$.\\
+    $v_7$ et $v_8$ étant indépendants, les sommets de $U'$ présents sur les bords des deux faces sont distincts. La nécessité
+    pour un sommet universel d'avoir au moins $3$ voisins dans $H'$ (vu dans la proposition précédente), ainsi que des
+    arguments de planarité, permettent d'affirmer que, soit les deux bords partagent les mêmes sommets hors $U'$, soit
+    ils n'en partagent aucun. Selon le cas, on obtient soit le premier, soit le second témoin Figure \ref{witnK2222} en sous
+    graphe induit de $H$.\\
+\end{proof}
+
+\begin{lem*}[\ref{2connstrictForbid}]
+    Les graphe $K(2, I(1, K_{2,2}))$ et $K(K_2, I(1, K_{2,2,2}))$ ne sont pas de carte
+\end{lem*}
+
+\begin{proof}
+    On utilisera ici une méthode utilisant le Lemme \ref{CNSK33} afin de montrer que les deux graphes ne sont pas de carte.
+    \\~\\
+    On commence par $K(2, I(1, K_{2,2}))$.
     On numérote $v_1, ..., v_6$ les sommets du $K_{2,2,2}$ induit, tels que les indépendants soient $\{v_1, v_2\}, \{v_3,v_4\}, \{v_5,v_6\}$.
     On notera $a$ le sommet relié à deux sommets indépendants de ce sous graphe, que l'on supposera être $v_1, v_2$.\\
     On suppose le graphe de carte, on s'en donne alors $H$ un témoin. Comme $v_1v_2 \notin E$, les voisins de $a$ sont tous de degré
-    $2$, ou l'un est aussi voisin de $v_1$ et un autre de $v_2$.\\
-    Les sommets $a, v_3, v_4, v_2, v_5, v_6$ et les chemins suivant vérifient alors les hypothèses du lemme \ref{CNSK33}, en reprenant un raisonnement
-    similaire à la proposition : les chemins de $v_3, v_4$ à $v_2, v_5, v_6$ sont les arrêtes subdivisées de $H$
-    traduisant les adjacences dans le graphe original, celui de $a$ à $v_2$ est donné par l'arrête subdivisée représentant l'arrête $av_2$,
-    ceux de $a$ à $v_5, v_6$ exploitent les chemins de $a$ à $v_1$ puis de $v_1$ à $v_5, v_6$.\\
-    Absurde, $H$ étant planaire, donc le graphe donné n'est pas de carte
+    $2$. Pour les mêmes raisons, les voisinages de $v_3$ et $v_4$ (comme ceux de $v_5$ et $v_6$) sont disjoints.\\
+    On considère les sommets $a, v_3, v_4, v_2, v_5, v_6$ et les chemins suivant entre eux : les chemins de $v_3, v_4$ à $v_2, v_5, v_6$
+    sont les arrêtes subdivisées de $H$ traduisant les adjacences dans le graphe original, celui de $a$ à $v_2$ est donné par l'arrête
+    subdivisée représentant l'arrête $av_2$, ceux de $a$ à $v_5, v_6$ exploitent les chemins de $a$ à $v_1$ puis de $v_1$ à $v_5, v_6$.\\
+    Ces chemins vérifient les hypothèses du Lemme \ref{CNSK33} : les voisinages disjoints de $v_3, v_4$ et $v_5, v_6$ permettent
+    en effet d'éviter les croisements entre chemins ayant ces sommets à leurs extrémités. Le chemin de $a$ à $v_2$ est disjoint
+    de tout les autres. Enfin pour le chemin de $a$ à $v_5$ (ou $v_6$) : le premier sommet de $U$ rencontré ne peut être commun à un autre
+    chemin, le deuxième ne peut se situer sur un chemin de $v_3, v_4$ à $v_6$ à cause des voisinages disjoints. Les autres hypothèses sont
+    faciles à vérifier.\\
+    Ainsi $H$ possède un mineur $K_{3,3}$, absurde comme il est planaire. Le graphe n'est donc pas de carte.
     \\~\\
     Pour $K(K_2, I(1, K_{2,2,2}))$, on numérotera $v_1, ..., v_6$ les sommets formant le $K_{2,2,2}$, $x$ le sommet indépendant du $K_{2,2,2}$
     et $a, b$ les deux sommets universels. On suppose par l'absurde le graphe de carte, on s'en donne un témoin $H$. On considère les sommets
@@ -925,7 +979,12 @@ Les preuves de certains énoncés admis.
     n'était donc pas de carte.
 \end{proof}
 
-\begin{proof}[Proposition \ref{3connCompl}]
+\begin{prop*}[\ref{3connCompl}]
+    Soit $G$ un graphe de carte $3$-connexe. Il existe un graphe $G'$ sur les sommets $V \sqcup \{\infty\}$ (où $\infty$ est un sommet non
+    présent dans $V$) admettant une carte complète, et tel que $G'[V] = G$
+\end{prop*}
+
+\begin{proof}
     On se donne un témoin $H$ de $G$ et on note $U$ l'ensemble des sommets autres que $V$ de $H$. On peut supposer que $H$
     est construit de telle sorte à ce que $d(u) \geq 2$ pour $u \in U$. Soit $u \in U$, $x, y \in V$ parmi ses voisins.
     Si $x$ et $y$ sont adjacents à la même face de $H$, alors on ajoute une arrête entre $x$ et $y$ à l'intérieur de cette face,
@@ -940,14 +999,13 @@ Les preuves de certains énoncés admis.
     même face. On a alors qu'après le retrait de $u$, par construction encore de $U'$, les $v_i$ sont tous accessibles
     entre eux. On peut alors voir que cela implique que le graphe reste connexe et est un témoin de $G$
     \\~\\
-    On construit alors un surgraphe de $H'$ que l'on va plonger dans le plan. On construit le
+    On construit alors un surgraphe de $H'$ que l'on va plonger dans le plan afin d'obtenir une carte . On construit le
     surgraphe $H''$ en itérant sur tout sommet $v \in V$, et en ajoutant une arrête entre chaque paire $u_1, u_2$
     voisine de $v$ adjacente à une même face, arrête prenant la forme d'un chemin dans cette face. Si $v$ est
     un sommet extérieur dans $H'$, et que l'on considère $2$ de ses voisins dans $H'$ eux aussi extérieurs,
     alors on choisira le chemin de telle sorte à ce que $v$ devienne intérieur dans $H''$.
-    Ainsi tout les élements de $U'$ deviennent de degré au moins $3$. $G$ étant $3$-connexe, on peut alors voir que $H''$
-    le devient également (on ne peut plus isoler de sommet de $U'$). $H''$ est également planaire et par construction,
-    tout les sommets $v \in V$ sont intérieurs.
+    On peut alors montrer par des arguments similaires à ceux utilisés précédemment que ce graphe est $3$-connexe.
+    $H''$ est également planaire et par construction, tout les sommets $v \in V$ sont intérieurs.
     \\~\\
     On construit à présent la carte : pour $v \in V$, la région associée à $v$ est l'adhérence de la face dans laquelle se trouve
     le point $v$ dans $H'' - v$. Cette face est bien homéomorphe à un disque, comme $H'' - v$ est $2$-connexe et qu'alors
@@ -959,6 +1017,31 @@ Les preuves de certains énoncés admis.
     de la région associée au sommet $v$ est le cycle formé des voisins de $v$ dans $H''$. Si $uv \in E$, $u$ et $v$ partagent un voisin
     dans $H''$ et donc les régions se rencontrent. Si les régions se rencontrent, $H''$ étant planaire, les cycles ne peuvent se rencontrer
     que s'ils partagent des sommets, donc $uv \in E$.
+\end{proof}
+
+\begin{lem*}[\ref{cordsepintercliquemax}]
+    Soit $G$ un graphe cordal connexe, $S$ un séparateur minimal de ce dernier, et $C_1, ..., C_l$ les composantes de $G - S$. Pour tout
+    $i$, il existe $v_i \in C_i$ tel que $S \subset N(v_i)$
+\end{lem*}
+
+\begin{proof}
+    Notons que, $G$ étant cordal, $S$ est une clique. On se fixe un $1 \leq i \leq l$.
+    Notons $k = |S|$. On va montrer par récurrence sur $1 \leq j \leq k$ que pour tout $B \subset S, |B| = j$,
+    il existe $v \in C_i$ tel que $B \subset N(v)$.
+    \\~\\
+    Le cas $j = 1$ est donné par la minimalité de $S$ : en effet si il existait un sommet de $S$ complètement isolé de $C_i$, retirer
+    ce dernier de $S$ redonnerait un séparateur.\\
+    Soit $2 \leq j \leq k$ et supposons la propriété vraie pour $j-1$. On écrit $S = \{s_1, ..., s_k\}$. Supposons par l'absurde la propriété
+    fausse pour $j$. On suppose la numérotation des sommets faite de telle sorte à ce que le sous ensemble $B$ interdit soit
+    $\{s_1, ..., s_j\}$. Il existe par hypothèse $v \in C_i$ tel que $s_1, ..., s_{j-1}$ soient tous voisins de $v$, et $u \in C_i$ tel que
+    $s_2, ..., s_j$ soient voisins de $u$. $C_i$ étant connexe on a un chemin de $u$ à $v$. Ce chemin, concaténé aux arrêtes $vs_1, s_1 s_j, s_j u$
+    donne un cycle de longueur au moins $4$. On choisit alors $u$ et $v$ et le chemin de manière à minimiser la longueur de ce cycle.
+    Ce cycle possède alors des cordes, mais la minimalité impose que ces dernières ne soient pas entre des sommets du chemin de $u$ à $v$,
+    sinon on pourrait le racourcir, ni entre $s_1$ ou $s_j$ et un sommet intermédiaire du chemin de $u$ à $v$. Les seules cordes envisageables
+    sont alors $s_1u$ ou $s_jv$. Supposons sans perte de généralité qu'on se trouve dans le premier cas. Alors $u$ a parmi ses voisins
+    $s_1, ..., s_j$, absurde. Donc la propriété est également vraie pour $j$.
+    \\~\\
+    Au total, on a bien la propriété vraie au rang $k$, c'est à dire qu'il existe $v_i \in C_i$ tel que $S \subset N(v_i)$
 \end{proof}
 
 \end{flushleft}
