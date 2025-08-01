@@ -65,16 +65,17 @@ On commence par définir plus formellement ce que l'on entend lorsque l'on parle
 \begin{def*}[Carte]
     Une carte est une fonction $f : V \rightarrow \mathcal{P}(\mathbb{S}^2)$ telle que pour tout $v \in V$, $f(v)$
     est homéomorphe à $\mathbb{D}^2$ et telle que pour $v \neq u$, $f(u)$ et $f(v)$ sont d'intérieur disjoints. Si
-    $f$ forme un recouvrement de $\mathbb{S}^2$, on la dira sans trou, ou complète. On appelera les $f(v)$ régions
+    $f$ forme un recouvrement de $\mathbb{S}^2$, on la dira sans trou, ou complète. On appelera régions les images
+    de $f$.
 \end{def*}
 
 \begin{def*}[Graphe de carte \cite{IntroMap}]
     Un graphe $G = (V, E)$ est de carte s'il existe une carte $f$ sur $V$ telle que $xy \in E$ si et seulement si
-    $f(x) \cap f(y) \neq \varnothing$
+    $f(x) \cap f(y) \neq \varnothing$.
 \end{def*}
 
 \begin{figure}[h]
-    \caption{Un graphe, une carte, et un témoin associés à ce dernier}
+    \caption{Un graphe, une carte, et un témoin associés à ce dernier.}
 
     \begin{center}
     \begin{tikzpicture}[auto]
@@ -104,11 +105,12 @@ On commence par définir plus formellement ce que l'on entend lorsque l'on parle
 \end{figure}
 
 La caractérisation suivante permet d'envisager les graphes de carte de manière bien plus combinatoire que la définition précédente.
-Si $G$ est un graphe et $S \subset V$, $G[S]$ désigne le sous graphe induit de $G$ par $S$.
+Si $G$ est un graphe et $S \subset V$, $G[S]$ désigne le sous graphe induit de $G$ par $S$. $G^2$ désigne le graphe sur le même
+ensemble de sommets, où $xy$ est une arrête si et seulement si il existe un chemin de longueur $2$ de $x$ à $y$.
 
 \begin{theorem}[Témoins des graphes de carte \cite{IntroMap}]\label{carCarte}
     Un graphe $G = (V, E)$ est de carte si et seulement si il existe $H$ un graphe biparti planaire, de bipartition $V, U$,
-    tel que $H^2[V] = G$. Un tel graphe $H$ est appelé graphe témoin de $G$
+    tel que $H^2[V] = G$. Un tel graphe $H$ est appelé graphe témoin de $G$.
 \end{theorem}
 
 Le témoin est construit depuis une carte comme suit : les sommets de $V$ sont placés à l'intérieur de leur région respective.
@@ -118,11 +120,11 @@ dans les régions respectives.\\
 La proposition suivante montre une certaine stabilité de la classe des graphes de carte.
 
 \begin{prop}
-    Si $G$ est un graphe de carte, et $H = G[A]$ où $A \subset V$, alors $H$ est un graphe de carte
+    Si $G$ est un graphe de carte, et $H = G[A]$ où $A \subset V$, alors $H$ est un graphe de carte.
 \end{prop}
 
 \begin{proof}
-    On reprend la carte de $G$ où l'on ne garde que les régions identifées aux sommets présents dans $A$
+    On considère la restriction de la carte de $G$ à $A$.
 \end{proof}
 
 Toutefois, comme on le verra plus tard, les graphes de carte ne sont ni stables par retrait d'arrêtes, ni par contraction d'arrêtes.
@@ -134,23 +136,26 @@ On introduit ensuite quelques concepts communs et notations utiles pour la suite
     \[ E'' = E \cup E' \cup \{ xx' \mid x \in V, x \in V' \} \]
     On notera pour tout $n \geq 1$ $K(n, G)$ le join d'un indépendant à $n$ sommets avec le graphe $G$. Plus généralement,
     le join des graphes $G$ et $G'$ sera noté $K(G, G')$. Cette opération étant associative, on se permettra
-    d'écrire $K(G, H, L)$ pour désigner le join successif de $G$ à $H$ puis à $L$
+    d'écrire $K(G, H, L)$ pour désigner le join successif de $G$ à $H$ puis à $L$.
 \end{def*}
+
+Si un graphe $G$ est de la forme $K(K_n, H)$, les sommets de $K_n$ seront dits universels. Plus généralement, un sommet universel
+est un sommet adjacent à tout les sommets du graphe.
 
 \begin{def*}[Cliques indépendantes]
     Pour tout $k \geq 1$, $n_1, ..., n_k \geq 1$, on dénotera par $I_{n_1, ..., n_k}$ le graphe complémentaire de $K_{n_1, ..., n_k}$.
     Ainsi $I_n$ est l'indépendant à $n$ sommets pour $n$ un entier, et $I_{n_1, ..., n_k}$ pour $k \geq 2$ est composé de $k$
-    composantes connexes, qui sont toutes des cliques de tailles $n_1, ..., n_k$
+    composantes connexes, qui sont toutes des cliques de tailles $n_1, ..., n_k$.
 \end{def*}
 
 \begin{def*}[Union disjointe]
-    L'union disjointe de deux graphes $G = (V, E)$ et $G' = (V', E')$ est le graphe ayant pour sommets $V \cup V'$ et pour arrêtes
+    L'union disjointe de deux graphes $G = (V, E)$ et $G' = (V', E')$ est le graphe ayant pour sommets $V \sqcup V'$ et pour arrêtes
     $E \cup E'$. On notera cette dernière $I(G, G')$. Cette opération étant également associative, on se permettre de reprendre la
     convention du join.\\
     On notera pour tout $n \geq 1$, $I(n, G)$ l'union disjointe d'une clique à $n$ sommets et du graphe $G$.
 \end{def*}
 
-Enfin on introduit le concept d'adjacence réelle pour les témoins, permettant de simplifier les preuves et les notations
+Enfin on introduit le concept d'adjacence réelle pour les témoins, permettant de simplifier les preuves et les notations.
 
 \begin{def*}[Adjacence réelle]
     Pour $H = (V \cup U, E')$ un témoin de $G$, on définit l'adjacence réelle, $RA(x)$ d'un sommet $x \in V \cup U$ comme suit :
@@ -158,7 +163,8 @@ Enfin on introduit le concept d'adjacence réelle pour les témoins, permettant 
         \item Si $x \in V$, $RA(x) = \{x\}$
         \item Si $x \in U$, $RA(x) = N(x)$
     \end{itemize}
-    On peut alors définir l'adjacence réelle $RA(S)$ d'un sous ensemble $S \subset V \cup U$ en faisant l'union sommet par sommet.
+    On définit alors l'adjacence réelle d'un sous ensemble $S \subset V \cup U$ par
+    \[ RA(S) = \bigcup_{x \in S} RA(x) \]
 \end{def*}
 
 \subsection{Premières obstructions à l'existence de cartes}
@@ -167,7 +173,7 @@ Comme beaucoup de problèmes concernant des représentations de graphes, il est 
 carte que de montrer qu'il ne peut en admettre. On peut bien sûr trouver des graphes n'admettant pas de carte en exploitant
 le fait que le nombre de cliques maximales dans un graphe de carte est linéaire en le nombre de sommets. Les graphes bipartis
 complets ne sont donc plus de carte à partir d'un certain rang, tout comme les graphes $K_{r,...,r}$. Le rang trouvé est toutefois
-élevé. On trouve ici des graphes contre exemple relativement simples.
+élevé. On trouve ici des graphes contre exemples relativement simples.
 
 \begin{lem}\label{CNSK33}
     Un graphe $G$ a pour mineur $K_{3,3}$ si et seulement si il existe $6$ sommets, $s_1, s_2, s_3, t_1, t_2, t_3$ et des chemins
@@ -179,17 +185,19 @@ complets ne sont donc plus de carte à partir d'un certain rang, tout comme les 
     \end{itemize}
 \end{lem}
 
+Rappelons que la stabilité par mineur des graphes planaires implique qu'un graphe possédant un mineur $K_{3,3}$ n'est pas planaire.
+
 \begin{prop}\label{K3G}
-    Soit $G$ un graphe à $3$ sommets. $K(3, G)$ n'est pas un graphe de carte
+    Soit $G$ un graphe à $3$ sommets. $K(3, G)$ n'est pas un graphe de carte.
 \end{prop}
 
 \begin{proof}
     Supposons par l'absurde que $K(3, G)$ est un graphe de carte. On se donne alors $H$ vérifiant toutes les propriétés
-    du théorème \ref{carCarte}. On note pour tout $v_i$, sommet indépendant de $K(3, G)$, $N_i$ son voisinage dans $H$
-    incluant $v_i$. Notons que pour $i \neq j$, $N_i$ et $N_j$ sont disjoints comme $v_i$ et $v_j$ sont indépendants.
-    Comme les chemins de $v_i$ aux sommets de $G$ n'empruntent que des sommets de $N_i$, mis à part le sommet de $G$,
-    les hypothèses du lemme \ref{CNSK33} sont vérifiées. $H$ a donc pour mineur $K_{3,3}$, absurde par planarité.
-    $K(3, G)$ n'est donc pas un graphe de carte.
+    du Théorème \ref{carCarte}, et étant donc planaire. On note pour tout $v_i$, sommet indépendant de $K(3, G)$,
+    $N_i$ son voisinage dans $H$ incluant $v_i$. Notons que pour $i \neq j$, $N_i$ et $N_j$ sont disjoints comme
+    $v_i$ et $v_j$ sont indépendants. Comme les chemins de $v_i$ aux sommets de $G$ n'empruntent que des sommets de
+    $N_i$, mis à part le sommet de $G$, les hypothèses du Lemme \ref{CNSK33} sont vérifiées. $H$ a donc pour mineur $K_{3,3}$,
+    absurde par planarité. $K(3, G)$ n'est donc pas un graphe de carte.
 \end{proof}
 
 Notons toutefois que $K(2, G)$ lui est un graphe de carte, et que le join de $2$ graphes à $3$ sommets tous deux non indépendants
@@ -198,7 +206,7 @@ en effet $K_6$ est de carte mais $K_{3,3}$ ne l'est pas. On peut également en d
 par contraction d'arrêtes, le graphe Figure \ref{nonstabcontrarr} en est un contre exemple.
 
 \begin{figure}[h]
-    \caption{Un graphe de carte dont la contraction de $xy$ le transforme en un $K(3, G)$}\label{nonstabcontrarr}
+    \caption{Un graphe de carte dont la contraction de $xy$ le transforme en un $K(3, G)$.}\label{nonstabcontrarr}
     \vspace*{0.5cm}
     \begin{center}
         \begin{tikzpicture}[auto]
@@ -229,11 +237,11 @@ Il est également possible de trouver des graphes n'étant pas de carte et n'aya
 propositions suivantes.
 
 \begin{prop}\label{K222K5}
-    $K(2,2,2,K_5)$ n'est pas un graphe de carte
+    $K(2,2,2,K_5)$ n'est pas un graphe de carte.
 \end{prop}
 
 \begin{figure}[h]
-    \caption{Des témoins de $K_{2,2,2,2}$}\label{witnK2222}
+    \caption{Des témoins de $K_{2,2,2,2}$.}\label{witnK2222}
     \begin{center}
         \includegraphics[page=\ipeFigfirsttemoinquatriparti, scale = 0.5]{figs}
         \hspace*{2cm}
@@ -242,7 +250,7 @@ propositions suivantes.
 \end{figure}
 
 \begin{lem}\label{formeK2222}
-    $K_{2,2,2,2}$ est de carte et tout témoin de ce dernier a pour sous graphe induit un des graphes Figure \ref{witnK2222}
+    $K_{2,2,2,2}$ est de carte et tout témoin de ce dernier a pour sous graphe induit un des graphes Figure \ref{witnK2222}.
 \end{lem}
 
 \begin{prop}\label{K22221}
@@ -250,28 +258,34 @@ propositions suivantes.
 \end{prop}
 
 \begin{proof}
-    Si un témoin d'un de ces deux graphes existe, il est construit depuis un des deux témoins du Lemme \ref{formeK2222} par ajout
-    d'un ou plusieurs sommets.\\
+    Si un témoin d'un de ces deux graphes existe, il a pour sous graphe induit un des deux témoins du Lemme \ref{formeK2222} :
+    en effet, en retirant les sommets supplémentaires de $K_{2,2,2,2,1}$ ou $K(2,2,2,I_{2,1})$, on obtient un témoin de
+    $K_{2,2,2,2}$. Ainsi un témoin d'un de ces deux graphes est construit depuis ceux du Lemme \ref{formeK2222} par ajouts
+    de sommets et d'arrêtes ayant à l'une de ses extrémités un de ces sommets ajoutés.\\
     Dans le cas $K_{2,2,2,2,1}$, le sommet ajouté doit être universel. Or aucune face des témoins n'a pour adjacence réelle
     l'intégralité des sommets de $V$, donc le graphe ne peut être de carte.\\
-    Dans le cas $K(2,2,2,I_{2,1})$, le sommet ajouté doit être adjacent à tout les sommets sauf $1$. Là encore c'est impossible, et le
+    Dans le cas $K(2,2,2,I_{2,1})$, le sommet ajouté doit être adjacent à tout les sommets sauf un. Là encore c'est impossible, et le
     graphe n'est donc pas de carte.
 \end{proof}
 
 
 \subsection{Cartes et connexités}\label{cartesetconnex}
 
-La propriété pour un graphe d'admettre une carte a des interactions avec la connexité de ce dernier, et à quel point cette connexité
+La propriété "de carte" d'un graphe a des interactions avec la connexité de ce dernier, et à quel point cette connexité
 est forte. Par exemple, un graphe est de carte si et seulement si chacune de ses composantes connexes l'est, ce qui peut se montrer
 facilement à l'aide d'un témoin. Dans toute la suite, on considèrera alors que tout les graphes que l'on cherche à étudier sont connexes.
 \\~\\
+Un séparateur d'un graphe connexe est un ensemble de sommets tel que leur retrait sépare le graphe en plusieurs composantes connexes.
+Un graphe sera dit $k$-connexe, $k \geq 2$ si tout les séparateurs ont au moins $k$ sommets. On manipulera par la suite
+les composantes $2$-connexes d'un graphe, c'est à dire l'ensemble des sous graphes induits $2$-connexes maximaux. Ces derniers
+sont uniques.\\
 Les graphes admettant une carte complète ont des propriétés de connexité particulière : on peut en effet montrer par des arguments
 topologiques (en exploitant le fait que chaque région est homéomorphe à un disque) qu'un graphe admettant une telle carte
-est nécesairement $2$-connexe. Ceci couplé à la proposition suivante permet de dire que l'on peut accéder à toutes les propriétés
-intéressantes des cartes en ne regardant que celles $2$-connexes
+est nécessairement $2$-connexe. Ceci couplé à la proposition suivante permet de dire que l'on peut accéder à toutes les propriétés
+intéressantes des graphes de carte en ne s'intéressant qu'à ceux $2$-connexes.
 
 \begin{prop}\label{suffbiconn}\cite{FptMap}
-    Un graphe $G$ est de carte si et seulement si toutes ses composantes $2$-connexes le sont
+    Un graphe $G$ est de carte si et seulement si toutes ses composantes $2$-connexes le sont.
 \end{prop}
 
 On peut par exemple en déduire qu'un block graph, c'est à dire un graphe dont les composantes $2$-connexes sont des cliques,
@@ -281,8 +295,8 @@ peut ne pas être de carte. Le graphe donné par un $K_{3,3}$ auquel on ajoute u
 et n'est pas de carte.
 \\~\\
 La $3$-connexité jouant un rôle important dans la suite, on se propose de voir comment on peut se ramener à l'étude des
-graphes $3$-connexes à partir d'un graphe $2$-connexe \cite{3connComp}.\\
-Si $\{x,y\} \subset V$ est un séparateur d'un graphe $G$ $2$-connexe, on note $C_1, ..., C_k$ les composantes connexes de
+graphes $3$-connexes à partir d'un graphe $2$-connexe. On suit ici partiellement les idées développées en \cite{3connComp}.\\
+Si $\{x,y\} \subset V$ est un séparateur d'un graphe $2$-connexe $G$, on note $C_1, ..., C_k$ les composantes connexes de
 $G - \{x,y\}$. Pour tout $i$, on note $G_i$ le graphe induit par $C_i \cup \{x,y\}$ auquel on a rajouté l'arrête $xy$.
 $G_i$ est $2$-connexe. Si $G_i$ n'est pas $3$-connexe, il existe alors séparateur de taille $2$ et on peut ainsi recommencer
 ce processus. En répétant ce processus, on finit par obtenir un ensemble de graphes $3$-connexes. La donnée de ces graphes finaux
@@ -290,17 +304,17 @@ ainsi que celle des $2$-séparateurs permettant de les obtenir sera appelée une
 Les graphes $3$-connexes finaux seront appelés des composantes $3$-connexes de $G$ associés à cette décomposition.
 
 \begin{prop}\label{3connCompCarte}
-    Soit $G$ un graphe de carte $2$-connexe. Pour toute décomposition $3$-connexe de $G$, ses composantes sont des graphes de carte
+    Soit $G$ un graphe de carte $2$-connexe. Pour toute décomposition $3$-connexe de $G$, ses composantes sont des graphes de carte.
 \end{prop}
 
 \begin{proof}
     On montre uniquement que, étant donné un séparateur $\{x,y\}$ de $G$, tout les $G_i$ associés sont des graphes de carte.
     Si $xy$ est une arrête de $G$, alors chaque $G_i$ est un sous graphe induit de $G$ et on a ce qu'on veut. Sinon, on construit une
-    carte à $G_i$ à partir de celle de $G$ : comme $\{x,y\}$ est un séparateur, il existe au moins une autre composante connexe de
+    carte de $G_i$ à partir de celle de $G$ : comme $\{x,y\}$ est un séparateur, il existe au moins une autre composante connexe de
     $G - \{x,y\}$, que l'on note $C_j$, $j \neq i$. $x$ et $y$ étant reliés à $C_j$, il existe un chemin de $x$ à $y$ dans $C_j$.
     On se donne un témoin $H$ associé à $G$. L'existence de ce chemin dans $G$ donne un chemin dans $H$ de $x$ à $y$, jamais voisin
     d'un sommet de $C_i$ sauf en $x$ et $y$. En considérant le sous graphe de $H$ obtenu en ne considérant que le voisinage de $C_i$ et le chemin
-    de $x$ à $y$ évoqué, on peut en contractant des arrêtes du chemin obtenir un témoin de $G_i$
+    de $x$ à $y$ évoqué, on peut en contractant des arrêtes du chemin obtenir un témoin de $G_i$.
 \end{proof}
 
 \section{Reconaissance de sous classes}
@@ -311,16 +325,15 @@ particuliers.
 \subsection{Cas des graphes trivialement parfaits}
 
 Un graphe $G$ sera dit trivialement parfait s'il ne contient pas les graphes $P_4$ et $C_4$ en sous graphe induit.
-Il est équivalent de les définir comme des graphes d'intervalles particuliers. Un graphe trivialement parfait est le graphe
+Il est équivalent de définir cette classe comme une certaine sous classe des graphes d'intervalles. Un graphe trivialement parfait est le graphe
 d'intersection d'un ensemble d'intervalles "emboîtés" : si $I$ et $J$ sont deux intervalles représentant des sommets de $G$,
-si $I \cap J \neq \varnothing$, alors $I \subset J$ ou inversement. Un exemple d'une telle représentation est donné figure
-\ref{extrivperf}\\
+si $I \cap J \neq \varnothing$, alors $I \subset J$ ou inversement. Un exemple d'une telle représentation est donné Figure
+\ref{extrivperf}.\\
 Cette définition par les intervalles permet de voir facilement que l'unique séparateur minimal d'un graphe trivialement parfait $G$ est
-composé de l'ensemble des sommets universels de $G$ (un sommet universel étant un sommet adjacent à tout les sommets du graphe). Ainsi
-$G$ est $3$-connexe si et seulement si il possède au moins $3$ sommets universels.
+composé de l'ensemble des sommets universels de $G$. Ainsi $G$ est $3$-connexe si et seulement si il possède au moins $3$ sommets universels.
 
 \begin{figure}[h]
-    \caption{Un graphe trivialement parfait et sa représentation par des intervalles emboîtés}\label{extrivperf}
+    \caption{Un graphe trivialement parfait et sa représentation par des intervalles emboîtés.}\label{extrivperf}
     \begin{center}
         \begin{tikzpicture}[auto]
         \begin{scope}[every node/.style={circle, draw}]
@@ -349,36 +362,36 @@ $G$ est $3$-connexe si et seulement si il possède au moins $3$ sommets universe
 
 \subsubsection{Cas $3$-connexe}
 
-On se fixe pour la suite un graphe $G$ trivialement parfait $3$-connexe
+On se fixe pour la suite un graphe $G$ trivialement parfait $3$-connexe.
 
 \begin{lem}\label{trivPerfind}
-    Si $G$ a $3$ sommets indépendants, il n'est pas de carte
+    Si $G$ a $3$ sommets indépendants, il n'est pas de carte.
 \end{lem}
 
 \begin{proof}
-    Un tel graphe contient $K(3, K_3)$ parmi ses sous graphes induits, par les remarques précédentes
+    Un tel graphe contient $K(3, K_3)$ parmi ses sous graphes induits, par les remarques précédentes.
 \end{proof}
 
 Supposons que $G$ ne soit pas une clique.
 On peut déduire de ce lemme que le séparateur minimal de $G$ le sépare en $2$ composantes connexes. Notons que ce séparateur est une
-clique de taille au moins $3$. Notons $C_1$ et $C_2$ les $2$ composantes connexes séparées par ce séparateur. Le lemme
+clique de taille au moins $3$. Notons $C_1$ et $C_2$ les $2$ composantes connexes séparées par ce séparateur. Le Lemme
 \ref{trivPerfind} permet également de déduire que $C_1$ et $C_2$ sont des cliques : en effet si $C_1$ n'est pas une clique,
 il contient $2$ sommets indépendants. On a donc un indépendant de taille $3$ constitué de ces $2$ sommets et d'un sommet de $C_2$.
 On en déduit le lemme suivant :
 
 \begin{lem}\label{trivPar3conn}
     $G$ est de carte si et seulement c'est une clique ou un $K(K_n, I_{p,q})$ avec $n \geq 3$. De plus, la carte
-    donnée est complète
+    donnée est complète.
 \end{lem}
 
 \begin{proof}
     Le sens direct a déjà été traité précedemment.\\
     Pour le sens réciproque, toute clique admettant une carte complète, on se concentre sur le second cas. On construit
-    alors une carte complète pour $K(K_n, I_{p,q})$ comme illustré figure \ref{KKnIpqmap}
+    alors une carte complète pour $K(K_n, I_{p,q})$ comme illustré figure \ref{KKnIpqmap}.
 \end{proof}
 
 \begin{figure}[h]
-    \caption{Carte complète pour $K(K_n, I_{p,q})$}\label{KKnIpqmap}
+    \caption{Carte complète pour $K(K_n, I_{p,q})$.}\label{KKnIpqmap}
     \begin{center}
         Le séparateur en "donut" représente la clique $K_n$\\
         \includegraphics[page=\ipeFigKKnIpqcompl, scale = 0.4]{figs}
@@ -396,12 +409,12 @@ de décomposition.
 
 \begin{theorem}\label{maptrivperf}
     Un graphe $G$ trivialement parfait $2$-connexe est de carte si et seulement si chacune de ses composantes $3$-connexe est de carte.
-    De plus la carte de $G$ construite est complète.
+    De plus la carte de $G$ que l'on construit est complète.
 \end{theorem}
 
 \begin{proof}
     Si $G$ est de carte, toutes ses composantes $3$-connexes sont de carte par la proposition \ref{3connCompCarte}\\
-    Pour le sens réciproque, le lemme \ref{trivPar3conn}, nous donne la forme des composantes $3$-connexes de $G$.
+    Pour le sens réciproque, le Lemme \ref{trivPar3conn}, nous donne la forme des composantes $3$-connexes de $G$.
     Notons $C_1, ..., C_k$ les composantes $3$-connexes de $G$. On construit alors une carte comme suit :
     on place $2$ régions associées aux $2$ universels, $u$ et $v$, de $G$, que l'on fait se rencontrer en $k+1$ chemins disjoints.
     Ainsi après retrait de ces $2$ régions, la sphère est séparée en $k$ composantes connexes.\\
@@ -413,7 +426,7 @@ de décomposition.
 \end{proof}
 
 \begin{figure}[h]
-    \caption{Illustration de la construction du théorème \ref{maptrivperf}}
+    \caption{Illustration de la construction du Théorème \ref{maptrivperf}}
     \begin{center}
         Dans le "trou" de gauche, on a représenté un $K(K_n, I_{p,q})$, alors que dans le "trou" extérieur et de droite,
         on a représenté des cliques
@@ -424,7 +437,7 @@ de décomposition.
 
 Notons alors que les graphes trivialement parfaits de carte sont exactement les graphes ne possédant pas $C_4, P_4, K(3, K_3)$ parmi
 leur sous graphes induits : en effet, un graphe trivialement parfait de carte vérifie cette condition, et réciproquement, un graphe
-n'ayant pas ces $3$ sous graphes induits sera de carte car tout le raisonnement est basé sur le seul lemme \ref{trivPerfind}
+n'ayant pas ces $3$ sous graphes induits sera de carte car tout le raisonnement est basé sur le seul Lemme \ref{trivPerfind}.
 \\~\\
 (A rediscuter avec la possibilité de juste passer en force par les sous graphes interdits)
 On en déduit alors un algorithme en temps polynômial décidant si un graphe $G$ trivialement parfait est de carte : on commence
@@ -454,7 +467,7 @@ son coarbre. On remarquera que les opérations de join et union disjointe étant
 $2$ enfants. 
 
 \begin{figure}[h]
-    \caption{Le graphe $K(2,I(1,K_{2,2}))$ et son coarbre}\label{excographe}
+    \caption{Le graphe $K(2,I(1,K_{2,2}))$ et son coarbre.}\label{excographe}
     \vspace*{0.5cm}
     \begin{center}
         \begin{tikzpicture}[auto]
@@ -502,18 +515,18 @@ $2$ enfants.
 \subsubsection{Connexités et coarbres}
 
 On discutera ici de comment se manifeste les différentes propriétés de connexité des cographes au niveau de leur coarbre associé. Le lemme
-suivant caractérise la connexité par la racine de du coarbre
+suivant caractérise la connexité par la racine de du coarbre.
 
 \begin{lem}
-    Un cographe $G$ est connexe si et seulement si son coarbre $T$ a pour racine un noeud $1$
+    Un cographe $G$ est connexe si et seulement si son coarbre $T$ a pour racine un noeud $1$.
 \end{lem}
 
-Dont on peut déduire la proposition suivante
+Dont on peut déduire la proposition suivante :
 
 \begin{prop}\label{sepcographe}
     Soit $G$ un cographe connexe et $T$ son coarbre. Notons $T_1, ..., T_k$ les sous arbres de $T$ enracinés en les enfants de la racine de $T$.
     Les séparateurs minimaux de $G$ sont exactement les $\displaystyle \bigcup_{i \neq j} V(T_i)$ où $j$ parcourt l'ensemble des indices de $1, ..., k$
-    tels que $T_i$ ne soit pas une feuille
+    tels que $T_j$ ne soit pas une feuille.
 \end{prop}
 
 \begin{proof}
@@ -524,16 +537,16 @@ Dont on peut déduire la proposition suivante
     Soit $S$ un séparateur. Soient $s, t$ deux sommets séparés par $S$. Le plus petit ancêtre commun de $s$ et $t$ dans $T$
     est donc un noeud $0$. $T$ étant le coarbre de $G$, connexe, $0$ a pour parent un noeud $1$. Tout $r$ descendant de ce noeud, n'étant pas dans le
     sous arbre contenant $s$ et $t$ fournit un chemin de longueur $3$ de $s$ à $t$. En particulier, en notant $j$ l'indice du sous arbre de la racine
-    contenant $s$ et $t$, $T_j$ n'est pas une feuille et $S$ contient alors $V(T_i)$ pour tout $i \neq j$. Donc $S_j \subset S$. On montre
-    alors que les $S_j$ sont des séparateurs minimaux, et que ce sont les seuls
+    contenant $s$ et $t$, $T_j$ n'est pas une feuille et $S$ contient alors $V(T_i)$ pour tout $i \neq j$. Donc $S_j \subset S$. On a
+    alors montré que les $S_j$ sont des séparateurs minimaux, et que ce sont les seuls.
 \end{proof}
 
 \begin{cor}\label{coarbrekconn}
-    Un cographe $G$ est $k$-connexe si et seulement si pour tout $j$ tel que $T_j$ n'est pas une feuille, $\sum_{i \neq j} |V(T_i)| \geq k$
+    Un cographe $G$ est $k$-connexe si et seulement si pour tout $j$ tel que $T_j$ n'est pas une feuille, $\sum_{i \neq j} |V(T_i)| \geq k$.
 \end{cor}
 
 On mènera alors une étude similaire aux graphes trivialement parfaits, en se concentrant d'abord sur les cographes à forte connexité pour ensuite
-généraliser les résultats
+généraliser les résultats.
 
 \subsubsection{Structure des cographes de carte}
 
@@ -552,7 +565,7 @@ des Propositions \ref{K3G}, \ref{K222K5}, \ref{K22221}.
 \end{theorem}
 
 \begin{proof}
-    Supposons $G$ de carte. Notons $T$ son coarbre. On va contraindre de $T$ pour ensuite aboutir aux $5$ formes de l'énoncé.\\
+    Supposons $G$ de carte. Notons $T$ son coarbre. On va contraindre $T$ pour ensuite aboutir aux $5$ formes de l'énoncé.\\
     Notons d'abord que tout noeud $0$ a exactement $2$ fils : si l'un d'entre eux en avait
     plus de $3$, on aurait alors $3$ sommets indépendants. $G$ étant $3$-connexe, le Corollaire \ref{coarbrekconn} donne $3$ sommets
     ayant pour plus petit ancêtre commun avec le noeud $0$ a $3$ fils la racine de $T$. On a ainsi construit un sous graphe induit
@@ -587,7 +600,7 @@ des Propositions \ref{K3G}, \ref{K222K5}, \ref{K22221}.
 \end{proof}
 
 \begin{figure}[h]
-    \caption{Une carte du graphe $K(I_{p,q}, I_{r,s}, I_{t,u}, K_4)$}\label{IpqIrsItuMap}
+    \caption{Une carte du graphe $K(I_{p,q}, I_{r,s}, I_{t,u}, K_4)$.}\label{IpqIrsItuMap}
     \begin{center}
         Chaque couleur représente une paire de clique indépendantes distincte. Les régions grises représentent la clique $K_4$
         \\~\\
@@ -607,7 +620,7 @@ obstructions au fait d'être de carte ne sont pas toutes dues à la forme des co
 mais également à la manière d'assembler ces composantes, comme l'illustre le lemme suivant.
 
 \begin{lem}\label{2connstrictForbid}
-    Les graphe $K(2, I(1, K_{2,2}))$ et $K(K_2, I(1, K_{2,2,2}))$ ne sont pas de carte
+    Les graphe $K(2, I(1, K_{2,2}))$ et $K(K_2, I(1, K_{2,2,2}))$ ne sont pas de carte.
 \end{lem}
 
 On remarque que, par la forme des séparateurs minimaux donnée par la proposition \ref{sepcographe}, le seul cographe $2$-connexe n'ayant
@@ -629,7 +642,7 @@ les $G_i$ associés à l'unique séparateur à $2$ sommets.
 \\~\\
 Soit $G_i$ une composante $3$-connexe de $G$. Soit $T_i$ le coarbre de la composante connexe $C_i$ de $G - \{x,y\}$.
 Notons que le coarbre de $G_i$ est obtenu depuis $T_i$ par ajout des sommets $x$ et $y$ comme fils de la racine. Ainsi, le nombre de fils
-$0$ de la racine de $T_i$ coincide avec le type de $G_i$. On déduit de toute ces remarques le résultat suivant :
+$0$ de la racine de $T_i$ coïncide avec le type de $G_i$. On déduit de toutes ces remarques le résultat suivant :
 
 \begin{theorem}\label{cographe2conn}
     Soit $G$ un cographe $2$-connexe à plus de $5$ sommets et $\{x,y\}$ un séparateur minimal de $G$. 
@@ -645,7 +658,7 @@ $0$ de la racine de $T_i$ coincide avec le type de $G_i$. On déduit de toute ce
     a pour sous arbre un arbre tel que décrit Figure \ref{3conntype3}. On peut alors trouver un sous graphe induit $K(K_2, I(1, K_{2,2,2}))$.\\
     Pour le sens réciproque, les remarques précédentes permettent de dire que les composantes $3$-connexes de $G$ sont exactement les $G_i$
     donnés par la paire $\{x,y\}$. Notons que comme $xy \in E$, les $G_i$ sont des sous graphes induits de $G$. On représente les régions $x$ et
-    $y$ comme décrit dans la démonstration du théorème \ref{maptrivperf}. On se fixe à présent un $G_i$ que l'on va représenter à l'intérieur de
+    $y$ comme décrit dans la démonstration du Théorème \ref{maptrivperf}. On se fixe à présent un $G_i$ que l'on va représenter à l'intérieur de
     l'un des trous laissés par les régions $x$ et $y$.\\
     Les composantes de type $0,1$ sont alors représentées comme sur la Figure \ref{maptrivperf} et celles de type $2$ comme sur la
     Figure \ref{cographemap} (a).
@@ -700,7 +713,7 @@ $0$ de la racine de $T_i$ coincide avec le type de $G_i$. On déduit de toute ce
 \end{proof}
 
 \begin{figure}[h]
-    \caption{Constructions des cartes du théorème \ref{cographe2conn}}\label{cographemap}
+    \caption{Constructions des cartes du Théorème \ref{cographe2conn}}\label{cographemap}
     \begin{center}
         A gauche la figure (a), à droite la (b)
         \\~\\
@@ -737,7 +750,7 @@ des cartes complètes, ces derniers étant en effet "presque" à carte complète
 On peut par exemple "compléter" la roue $W_n$ en ajoutant un autre sommet adjacent à tout les sommets du cycle.
 En conséquence de cette proposition, on s'intéressera plus particulièrement aux graphes de carte $3$-connexe admettant une carte complète.
 Une propriété sympathique de ces derniers est que les voisins de chaque sommet $v$ peuvent être organisés afin
-de former un cycle, et on a même plus précis si on regarde les cartes.
+de former un cycle, et on a même plus précis si on regarde les cartes comme le montre la proposition suivante :
 
 \begin{prop}[Cycle séparant]\label{cyclSep}
     Soit $G$ $3$-connexe admettant une carte complète. Soit $v \in V$. Il existe un témoin $H$ de $G$ et
@@ -750,9 +763,10 @@ de former un cycle, et on a même plus précis si on regarde les cartes.
 \end{prop}
 
 On admettra pour la démonstration les lemmes suivants :
+
 \begin{lem}[\cite{FptMap}]
-    Soit $G$ un graphe admettant une carte complète. Alors $G$ admet un témoin $H$ quadrangulé vérifiant que, pour toute paire
-    $u, u' \in U$ telle que $\deg(u) = 2$, on n'ait pas $N(u) \subset N(u')$.
+    Soit $G$ un graphe admettant une carte complète. Alors $G$ admet un témoin $H$ quadrangulé (chaque face est bordée par un cycle
+    de taille $4$) vérifiant que, pour toute paire $u, u' \in U$ telle que $\deg(u) = 2$, on n'ait pas $N(u) \subset N(u')$.
 \end{lem}
 
 \begin{lem}[\cite{face2conn}]
@@ -906,7 +920,7 @@ Les preuves de certains énoncés admis.
     Montrons à présent que $a_i$ a au moins $3$ voisins : si il n'en avait que $2$, ces voisins que l'on note
     $u$ et $u'$ ont respectivement pour voisins dans $H - S$ $v_1, v_3, v_5$ et $v_2, v_4, v_6$. On considère les sommets $v_1, v_2, v_3, a_i, v_5, v_6$
     et les chemins suivants : de $v_1$ et $v_3$ à $a_i$, on utilise $u$, de $v_2$ à $a_i$ on utilise $u'$, puis pour le reste on prend des sommets
-    intermédiaires quelconques. Ces derniers vérifient les hypothèses du lemme \ref{CNSK33} par indépendances et comme $u \neq u'$, absurde comme $H$
+    intermédiaires quelconques. Ces derniers vérifient les hypothèses du Lemme \ref{CNSK33} par indépendances et comme $u \neq u'$, absurde comme $H$
     est planaire, donc $a_i$ a bien au moins $3$ voisins. Cela permet alors d'affirmer que chaque face vérifiant les hypothèses précédentese
     ne peut pas accueillir plus d'un $a_i$ par planarité. Il y a donc $5$ faces vérifiant ces hypothèses.
     \\~\\
@@ -975,7 +989,7 @@ Les preuves de certains énoncés admis.
     et $a, b$ les deux sommets universels. On suppose par l'absurde le graphe de carte, on s'en donne un témoin $H$. On considère les sommets
     $x, v_1, v_2, a, v_3, v_4$ et les chemins suivants : de $v_1, v_2$ à $a, v_3, v_4$ on considère des chemins de longueur $2$, de
     $x$ à $a$ également, puis de $x$ à $v_3, v_4$, on utilise le sommet intermédiaire $b$. On peut là aussi montrer par des arguments
-    d'indépendance que les chemins vérifient les hypothèses du lemme \ref{CNSK33} et que donc $H$ n'est pas planaire, le graphe
+    d'indépendance que les chemins vérifient les hypothèses du Lemme \ref{CNSK33} et que donc $H$ n'est pas planaire, le graphe
     n'était donc pas de carte.
 \end{proof}
 
