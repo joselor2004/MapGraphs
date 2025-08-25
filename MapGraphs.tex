@@ -18,15 +18,23 @@
 
 \begin{document}
 
-\title{Stage Map Graphs}
+\title{Reconaissance et caractérisations partielles des graphes de carte}
 
 \author{José Lorgeré}
 
 \maketitle
+\thispagestyle{empty}
+
+\begin{center}
+    Stage réalisé au LIMOS, Clermont-Ferrand, encadré par Vincent Limouzy
+\end{center}
 
 \begin{flushleft}
 
 \tableofcontents
+
+\newpage
+\setcounter{page}{1} 
 
 \section*{Introduction}
 
@@ -140,7 +148,7 @@ On introduit ensuite quelques concepts communs et notations utiles pour la suite
 \end{def*}
 
 Si un graphe $G$ est de la forme $K(K_n, H)$, les sommets de $K_n$ seront dits universels. Plus généralement, un sommet universel
-est un sommet adjacent à tout les sommets du graphe.
+est un sommet adjacent à tous les sommets du graphe.
 
 \begin{def*}[Cliques indépendantes]
     Pour tout $k \geq 1$, $n_1, ..., n_k \geq 1$, on dénotera par $I_{n_1, ..., n_k}$ le graphe complémentaire de $K_{n_1, ..., n_k}$.
@@ -290,7 +298,7 @@ intéressantes des graphes de carte en ne s'intéressant qu'à ceux $2$-connexes
 
 On peut par exemple en déduire qu'un block graph, c'est à dire un graphe dont les composantes $2$-connexes sont des cliques,
 est alors toujours un graphe de carte, et admet une carte complète si et seulement si ce dernier est une clique\\
-On pourrait alors se demander, à la lumière des exemples de $K(3,G)$ et $K_{2,2,2,2}$ si un graphe n'étant pas $3$-connexe
+On pourrait alors se demander, à la lumière des exemples précédents si un graphe n'étant pas $3$-connexe
 peut ne pas être de carte. Le graphe donné par un $K_{3,3}$ auquel on ajoute un sommet de degré $2$ n'est pas $3$-connexe
 et n'est pas de carte.
 \\~\\
@@ -437,19 +445,28 @@ de décomposition.
 
 Notons alors que les graphes trivialement parfaits de carte sont exactement les graphes ne possédant pas $C_4, P_4, K(3, K_3)$ parmi
 leur sous graphes induits : en effet, un graphe trivialement parfait de carte vérifie cette condition, et réciproquement, un graphe
-n'ayant pas ces $3$ sous graphes induits sera de carte car tout le raisonnement est basé sur le seul Lemme \ref{trivPerfind}.
-\\~\\
-(A rediscuter avec la possibilité de juste passer en force par les sous graphes interdits)
-On en déduit alors un algorithme en temps polynômial décidant si un graphe $G$ trivialement parfait est de carte : on commence
-par séparer $G$ en ses composantes connexes puis $2$-connexes, puis $3$-connexes.
-\\~\\
-Puis, afin de décider si les composantes $3$-connexes ont bien la forme souhaitée, on emploie l'algorithme suivant : on liste les cliques
-max de la composante, si la composante elle même est une clique max, il n'y a alors qu'une seule clique max et ce cas est donc
-vu dès la première clique listée. On renvoie alors une réponse positive. Si il n'y a que $2$ cliques max, chaque sommet étant
-dans au moins une clique max, ces deux dernières recouvrent la composante $3$-connexe. La $3$-connexité impose que ces deux dernières
-se rencontrent en au moins $3$ points, le graphe est alors de la forme $K(K_n, I_{p,q})$, les $2$ cliques max ayant $n+p$
-et $n+q$ sommets chacune, la clique $K_n$, $n \geq 3$ étant formée des sommets communs aux deux cliques max. On renvoie alors
-aussi une réponse positive. Si il y a plus de $3$ cliques max, on renvoie une réponse négative.
+n'ayant pas ces $3$ sous graphes induits sera de carte car tout le raisonnement est basé sur le seul Lemme \ref{trivPerfind}. On peut
+déduire de ces résultats structurels le résultat algorithmique suivant
+
+\begin{theorem}
+    Il existe un algorithme prenant en entrée un graphe trivialement parfait $G$ et retournant en temps polynômial, un témoin de $G$
+    si ce dernier est de carte, ou un sous graphe induit $K(3, K_3)$ le cas échéant.    
+\end{theorem}
+
+\begin{proof}
+    On suppose sans perte de généralité $G$ $2$-connexe.\\
+    L'algorithme est le suivant : dans le cas où $G$ est $3$-connexe, il suffit d'identifier si il est de l'une des formes décrite
+    par le Lemme \ref{trivPar3conn}. Pour cela, on énumère ses cliques max : si il n'en a qu'une, $G$ est une clique, si il en a
+    deux, alors $G$ est de la forme $K(K_n, I_{p,q})$. On construit alors des témoins en s'inspirant de la carte Figure \ref{KKnIpqmap}.
+    Si $G$ a plus de $3$ cliques max, il possède un indépendant de taille $3$ car $G$ ne peut être de carte, n'étant pas de la bonne
+    forme. Il suffit alors d'en trouver un et de compléter par les $3$ universels pour obtenir un sous graphe induit $K(3, K_3)$.
+    \\~\\
+    Si $G$ est uniquement $2$-connexe, on vérifie d'abord que ses composantes $3$-connexes sont de carte. Si l'une ne l'est pas on renvoie le
+    $K(3, K_3)$ trouvé pour cette dernière. Sinon, on construit un témoin à $G$ en s'inspirant de la carte construite lors du
+    Théorème \ref{maptrivperf}.
+    \\~\\
+    Toutes les opérations décrites se font en temps polynômial.
+\end{proof}
 
 \subsection{Cas des cographes}
 
@@ -558,7 +575,7 @@ des Propositions \ref{K3G}, \ref{K222K5}, \ref{K22221}.
     \begin{itemize}
         \item $K_n$, $n \geq 3$
         \item $K(I_{p,q}, K_n)$, $n \geq 3$
-        \item $K(I_{p,q}, I_{r,s}, K_n)$, $p,q,r,s,n \geq 1$, tels que le graphe soit $3$-connexe
+        \item $K(I_{p,q}, I_{r,s}, K_n)$, $p,q,r,s \geq 1$, $n \geq 0$, tels que le graphe soit $3$-connexe
         \item $K(I_{p,q}, I_{r,s}, I_{t,u}, K_n)$, $p,q,r,s,t,u \geq 1$, $n \leq 4$
         \item $K_{2,2,2,2}$
     \end{itemize}
@@ -726,8 +743,26 @@ $0$ de la racine de $T_i$ coïncide avec le type de $G_i$. On déduit de toutes 
 On peut déduire de ces théorèmes que les cographes de carte sont exactement ceux ne possédant pas $K(3, G), K_{2,2,2,2,1},
 K(2,2,2,I_{2,1}), K(2,2,2,K_5), K(2, I(1, K_{2,2})), K(K_2, I(1, K_{2,2,2}))$
 parmi leur sous graphes induits : en effet la démonstration utilise uniquement l'interdiction de ces $6$ classes de graphes comme condition nécessaire
-à être un graphe de carte. Que ce soit par une méthode exploitant cette caractérisation ou par une autre méthode séparant en composantes
-$3$-connexe et vérifiant si ces dernières ont la bonne forme, on obtient un algorithme polynômial reconaissant si un cographe $G$ est de carte
+à être un graphe de carte. On en déduit le résultat algorithmique suivant
+
+\begin{theorem}
+    Il existe un algorithme prenant en entrée un cographe $G$ et renvoyant en temps polynômial, soit un des sous graphes induits
+    interdits décrits plus tôt présent dans $G$ si ce dernier n'est pas de carte, soit un témoin de $G$ si ce dernier l'est.
+\end{theorem}
+
+\begin{proof}
+    On suppose sans perte de généralité $G$ $2$-connexe.\\
+    On distingue selon si $G$ est $3$-connexe ou non. Dans le premier, l'algorithme renvoyant un sous graphe interdit est presque exactement
+    décrit par les preuves du Théorème \ref{cograph3conn} où l'on peut remplacer chaque "il existe un descendant" par une recherche dans
+    un sous arbre. Pour l'algorithme renvoyant un témoin, on distingue d'abord le type de $G$ selon le nombre de fils $0$ de la
+    racine et puis on utilise les cartes données pour construire un témoin.
+    \\~\\
+    Dans le deuxième, on décompose d'abord $G$ en composantes $3$-connexes selon son unique séparateur minimal. On vérifie alors
+    le type des composantes $3$-connexes en leur trouvant un coarbre à chacune, selon la forme de ce séparateur. Si l'une d'elle
+    n'est pas un graphe de carte, on renvoie l'obstruction trouvée. Si elles le sont toutes mais qu'une d'entre elle est d'un
+    type trop élevé d'après le Théorème \ref{cographe2conn}, on renvoie l'obstruction décrite en suivant pour cela la preuve du
+    Théorème. Pour la construction de témoin, on utilise les cartes décrites afin de les construire.
+\end{proof}
 
 \section{Quelques propriétés des graphes de cartes $3$-connexes}
 
@@ -852,6 +887,7 @@ mais pour des degrés plus grands que $5$, aucun algorithme n'est aujourd'hui co
 \bibliographystyle{plain}
 \bibliography{MapGraphs}
 
+\newpage
 
 \section*{Annexe}
 
@@ -909,7 +945,7 @@ Les preuves de certains énoncés admis.
 \begin{proof}
     Supposons par l'absurde qu'il le soit, on s'en donne alors un témoin $H$. On numérote les indépendants $\{v_1, v_2\}, \{v_3, v_4\}, \{v_5, v_6\}$
     et $a_1, ..., a_5$ les sommets de la clique $K_5$. On pose $S \subset V \cup U$ le sous ensemble composé de $a_1, ..., a_5$, des sommets
-    de $U$ tels que tout leurs voisins soient parmi $a_1, ..., a_5$, et des sommets de $U$ de degré $2$ tels que l'un des deux voisins
+    de $U$ tels que tous leurs voisins soient parmi $a_1, ..., a_5$, et des sommets de $U$ de degré $2$ tels que l'un des deux voisins
     est parmi $a_1, ..., a_5$.\\
     $H - S$ est un témoin de $K_{2,2,2}$. On écrit alors $V \cup U \backslash S = \{v_1, ..., v_6\} \cup U'$.
     Notons que les sommets de $U'$ sont de degré au plus $3$ dans $H - S$ : en effet $H-S$ étant témoin de $K_{2,2,2}$, si on avait
