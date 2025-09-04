@@ -62,6 +62,8 @@
     \begin{figure}
         \caption{Un graphe, et une carte de ce dernier}
 
+        \includegraphics[page=\ipeFigexcarte, scale = 0.5]{figs}
+        \hspace*{1cm}
         \begin{tikzpicture}[auto]
             \begin{scope}[every node/.style={circle, draw}]
 
@@ -81,8 +83,6 @@
             (c) edge (d) edge (g) edge (f)
             (d) edge (e) edge (f);
         \end{tikzpicture}
-        \hspace*{1cm}
-        \includegraphics[page=\ipeFigexcarte, scale = 0.5]{figs}
     \end{figure}
 
 \end{frame}
@@ -92,8 +92,6 @@
         Un graphe $G = (V, E)$ est de carte si et seulement il existe un graphe planaire biparti $H$ de bipartition $V, U$
         tel que $H^2[V] = G$. Un tel graphe $H$ sera appelé un témoin de $G$.
     \end{thm}
-
-    On peut alors voir que la classe des graphes planaires est sous classe stricte des graphes de carte.
 \end{frame}
 
 \begin{frame}
@@ -124,8 +122,19 @@
     \end{figure}
 \end{frame}
 
+\begin{frame}{Liens avec les graphes planaires}
+    \begin{cor}
+        Les graphes planaires forment une sous classe stricte des graphes de carte.
+    \end{cor}
+
+    \begin{proof}
+        Tout graphe planaire admet un témoin, il suffit de subdiviser une fois toutes les arrêtes du graphe planaire pour
+        en obtenir un. Il existe des graphes de carte non planaires, par exemple les grands graphes complets.
+    \end{proof}
+\end{frame}
+
 \begin{frame}{Quelques propriétés}
-    \begin{proposition}
+    \begin{proposition}[Hérédité]
         Soit $G = (V, E)$ un graphe de carte, $S \subset V$. $G[S]$ est également de carte
     \end{proposition}
 
@@ -136,7 +145,7 @@
         Un graphe $G$ est de carte si et seulement si ses composantes $2$-connexes sont de carte.
     \end{proposition}
 
-    On considèrera par la suite tout les graphes étudiés $2$-connexes.
+    On considèrera par la suite que tout les graphes étudiés sont $2$-connexes.
 \end{frame}
 
 \begin{frame}{Reconnaissance}
@@ -157,29 +166,29 @@
     \end{thm}
 
     \begin{thm}[Angelin, Bekos, Da Lozzo, Gronemann, Montecchiani, Tappini, 2024]
-        Le problème de reconnaissance paramétré par la largeur d'arbre est FPT
+        Le problème de reconnaissance paramétré par la largeur arborescente est FPT
     \end{thm}
 \end{frame}
 
 \section{Recherche de petits graphes sans carte}
 
 \begin{frame}{Définitions}
-    \begin{definition}[Join et union disjointe]
+    \begin{definition}[Join]
         Le join de deux graphes $G = (V, E)$, $G' = (V', E')$ est le graphe sur les sommets $V \cup V'$ tel
         que les arrêtes entre sommets de $V$ soient conservées identiques, de même entre ceux de $V'$. Toutefois,
         chaque sommet de $V$ est adjacent à tout ceux de $V'$ et inversement. On notera ce graphe $K(G, G')$.
-        \\~\\
+    \end{definition}
+    \begin{definition}[Union disjointe]
         On définit l'union disjointe de manière similaire, à la différence près que les sommets de $V$ et $V'$ sont
         indépendants, et on note le graphe obtenu $I(G, G')$.
     \end{definition}
 \end{frame}
 
 \begin{frame}
+    On dénotera par $G_{ex}$ un graphe à $3$ sommets n'ayant qu'une seule arrête.
     \begin{figure}
-        \caption{Le join et l'union disjointe de deux graphes}
+        \caption{Le join d'un indépendant à $2$ sommets avec $G_{ex}$}
         \includegraphics[page=\ipeFigjoinex, scale = 0.7]{figs}
-        \hspace*{1cm}
-        \includegraphics[page=\ipeFiguniondisjex, scale = 0.7]{figs}
     \end{figure}
 \end{frame}
 
@@ -243,8 +252,11 @@
 \subsection{Graphes trivialement parfaits de carte}
 
 \begin{frame}{Définition}
-    Un graphe trivialement parfait est un graphe sans $P_4, C_4$ induits. De manière équivalente, il peut être
-    représenté par l'intersection d'intervalles emboîtés
+
+    \begin{definition}
+        Un graphe trivialement parfait est un graphe sans $P_4, C_4$ induits. De manière équivalente, il peut être
+        représenté par l'intersection d'intervalles emboîtés
+    \end{definition}
 
     \begin{figure}
     \caption{Un graphe trivialement parfait représenté par des intervalles emboîtés.}
