@@ -1,0 +1,93 @@
+\documentclass{scrartcl}
+\usepackage[a4paper, total={7in, 10in}]{geometry}
+\usepackage{stmaryrd}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{algorithm2e}
+\usepackage{hyperref}
+\usepackage{comment}
+\usepackage[french]{babel}
+\usepackage{color}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usetikzlibrary{automata, arrows.meta, positioning}
+\usepackage{MacrosArt}
+
+\begin{document}
+
+\title{Graphes de carte cordaux}
+
+\author{José Lorgeré}
+
+\maketitle
+
+\begin{flushleft}
+    
+\section{Idée d'algo}
+
+On le fait que pour les $3$-connexes dans un premier temps. L'idée : on prends en entrée le graphe et une clique donnée
+de taille $\geq 2$, on veut construire une carte avec région extérieure libre tq les seules sommets en contact avec l'ext
+sont ceux de cette clique. Pour cela on va subdiviser petit à petit avec les séparateurs, et faire rouler
+récursivement l'algo sur le la composante + sép avec comme clique ext le sép.
+
+\section{Résultats}
+
+\subsection{Ce qu'on a déjà}
+
+\begin{lem}\label{CNSK33}
+    Un graphe $G$ a pour mineur $K_{3,3}$ si et seulement si il existe $6$ sommets, $s_1, s_2, s_3, t_1, t_2, t_3$ et des chemins
+    $P_{i,j}$ de $s_i$ à $t_j$ pour tout $i, j$ tels que
+    \begin{itemize}
+        \item Pour tout $i \neq i', j \neq j'$, $P_{i',j'}$ et $P_{i, j}$ ne se rencontrent pas
+        \item Pour tout $i$, $s_i$ et $t_i$ ne sont sommet intermédiaire d'aucun des chemins
+        \item Si deux de ces chemins se rencontrent, leur intersection est également un chemin
+    \end{itemize}
+\end{lem}
+
+\begin{lem}
+    Soit $G$ un graphe cordal connexe, $S$ un séparateur minimal de ce dernier, et $C_1, ..., C_l$ les composantes de $G - S$. Pour tout
+    $i$, il existe $v_i \in C_i$ tel que $S \subset N(v_i)$
+\end{lem}
+
+La preuve de ce lemme est aussi utile en vrai.
+
+\begin{cor}
+    Soit $G$ un graphe cordal $3$-connexe de carte et $S$ un séparateur minimal de ce dernier. $G - S$ a au plus $2$ composantes
+    connexes
+\end{cor}
+
+\subsection{Graphes interdits}
+
+
+\subsection{Nouveaux résultats}
+
+On prends $G$ cordal de carte $3$-connexe, $S$ un séparateur minimal de $G$, $C_1, C_2$ les composantes de $G - S$.
+
+\begin{lem}
+    Soit pour $i = 1, 2$, $v_i$ donné par le lemme d'avant. Pour tout $u \in C_i$ ayant au moins $3$
+    voisins dans $S$, on a $uv_i \in E$.
+\end{lem}
+
+\begin{proof}
+    Prenos $i = 1$. Si $uv_1 \notin E$, alors en considérant le sous graphe induit par $v_2, v_1, u$ et les $3$
+    voisins de $u$ dans $S$, on obtient un $K(3, K_3)$
+\end{proof}
+
+\begin{prop}
+    Il existe un temoin $H$ de $G$ tel que ce dernier admette un cycle $C$ vérifiant :
+    \begin{itemize}
+        \item $C \cap V \subset S$
+        \item $S \subset \operatorname*{RA}(C)$
+        \item Pour tout $u \in C \cap U$, $\operatorname*{RA}(u)$ ne contient pas à la fois de sommets de $C_1$
+        et $C_2$
+    \end{itemize}
+\end{prop}
+
+\begin{proof}
+    On se donne tout d'abord une carte quasi complète de $G$ ce dernier étant $3$-connexe.
+\end{proof}
+
+\end{flushleft}
+
+\end{document}
