@@ -14,6 +14,8 @@
 \usetikzlibrary{automata, arrows.meta, positioning}
 \usepackage{MacrosArt}
 
+\input{figscordallabel.tex}
+
 \begin{document}
 
 \title{Graphes de carte cordaux}
@@ -23,13 +25,195 @@
 \maketitle
 
 \begin{flushleft}
-    
-\section{Idée d'algo}
 
-On le fait que pour les $3$-connexes dans un premier temps. L'idée : on prends en entrée le graphe et une clique donnée
-de taille $\geq 2$, on veut construire une carte avec région extérieure libre tq les seules sommets en contact avec l'ext
-sont ceux de cette clique. Pour cela on va subdiviser petit à petit avec les séparateurs, et faire rouler
-récursivement l'algo sur le la composante + sép avec comme clique ext le sép.
+\section{Approche par le graphe des cliques}
+
+\subsection{Généralités sur les graphes cordaux}
+
+On fixe $G$ un graphe cordal (connexe on va dire).
+
+\begin{def*}
+    Le graphe des cliques max de $G$ est le graphe $C(G) = (V_c, E_c)$ où $V_c$ est l'ensemble
+    des cliques max de $G$, et où pour $C_1, C_2 \in V_c$, $C_1 C_2 \in E_c$ ssi $C_1 \cap C_2$
+    est un séparateur minimal de $C_1 \backslash C_2$ et $C_2 \backslash C_1$
+\end{def*}
+
+On étiquette les arrête de ce graphe par le séparateur minimal obtenu par l'intersection de ses
+deux extrémités.
+
+\subsection{Contraintes sur les cartes cordales 3-connexes}
+
+On suppose à présent que $G$ est cordal $3$-connexe et de carte. On rappelle le résultat négatif
+suivant concernant l'existence de carte pour les graphes cordaux 
+
+\begin{prop}
+    Le graphe $K(3, K_3)$ n'est pas de carte
+\end{prop}
+
+Notons $K'(3, K_5)$ le graphe biparti suivant : on a d'un côté $3$ sommets indépendants,
+de l'autre une clique $K_5$. $2$ de ces sommets sont reliés de manière complète aux $3$
+indépendants. Pour les $3$ autres, on a un couplage entre eux et les $3$ indépendants.
+
+\begin{prop}
+    Le graphe $K'(3, K_5)$ n'est pas de carte
+\end{prop}
+
+On déduit de ces sous graphes interdits les contraintes suivantes sur le graphe des cliques max
+de $G$.
+
+\begin{lem}\label{interlimit}
+    Soient $C_1, C_2, C_3 \in V_c$ tels que $C_1C_2 \in E_c$. L'ensemble $C_3 \cap S_{12}$
+    n'a pas plus de $2$ sommets.
+\end{lem}
+
+\begin{proof}
+    Supposons par l'absurde que l'ensemble décrit ait au moins $3$ sommets. Montrons d'abord
+    que $C_3 \not\subset (C_1 \cup C_2)$ : comme ce sont des cliques max, 
+    $C_3 \backslash C_1$ et $C_3 \backslash C_2$ sont non vides. Si on avait l'inclusion,
+    $S_{12}$ ne séparerait plus l'ensemble $C_1 \Delta C_2$, ce dernier étant connexe par
+    la présence de $C_3$. \medskip \newline
+    On choisit donc $v_3 \in C_3 \backslash (C_1 \cup C_2)$. On se donne alors
+    $v_1 \in C_1$ tel que $v_1$ et $v_3$ soient indépendants, et $v_2 \in C_2$ vérifiant
+    la même chose. $v_1$ et $v_2$ sont alors indépendants, car séparés par $S_{12}$. On
+    forme alors un sous graphe induit $K(3, K_3)$ avec $S_{12}$ et ces $3$ indépendants, absurde.
+\end{proof}
+
+\begin{prop}
+    Le graphe $C(G)$ est acyclique.
+\end{prop}
+
+\begin{proof}
+    Supposons que l'on ait $C_1, ..., C_k, C_{k+1} = C_1$ un cycle de $C(G)$. Mais alors
+    pour tout $1 \leq i \leq k$, $S_{i,i+1}$ sépare $C_i \Delta C_{i+1}$ dans $G$.
+    Cela implique donc qu'il existe $j \neq i$ tel que $S_{j,j+1} \subset S_{i,i+1}$, le
+    cas contraire on pourrait trouver un chemin en empruntant le cycle. On obtient alors
+    une chaîne d'inclusions
+    \[ S_{i_1, i_1+1} \supset S_{i_2, i_2+1} \supset ... \]
+    et par principe des tiroirs on trouve $i \neq j$ tels que $S_{i,i+1} = S_{j,j+1}$.
+    Les sommets $C_i, C_{i+1}, C_j$ (que l'on suppose sans perte de généralité distincts deux
+    à deux) vérifient alors que
+    \[ C_j \cap S_{i, i+1} = C_j \cap S_{j, j+1} = S_{j, j+1} \]
+    Cet ensemble ayant plus de $3$ sommets comme $G$ est $3$-connexe, le Lemme \ref{interlimit}
+    donne une contradiction.
+\end{proof}
+
+$C(G)$ est donc un arbre. Les résultats de (article clique graph) nous permettent alors
+d'affirmer que pour tout sommet $v \in V$, l'ensemble des cliques max le contenant forme un
+sous arbre de $C(G)$. On déduit de cela des résultats d'indépendances sur les cliques non
+adjacentes dans l'arbre.
+
+\begin{prop}\label{bornecliqueind}
+    Soient $C_1, C_2 \in V_c$ tels que $C_1C_2 \notin E_c$. Alors $|C_1 \cap C_2| \leq 2$.
+\end{prop}
+
+\begin{proof}
+    Considérons une arrête $C_i C_j \in E_c$ sur l'unique chemin de $C_1$ à $C_2$ dans $C(G)$.
+    Les remarques précédentes sur les sous arbres de $C(G)$ permettent d'affirmer que
+    $C_1 \cap C_2 \subset S_{ij}$.
+    En appliquant le Lemme \ref{interlimit} à $C_1, C_i, C_j$ qu'on suppose distincts deux à
+    deux quitte à échanger $C_1$ et $C_2$, on obtient ce qu'on veut.
+\end{proof}
+
+\begin{prop}
+    Soit $C^* \in V_c$ de degré au moins $3$ et considérons $C(G)$ comme enraciné en $C^*$,
+    et notons $T_1, T_2, T_3$ trois sous arbres descendants de $C^*$. Pour tout triplet
+    $C_i \in T_i$, $i \in \{1, 2, 3\}$, on a $|C_1 \cap C_2 \cap C_3| \leq 1$.
+\end{prop}
+
+% Reéxaminer avec attention plus tard
+
+\begin{proof}
+    Là encore la structure d'arbre des cliques contenant un sommet donné permet de se ramener
+    au cas où $C_1, C_2, C_3$ sont racines de $T_1, T_2, T_3$, c'est à dire descendants directs
+    de $C^*$.\newline
+    Notons $S_i$ le séparateur $C_i \cap C^*$. $S_i$ sépare $C_i$ des deux autres $C_j$, $j \neq i$.
+    En effet, $S_i \cap S_j$ a au plus $2$ sommets par le Lemme \ref{interlimit}, donc le retrait
+    de $S_i$ ne sépare pas $C_j$ de $C^*$ car $G$ est $3$-connexe. Ainsi, si $C_i$ et $C_j$
+    restaient connectés après le retrait de $S_i$, on pourrait construire un chemin de $C_i$ à $C^*$.
+    \medskip \newline
+    Par cette propriété, on choisit $v_i \in C_i$ non adjacent aux deux autres cliques pour
+    tout $i \in \{1, 2, 3\}$. En supposans $|C_1 \cap C_2 \cap C_3| \geq 2$, on construit un
+    sous graphe induit $K'(3, K_5)$ : les $v_i$ sont les indépendants, les deux sommets
+    leur étant complètement reliés sont les sommets de l'intersection, et on choisit un sommet
+    par $S_i$ pour les $3$ derniers. C'est donc absurde et on a l'inégalité souhaitée.
+\end{proof}
+
+\subsection{Sommets longeants et graphe écorce}
+
+On suppose ici uniquement que $G$ est cordal $3$-connexe et que $C(G)$ est un arbre.
+
+\begin{def*}
+    Un sommet $v \in V$ tel qu'il existe $C_1, C_2 \in V_c$, $C_1C_2 \notin E_c$ tels que
+    $v \in C_1 \cap C_2$ sera dit longeant.
+\end{def*}
+
+Là encore par les résultats sur les clique tree, l'ensemble des sommets de $C(G)$ contenant
+un sommet longeant forme un arbre, qui dans ce cas possède au moins $3$ sommets. Les
+résultats obtenus à la question précédente donnent donc des bornes sur le nombre de sommets
+longeants contenus dans les cliques de $G$.
+
+\begin{def*}
+    On définit le graphe écorce de $G$, noté $B(G)$ comme le graphe obtenu depuis $C(G)$ comme suit :
+    pour tout sommet longeant $v \in V$, on l'ajoute au graphe et on le relie à l'arbre formé
+    par les sommets de $C(G)$ le contenant.
+\end{def*}
+
+On cherchera à montrer la proposition suivante
+
+\begin{prop}
+    Si $G$ est de carte, alors $B(G)$ est planaire.
+\end{prop}
+
+\subsection{Construction de cartes 3-connexes}
+
+On se fixe à présent $G$ un graphe cordal $3$-connexe, dont on suppose que $C(G)$ est un arbre.
+
+\begin{prop}\label{carte3conndisj}
+    Si $G$ n'a pas de sommets longeants, alors $G$ est de carte.
+\end{prop}
+
+\begin{proof}
+    On construit un témoin de $G$ comme suit : on pose $H = (V \sqcup V_c, E')$, où pour tout
+    $v \in V$ on relie $v$ à tout les $C \in V_c$ le contenant. Ce graphe est planaire :
+    on peut partir d'un plongement de $C(G)$ dans le plan pour en construire un de $H$, il
+    suffit pour cela de placer chaque $V_c$ a la position prescrite par le plongement de $C(G)$
+    et de disposer les sommets de $V$ comme illustré Figure \ref{figcarte3conndisj} : les sommets faisant partie
+    d'une seule clique max sont placés transversalement aux arrêtes de $C(G)$, tandis que
+    ceux étant reliés à $2$ cliques max sont placés parallélement à ces dernières. Un sommet
+    est au plus relié à $2$ cliques max comme $G$ n'a pas de sommets longeants.
+\end{proof}
+
+\begin{figure}[h]
+    \caption{Illustration de la Proposition \ref{carte3conndisj}}\label{figcarte3conndisj}
+    \begin{center}
+    A gauche un plongement de $C(G)$, à droite le plongement du témoin $H$.\\~\\
+    \includegraphics*[page=\ipeFigCliqueTree, scale = 0.60]{figscordal}
+    \hspace*{0.5cm}
+    \includegraphics*[page=\ipeFigCarteCliqueTree, scale = 0.60]{figscordal}
+    \end{center}
+\end{figure}
+
+Reste à traiter le cas où des cliques non reliées par une arrête dans $C(G)$ se rencontrent.
+\medskip \newline
+On construit alors le graphe $C'(G)$ depuis $C(G)$ comme suit : pour tout sommet longeant $v$,
+on ajoute ce dernier au graphe et on le relie à tout les sommets de $T_v$. On a alors la
+caractérisation suivante pour $G$.
+\begin{prop}
+    $G$ admet une carte si et seulement si $C'(G)$ est planaire.
+\end{prop}
+
+\begin{proof}
+    Supposons que $C'(G)$ ne soit pas planaire. 
+\end{proof}
+
+\section{Attaque des $2$-connexes}
+
+Idée : générer des cartes pour les composantes $3$-connexes (pas uniques,
+faire attention). Puis il faut les recoller : pour ça on modifie un peu la
+carte $3$-connexe de telle sorte à placer les $2$ sommets du séparateur
+côté à côté, puis on peut creuser un trou dedans et c'est parti. Mais il
+y a des cas où c'est pas possible, et il est possible que ce cas soit un
+sous graphe interdit.
 
 \section{Résultats}
 
@@ -45,24 +229,13 @@ récursivement l'algo sur le la composante + sép avec comme clique ext le sép.
     \end{itemize}
 \end{lem}
 
-\begin{lem}
-    Soit $G$ un graphe cordal connexe, $S$ un séparateur minimal de ce dernier, et $C_1, ..., C_l$ les composantes de $G - S$. Pour tout
-    $i$, il existe $v_i \in C_i$ tel que $S \subset N(v_i)$
-\end{lem}
-
-La preuve de ce lemme est aussi utile en vrai.
-
-\begin{cor}
-    Soit $G$ un graphe cordal $3$-connexe de carte et $S$ un séparateur minimal de ce dernier. $G - S$ a au plus $2$ composantes
-    connexes
-\end{cor}
-
 \subsection{Graphes interdits}
 
 
 \subsection{Nouveaux résultats}
 
 On prends $G$ cordal de carte $3$-connexe, $S$ un séparateur minimal de $G$, $C_1, C_2$ les composantes de $G - S$.
+On note $G_1$ le sous graphe induit par $C_1 \cup S$ et de même pour $C_2$.
 
 \begin{lem}
     Soit pour $i = 1, 2$, $v_i$ donné par le lemme d'avant. Pour tout $u \in C_i$ ayant au moins $3$
@@ -74,19 +247,7 @@ On prends $G$ cordal de carte $3$-connexe, $S$ un séparateur minimal de $G$, $C
     voisins de $u$ dans $S$, on obtient un $K(3, K_3)$
 \end{proof}
 
-\begin{prop}
-    Il existe un temoin $H$ de $G$ tel que ce dernier admette un cycle $C$ vérifiant :
-    \begin{itemize}
-        \item $C \cap V \subset S$
-        \item $S \subset \operatorname*{RA}(C)$
-        \item Pour tout $u \in C \cap U$, $\operatorname*{RA}(u)$ ne contient pas à la fois de sommets de $C_1$
-        et $C_2$
-    \end{itemize}
-\end{prop}
 
-\begin{proof}
-    On se donne tout d'abord une carte quasi complète de $G$ ce dernier étant $3$-connexe.
-\end{proof}
 
 \end{flushleft}
 
