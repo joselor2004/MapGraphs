@@ -26,6 +26,61 @@
 
 \begin{flushleft}
 
+\section{Sous graphes interdits}
+
+On note $K(3, G)$ le join d'un indépendant à $3$ sommets et du graphe $G$.
+
+\begin{prop}\label{K3G}
+    Soit $G = (A \sqcup B, E)$ un graphe tel que $A$ est composé de $3$ sommets
+    indépendants de degré $3$, et tel que $B$ peut être contracté de telle sorte à ce que
+    le graphe obtenu soit $K(3, G')$ pour un certain $G'$ à $3$ sommets. $G$ n'est pas de carte
+\end{prop}
+
+\begin{proof}
+    On note $V = A \sqcup B$ et on se donne par l'absurde un témoin $H = (V \sqcup U, E')$
+    de $G$. On va y construire un mineur $K_{3,3}$. Notons $v_1, v_2, v_3$ les sommets de $A$.
+    Comme ils sont indépendants dans $G$ leur voisinages dans $H$ sont disjoints.
+    \medskip \newline
+    Maintenant considérons les $3$ ensembles de sommets de $B$ qui une fois contractés donnent
+    transforment $G$ en $K(3, G')$. On les note $P_1, P_2, P_3$. Notons d'abord qu'un seul
+    sommet par $P_i$ est relié à $v_j$, $i,j \in \{1, 2, 3\}$. Cela implique en particulier
+    qu'une arrête interne à $P_i$ n'utilise pas de sommet de $N_H(v_j)$, pour être représentée
+    dans $H$. Ainsi l'ensemble $N_H[P_j] \backslash N_H(A)$ est connexe, par connexité de
+    $P_j$.
+    \medskip \newline
+    On contracte alors les ensembles suivants : $N_H[v_i]$, $N_H[P_j] \backslash N_H(A)$,
+    $i,j \in \{1,2,3\}$. On note les sommets obtenus $V_i$ pour les premiers et $P'_j$ pour
+    les seconds. Ces sommets forment alors un graphe $K_{3,3}$ absurde, comme $H$ était supposé
+    planaire.
+\end{proof}
+
+Un cas particulier très utile de cette proposition est que le graphe $K(3, K_3)$ n'est pas
+de carte. On notera $\mathcal{F}_3$ cette famille de graphes.
+\newline \newline
+On note $K^-_3(4, G)$ le graphe suivant : il s'agit du join d'un indépendant à $4$ sommets avec
+$G$ à $4$ sommets, auquel on a retiré un couplage des indépendants vers $G$ de taille $3$.
+
+\begin{prop}
+    Soit $G = (A \sqcup B, E)$, où $A$ est composé de $4$ indépendants, 1 de degré $4$ et
+    les autres de degré $3$, et tel que $B$ peut être contracté de manière à ce que le graphe
+    obtenu soit un $K^-_3(4, G')$, pour $G'$ à $4$ sommets. $G$ n'est pas de carte.
+\end{prop}
+
+\begin{proof}
+    Notons d'abord que le graphe $K^-_3(4, I_4)$ n'est pas planaire, où $I_4$ est un indépendant à
+    $4$ sommets, car la planarité impliquerait que ce graphe a moins de $12$ arrêtes.
+    \medskip \newline
+    On suppose par l'absurde que $G$ est de carte, on s'en donne alors un témoin $H = (V \sqcup U, E')$,
+    où $V = A \sqcup B$. On note $v_1, ..., v_4$ les $4$ sommets de $A$, où $v_4$ est le sommet
+    de degré $4$. Comme pour les graphes précédents, les voisinages $N_H[v_i]$ sont disjoints.
+    Notons $P_1, ..., P_4$ les ensembles de sommets contractés dans $B$ donnant un
+    $K^-_3(4, G')$, où $P_4$ est le sommet ayant $4$ voisins dans $A$. La contrainte sur
+    les degrés des sommets de $A$ donne là encore que $N_H[P_i] \backslash N_H(A)$ est connexe.
+    On contracte alors ces ensembles de sommets et on obtient un mineur $K^-_3(4, I_4)$.
+\end{proof}
+
+On notera $\mathcal{F}_4$ cette famille de graphes.
+
 \section{Approche par le graphe des cliques}
 
 \subsection{Généralités sur les graphes cordaux}
@@ -43,23 +98,9 @@ deux extrémités.
 
 \subsection{Contraintes sur les cartes cordales 3-connexes}
 
-On suppose à présent que $G$ est cordal $3$-connexe et de carte. On rappelle le résultat négatif
-suivant concernant l'existence de carte pour les graphes cordaux 
-
-\begin{prop}
-    Le graphe $K(3, K_3)$ n'est pas de carte
-\end{prop}
-
-Notons $K'(3, K_5)$ le graphe biparti suivant : on a d'un côté $3$ sommets indépendants,
-de l'autre une clique $K_5$. $2$ de ces sommets sont reliés de manière complète aux $3$
-indépendants. Pour les $3$ autres, on a un couplage entre eux et les $3$ indépendants.
-
-\begin{prop}
-    Le graphe $K'(3, K_5)$ n'est pas de carte
-\end{prop}
-
-On déduit de ces sous graphes interdits les contraintes suivantes sur le graphe des cliques max
-de $G$.
+On suppose à présent que $G$ est cordal $3$-connexe et de carte.
+On déduit de l'interdiction des sous graphes induit $\mathcal{F}_3$ et $\mathcal{F}_4$ les
+contraintes suivantes sur le graphe des cliques max de $G$.
 
 \begin{lem}\label{interlimit}
     Soient $C_1, C_2, C_3 \in V_c$ tels que $C_1C_2 \in E_c$. L'ensemble $C_3 \cap S_{12}$
@@ -114,7 +155,7 @@ adjacentes dans l'arbre.
     deux quitte à échanger $C_1$ et $C_2$, on obtient ce qu'on veut.
 \end{proof}
 
-\begin{prop}
+\begin{prop}\label{borneclique3}
     Soit $C^* \in V_c$ de degré au moins $3$ et considérons $C(G)$ comme enraciné en $C^*$,
     et notons $T_1, T_2, T_3$ trois sous arbres descendants de $C^*$. Pour tout triplet
     $C_i \in T_i$, $i \in \{1, 2, 3\}$, on a $|C_1 \cap C_2 \cap C_3| \leq 1$.
@@ -133,9 +174,33 @@ adjacentes dans l'arbre.
     \medskip \newline
     Par cette propriété, on choisit $v_i \in C_i$ non adjacent aux deux autres cliques pour
     tout $i \in \{1, 2, 3\}$. En supposans $|C_1 \cap C_2 \cap C_3| \geq 2$, on construit un
-    sous graphe induit $K'(3, K_5)$ : les $v_i$ sont les indépendants, les deux sommets
+    sous graphe induit de $\mathcal{F}_3$ : les $v_i$ sont les indépendants, deux sommets
     leur étant complètement reliés sont les sommets de l'intersection, et on choisit un sommet
     par $S_i$ pour les $3$ derniers. C'est donc absurde et on a l'inégalité souhaitée.
+\end{proof}
+
+\begin{prop}\label{borneclique4}
+    Soit $C^* \in V_c$ de degré au moins $4$, enracinons $C(G)$ en $C^*$ et considérons
+    $T_1, T_2, T_3, T_4$ des sous arbres descendants de $C^*$. Pour tout quadruplet
+    $C_i \in T_i$, si l'intersection de tout les $C_i$ est vide, alors pour tout
+    $1 \leq i \leq 4$, il existe $k,l$ tels que $C_i \cap C_k \cap C_l = \varnothing$.
+\end{prop}
+
+\begin{proof}
+    De manière similaire à la preuve précédente, on considère sans perte de généralité
+    que $C_1, ..., C_4$ sont descendants directs de $C^*$. Supposons alors, sans perte
+    de généralité, que l'intersection de ces $4$ cliques soit vides et que pour toute paire
+    $k,l \neq 4$, on a $|C_4 \cap C_k \cap C_l| \geq 1$. Pour chaque telle paire $k,l$, on
+    se donne un sommet $v_{k,l}$ dans cette intersection. Ils sont distincts deux à deux
+    comme l'intersection totale est vide. Par des arguments similaires à la Proposition
+    \ref{borneclique3}, on choisit également $v_i \in C_i$, $1 \leq i \leq 4$ les $4$
+    étant indépendants.
+    \medskip \newline
+    On construit alors un sous graphe induit de $\mathcal{F}_4$ comme suit : les indépendants
+    sont les $v_1, ..., v_4$. Les sommets de l'autre côté sont les $v_{k,l}$, chacun
+    étant relié à $v_4, v_k, v_l$, auquels on ajoute un sommet par séparateur $S_i := C^* \cap C_i$,
+    qui n'est alors adjacent qu'à $v_i$. Ces $4$ sommets peuvent être contractés en un seul,
+    formant ainsi un $K^-_3(4, K_4)$. Absurde, on a ce qu'on veut.
 \end{proof}
 
 \subsection{Sommets longeants et graphe écorce}
@@ -148,21 +213,158 @@ On suppose ici uniquement que $G$ est cordal $3$-connexe et que $C(G)$ est un ar
 \end{def*}
 
 Là encore par les résultats sur les clique tree, l'ensemble des sommets de $C(G)$ contenant
-un sommet longeant forme un arbre, qui dans ce cas possède au moins $3$ sommets. Les
-résultats obtenus à la question précédente donnent donc des bornes sur le nombre de sommets
+un sommet longeant forme un arbre, qui dans ce cas possède au moins $3$ sommets. Pour un sommet
+longeant $v$, on notera $T_v$ l'arbre des cliques le contenant. Les
+résultats obtenus dans la section précédente donnent donc des bornes sur le nombre de sommets
 longeants contenus dans les cliques de $G$.
 
 \begin{def*}
     On définit le graphe écorce de $G$, noté $B(G)$ comme le graphe obtenu depuis $C(G)$ comme suit :
-    pour tout sommet longeant $v \in V$, on l'ajoute au graphe et on le relie à l'arbre formé
-    par les sommets de $C(G)$ le contenant.
+    pour tout sommet longeant $v \in V$, on l'ajoute au graphe et on le relie à $T_v$.
 \end{def*}
 
-On cherchera à montrer la proposition suivante
+On dispose du lemme technique suivant concernant les sommets longeants de $B(G)$.
+
+\begin{lem}\label{voislongpath}
+    Soit $v \in V$ un sommet longeant, relié à $C_1, C_2, C_3 \in V_c$ dans $B(G)$. Supposons
+    qu'il existe pour tout $i \in \{1,2,3\}$ un chemin de $C_i$ à $C'_i \in V_c$ tels que les
+    deux chemins soient disjoints. Alors il existe $C''_1, C''_2, C''_3 \in V_c$ voisins de $v$
+    formant un chemin et vérifiant la même propriété relativement aux $C'_i$.
+\end{lem}
+
+\begin{proof}
+    Notons $P_i$, $i \in \{1, 2, 3\}$ les $3$ chemins disjoints reliant $C_i$ à $C'_i$.
+    $C(G)$ étant un arbre, il existe un unique chemin $P_{ij}$ reliant $C_i$ à $C_j$,
+    $i \neq j$. $P_{ij}$ rencontre alors $P_j$. On suppose sans perte de généralité
+    comme $C(G)$ est acyclique que
+    $P_{12}$ ne rencontre pas $P_3 \backslash P_2$ et que $P_{32}$ ne rencontre pas $P_1 \backslash P_2$.
+    \medskip \newline
+    Notons $C''_2$ la dernière intersection (dans l'ordre de $C_2$ à $C'_2$) entre $P_2$
+    et un des deux autres chemins. On suppose sans perte de généralité qu'il s'agit de
+    celle avec $P_{12}$. On définit alors $C''_1$, le prédecesseur de $C''_2$ dans
+    $P_{12}$ et $C''_3$ le prédecesseur de $C''_2$ dans $P_{32}$. Les trois forment alors
+    bien un chemin. On peut également construire des chemins disjoints menant chacun d'eux
+    aux $C'_i$ correspondant. Enfin $T_v$ est un arbre contenant $C_1, C_2, C_3$, donc
+    contient $C''_1, C''_2, C''_3$.
+\end{proof}
+
+% Reformuler
+
+On cherche alors à relier la planarité de $B(G)$ au fait que $G$ soit de carte. On introduit
+pour cela la notion d'ensembles non planaires minimaux : notons $L \subset V$ l'ensemble
+des sommets longeants. Un sous ensemble $S \subset L$ sera dit non planaire minimal si
+$B(G) - (L\backslash S)$
+n'est pas planaire et que $S$ est minimal pour cette propriété. On utilisera pour toute
+la suite la caractérisation de cette propriété par mineurs interdits.
+\medskip \newline
+On rappelle qu'un graphe $H = (\mathcal{V}, \mathcal{E})$ est mineur de $B(G)$ si et seulement
+si à isomorphisme près, on a $\mathcal{V} = \{T_1, ..., T_r\}$, des sous arbres disjoints
+de $B(G)$ tels que $T_i T_j \in \mathcal{E}$ si et seulement si il existe un sommet
+de $T_i$ et un de $T_j$ reliés par une arrête dans $B(G)$. Il se trouve que l'on peut requérir
+dans le cas qui nous intéresse un choix particulier d'arbres.
+
+\begin{lem}\label{normalformK33}
+    Soit $S$ un ensemble non planaire minimal donnant lieu à un mineur $K_{3,3}$. Ce dernier
+    peut être choisi de telle sorte à ce que tout les arbres d'un côté de la bipartition
+    contiennent au plus un sommet longeant.
+\end{lem}
+
+\begin{proof}
+    On montre seulement que l'on peut toujours déplacer un sommet longeant d'un arbre à un
+    autre adjacent, si le premier a en a au moins $2$. On se donne un mineur $K_{3,3}$ ou
+    intervient $S$. On écrit $T_1, T_2, T_3$ et $T'_1, T'_2, T'_3$ les arbres des deux côtés
+    de la bipartition. Supposons sans perte de généralité que $T_1$ possède un sommet longeant.
+    Soient $p_1 \in T_1$, $q_1 \in T'_1$ tels que $p_1q_1$ soit une arrête de $B(G)$. On se
+    donne $v_1 \in T_1$ longeant tel que le chemin de $p_1$ à $v_1$ soit minimal pour
+    l'inclusion. On le note $P_1$. De même, on se donne $p_2$ et $v_2$ relatifs à $T'_2$ et
+    on note $P_2$ le chemin minimal.
+    \medskip \newline
+    Montrons que l'on peut soit ajouter $P_1$ à $T'_1$ et le retirer à $T_1$, soit
+    faire de même pour $P_2$ et $T'_2$ tout en conservant la structure du graphe. Supposons
+    par l'absurde qu'on ne puisse pas. Alors tout les sommets adjacents à $T'_3$ dans $T_1$
+    sont dans $P_1 \cap P_2$. Si l'on remplace $T_1$ par $P_1 \cup P_2$, on obtient un arbre
+    contenant un unique sommet longeant et adjacent à $T'_1, T'_2, T'_3$. Absurde,
+    on a construit un mineur $K_{3,3}$ sans utiliser un sommet de $S$, ce qui contredit la
+    minimalité.
+\end{proof}
+
+% \begin{lem}
+%     Soit $S$ un ensemble non planaire minimal donnant lieu à un mineur $K_5$. Ce dernier peut
+%     être choisi de telle sorte à ce que si un arbre possède plus de deux sommets longeants,
+%     au plus un arbre n'en possède aucun.
+% \end{lem}
+
+\begin{lem}\label{minimalmax3}
+    Un ensemble non planaire minimal a au plus $3$ sommets.
+\end{lem}
+
+\begin{proof}
+    Trouver une preuve non abominable (ou tout du moins raisonnable).
+\end{proof}
 
 \begin{prop}
     Si $G$ est de carte, alors $B(G)$ est planaire.
 \end{prop}
+
+\begin{proof}
+    On raisonne par contraposée. On suppose donc $B(G)$ non planaire, c'est à dire contenant
+    un mineur $K_{3,3}$ ou $K_5$, et on veut en déduire des structures interdites
+    pour un graphe de carte.
+    \newline \newline
+    Si $B(G)$ est non planaire, l'ensemble $L$ des sommets longeants est un ensemble non planaire.
+    On se donne alors $S$ un sous ensemble non planaire minimal. On distingue selon le mineur
+    produit. On s'appuie également sur le Lemme \ref{minimalmax3} pour simplifier l'étude,
+    et le fait qu'un ensemble non planaire minimal a au moins $2$ sommets.
+    \begin{itemize}
+        \item Cas $K_{3,3}$ : on écrit $T_1, T_2, T_3$ et $T'_1, T'_2, T'_3$ les arbres des
+        deux côtés de la bipartition, donnant lieu au mineur.
+        \begin{itemize}
+            \item[Si $|S| = 2$ :] Notons que par acyclicité de $C(G)$, les deux sommets
+            longeants sont du même côté de la bipartition dans des arbres différents. Dans
+            les deux cas, par le Lemme \ref{normalformK33} on peut construire un mineur
+            $K_{2,2}$ n'utilisant aucun sommet longeant, qui donne alors lieu à un cycle dans
+            $C(G)$, absurde. Pour le cas restant, notons $v_1, v_2$ les deux sommet longeants
+            respectivement dans $T_1$ et $T_2$, wilog. On choisit $C^* \in T_3$ de degré
+            au moins $3$ et
+            $C_1, C_2, C_3$ respectivement dans $T'_1, T'_2, T'_3$, arbres que l'on
+            enracine en ces sommets. On considère le chemin $P^{(j)}_i$ dans
+            $T_j \cup T_i$ de $v_j$ à $C_i$, $j \in \{1,2\}, i \in \{1,2,3\}$. $v_1$ a alors
+            pour voisin les extrémités des $P^{(j)}_i$, et en exploitant les chemins
+            de $C^*$ vers les $C_i$ et le fait que $v_j$ est adjacent à un sous arbre,
+            on a une arrête directe entre $v_j$ et chaque $C_i$. Par définition de $B(G)$,
+            $|C_1 \cap C_2 \cap C_3| \geq 2$. La Proposition \ref{borneclique3} donne
+            alors que $G$ n'est pas de carte.
+
+            \item[Si $|S| = 3$ :] Par minimalité de $S$, les trois sommets longeants sont
+            répartis un par $T_i$. Sinon on obtient wilog par le Lemme \ref{normalformK33}
+            $v_1, v_2$ dans $T_1, T_2$ longeants et $v_3$ dans $T'_3$. Les chemins de $v_i$
+            à $T'_j$, $i,j\in \{1,2\}$ permettent d'affirmer par la structure de $B(G)$
+            qu'il existe $C^{(j)}_1, C^{(j)}_2$ respectivement dans $T'_1, T'_2$ voisins directs
+            de $v_j$. Notons $C'_1, C'_2, C'_3$ les voisins de $v_3$ sur le chemin de $T_1, T_2, T_3$
+            respectivement. En exploitant la structure d'arbre des voisins de $v_1, v_2$, et les chemins
+            entre $C \in T_3$ et $T'_1, T'_2, T'_3$, on obtient que $v_1, v_2$ sont adjacents à $C'_1, C'_2, C'_3$,
+            et on peut ainsi, comme il existe des chemins entre ces derniers, retirer $v_3$ et garder
+            un mineur $K_{3,3}$.
+            \medskip \newline
+            On a donc bien la situation décrite au départ. On exploite ENCORE la structure d'arbre
+            des voisins des sommets longeants pour montrer qu'on a en fait un sous graphe $K_{3,3}$
+            et non pas un mineur (les arguments sont vraiment presque les mêmes). Parmi
+            les $3$ sommets de ce sous graphe, au moins $2$ ne sont pas adjacents, par acyclicité
+            de $C(G)$, mais partagent $3$ sommets longeants. La Proposition \ref{bornecliqueind}
+            donne que $G$ n'est pas de carte.
+        \end{itemize}
+
+        \item Cas $K_5$ : on écrit $T_1, ... T_5$ les sous arbres donnant lieu à ce mineur.
+        Dans ce cas, il est clair que $|S| = 3$ et que les sommets longeants sont répartis un
+        par arbre,car on aurait un cycle dans $C(G)$ le cas contraire. On suppose $v_1, v_2, v_3$
+        dans $T_1, T_2, T_3$. En exploitant les mêmes arguments que précédemment, on peut montrer
+        qu'il existe $C_4, C_5 \in T_4, T_5$ respectivements tels que $v_1, v_2, v_3$ soient
+        voisins directs de ces derniers.\newline
+        XXXXX\newline
+        Pour la suite, on va exploiter les chemins entre $v_i$ pour exhiber une structure
+        $\mathcal{F}_4$ donnée par une des propositions précédentes.
+    \end{itemize}
+\end{proof}
 
 \subsection{Construction de cartes 3-connexes}
 
@@ -203,51 +405,14 @@ caractérisation suivante pour $G$.
 \end{prop}
 
 \begin{proof}
-    Supposons que $C'(G)$ ne soit pas planaire. 
+    On a déjà montré un sens. Supposons que $C'(G)$ soit planaire. On se donne un plongement
+    de ce dernier. On construit d'abord un témoin de $G - L$, où $L$ est l'ensemble des
+    sommets longeants, par la procédure donnée à la Proposition \ref{carte3conndisj}. Ensuite,
+    on ajoute les sommets longeants : on ajoute au témoin les sommets longeants de $G$,
+    et on ajoute des arrêtes entre eux et chaque clique maximale à laquelle ils appartiennent.
+    Le plongement de ces arrêtes du témoin est donné par le plongement planaire
+    de $B'(G)$.
 \end{proof}
-
-\section{Attaque des $2$-connexes}
-
-Idée : générer des cartes pour les composantes $3$-connexes (pas uniques,
-faire attention). Puis il faut les recoller : pour ça on modifie un peu la
-carte $3$-connexe de telle sorte à placer les $2$ sommets du séparateur
-côté à côté, puis on peut creuser un trou dedans et c'est parti. Mais il
-y a des cas où c'est pas possible, et il est possible que ce cas soit un
-sous graphe interdit.
-
-\section{Résultats}
-
-\subsection{Ce qu'on a déjà}
-
-\begin{lem}\label{CNSK33}
-    Un graphe $G$ a pour mineur $K_{3,3}$ si et seulement si il existe $6$ sommets, $s_1, s_2, s_3, t_1, t_2, t_3$ et des chemins
-    $P_{i,j}$ de $s_i$ à $t_j$ pour tout $i, j$ tels que
-    \begin{itemize}
-        \item Pour tout $i \neq i', j \neq j'$, $P_{i',j'}$ et $P_{i, j}$ ne se rencontrent pas
-        \item Pour tout $i$, $s_i$ et $t_i$ ne sont sommet intermédiaire d'aucun des chemins
-        \item Si deux de ces chemins se rencontrent, leur intersection est également un chemin
-    \end{itemize}
-\end{lem}
-
-\subsection{Graphes interdits}
-
-
-\subsection{Nouveaux résultats}
-
-On prends $G$ cordal de carte $3$-connexe, $S$ un séparateur minimal de $G$, $C_1, C_2$ les composantes de $G - S$.
-On note $G_1$ le sous graphe induit par $C_1 \cup S$ et de même pour $C_2$.
-
-\begin{lem}
-    Soit pour $i = 1, 2$, $v_i$ donné par le lemme d'avant. Pour tout $u \in C_i$ ayant au moins $3$
-    voisins dans $S$, on a $uv_i \in E$.
-\end{lem}
-
-\begin{proof}
-    Prenos $i = 1$. Si $uv_1 \notin E$, alors en considérant le sous graphe induit par $v_2, v_1, u$ et les $3$
-    voisins de $u$ dans $S$, on obtient un $K(3, K_3)$
-\end{proof}
-
-
 
 \end{flushleft}
 
